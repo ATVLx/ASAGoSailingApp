@@ -1,0 +1,10 @@
+InIrons,0
+PCloseHauled,-45
+PCloseReach,-67.5
+PBeamReach,-90
+PBroadReach,-135
+Run,180
+SBroadReach,135
+SBeamReach,90
+SCloseReach,67.5
+SCloseHauled,45

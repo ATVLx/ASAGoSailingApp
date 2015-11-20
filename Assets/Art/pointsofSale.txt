@@ -1,0 +1,10 @@
+In|Irons,0
+Close|Hauled|Port|Tack,45
+Close|Reach|Port|Tack,67.5
+Beam|Reach|Port|Tack,90
+Broad|Reach|Port|Tack,135
+Run,180
+Broad|Reach|Starboard|Tack,-135
+Beam|Reach|Starboard|Tack,-90
+Close|Reach|Starboard|Tack,-67.5
+Close|Hauled|Starboard|Tack,-45
