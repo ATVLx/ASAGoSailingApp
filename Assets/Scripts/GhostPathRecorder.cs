@@ -13,11 +13,17 @@ public class GhostPathRecorder : MonoBehaviour {
 	public List<Quaternion> recordedRotations;
 	private Transform thisTransform;
 	private float timer;
+	private Rester _Rester;
 
 	void Start () {
 		recordedPositions = new List<Vector3>();
 		recordedRotations = new List<Quaternion>();
 		thisTransform = GetComponent<Transform>();
+
+		_Rester = GameObject.FindObjectOfType<Rester>();
+		if( _Rester == null ) {
+			Debug.LogError( "No rester." );
+		}
 
 		// TODO Get sampleRate from external script
 	}
@@ -80,6 +86,10 @@ public class GhostPathRecorder : MonoBehaviour {
 		}
 		// Add array of positions to recorded data
 		recordedData.Add( "frames", posRotArray );
+
+		_Rester.PostJSON( "asaghostmatch.herokuapp.com/data", recordedData, ( string err, JsonObject retJO ) => {
+			Debug.Log( err );
+		});
 		Debug.LogWarning( "Exporting complete." );
 	}
 
