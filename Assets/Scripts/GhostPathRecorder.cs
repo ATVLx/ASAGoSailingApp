@@ -8,12 +8,14 @@ public class GhostPathRecorder : MonoBehaviour {
 	public float sampleRate = 0.25f;
 	public bool isRecording = false;
 	public bool exportJSON = false;
+	public bool fetch = false;
 
 	public List<Vector3> recordedPositions;
 	public List<Quaternion> recordedRotations;
 	private Transform thisTransform;
 	private float timer;
 	private Rester _Rester;
+	private JsonObject GETOBJ;
 
 	void Start () {
 		recordedPositions = new List<Vector3>();
@@ -29,6 +31,12 @@ public class GhostPathRecorder : MonoBehaviour {
 	}
 
 	void Update () {
+		if( fetch ) {
+			fetch = false;
+			_Rester.GetJSON( "asaghostmatch.herokuapp.com/data/" + "5653e00e617b660300ccd226", ( string err, JsonObject result ) => {
+			});
+		}
+
 		if( exportJSON ) {
 			exportJSON = false;
 			if( recordedPositions.Count < 2 || recordedRotations.Count < 2 ) {
