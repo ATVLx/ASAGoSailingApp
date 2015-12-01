@@ -4,33 +4,40 @@ using UnityEngine.UI;
 
 public class NavBoatControl : BoatBase {
 
-	Rigidbody body;
 	public enum BoatSideFacingWind {Port, Starboard};
 	public static NavBoatControl s_instance;
+
+	private Rigidbody myRigidbody;
+	private float currThrust = 0f;
+	private float weakThrust = 150f, strongThrust = 2500f;
+	private float angleToAdjustTo;
+	private float turnStrength = 5f;
+	private float weakTurnStrength = 4f;
+	private float strongTurnStrength = 5f;
+	private float turningRate = 60f;
+	private float rudderRotation =40f;
+	private float deadZone = 45f;
+
+	private float currRutterRotation = 0f;			// in degrees
+	private float maxRutterRotation = 170f;			// in degrees
+	private float rutterRotationSpeed = 5f;			// in deg/s
+ 
+	private Quaternion comeAboutStart, comeAboutEnd;
+	private Quaternion targetRudderRotation = Quaternion.identity;
+
 	public ParticleSystem left, right;
-	float currThrust = 0f;
-	float weakThrust = 150f, strongThrust = 2500f;
-	float angleToAdjustTo;
-	float turnStrength = 5f, weakTurnStrength = 4f, strongTurnStrength = 5f;
-	float turningRate = 60f;
-	float rudderRotation =40f;
-	float deadZone = 45f;
-
-	Quaternion comeAboutStart, comeAboutEnd;
-	Quaternion targetRudderRotation = Quaternion.identity;
-
 	public bool canMove = false;
 	public AudioSource correct;
 	public Animator boatKeel;
 	public GameObject arrow;
-	public GameObject rudderR, rudderL;
+	public Transform rudderR, rudderL;
 	public GameObject redNavObj, greenNavObj;
 	public Transform red1,red2,green1,green2;
 
 	public Text pointOfSail;
 
 	void Start () {
-		body = GetComponent<Rigidbody>();
+		myRigidbody = GetComponent<Rigidbody>();
 	}
 
 	void Awake() {
@@ -43,6 +50,7 @@ public class NavBoatControl : BoatBase {
 	}
 
 	void Update () {
+		HandleRutterRotation();
 
 		MastRotation();
 
@@ -130,12 +138,12 @@ public class NavBoatControl : BoatBase {
 	
 		if (canMove) {
 			if(Input.GetKey(KeyCode.LeftArrow)) {
-				body.AddRelativeTorque (-Vector3.up*turnStrength);
+				myRigidbody.AddRelativeTorque (-Vector3.up*turnStrength);
 				targetRudderRotation = Quaternion.Euler(0, rudderRotation,0);
 			}
 			
 			else if(Input.GetKey(KeyCode.RightArrow)) {
-				body.AddRelativeTorque (Vector3.up*turnStrength);
+				myRigidbody.AddRelativeTorque (Vector3.up*turnStrength);
 				targetRudderRotation = Quaternion.Euler(0, -rudderRotation,0);
 
 			}
@@ -144,14 +152,12 @@ public class NavBoatControl : BoatBase {
 	
 			}
 
-			rudderR.transform.localRotation = Quaternion.RotateTowards(rudderR.transform.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
-			rudderL.transform.localRotation = Quaternion.RotateTowards(rudderL.transform.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
+//			rudderR.localRotation = Quaternion.RotateTowards(rudderR.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
+//			rudderL.localRotation = Quaternion.RotateTowards(rudderL.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
 
-			body.AddForce (transform.forward * currThrust);
+			myRigidbody.AddForce (transform.forward * currThrust);
 		}
 	}
-
-
 
 	void OnTriggerEnter(Collider other) {
 //		print (other.tag + " " + NavManager.s_instance.ReturnCurrNavPointName());
@@ -161,15 +167,21 @@ public class NavBoatControl : BoatBase {
 		}
 
 		if (other.tag == "CollisionObject") {
-			body.AddForce (transform.forward * -1 * currThrust);
+			myRigidbody.AddForce (transform.forward * -1 * currThrust);
 		}
 	
 	}
 
 	void OnTriggerStay(Collider other){
 		if (other.tag == "collisionObject") {
-			body.AddForce(transform.forward * -1 * currThrust);
+			myRigidbody.AddForce(transform.forward * -1 * currThrust);
 		}
 	}
 
+	private void HandleRutterRotation() {
+		float x = Input.GetAxis( "Horizontal" );
+
+		rudderR.localRotation = Quaternion.RotateTowards(rudderR.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
+		rudderL.localRotation = Quaternion.RotateTowards(rudderL.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
+	}
 }
