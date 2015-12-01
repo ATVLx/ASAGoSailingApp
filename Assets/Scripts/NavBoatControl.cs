@@ -16,12 +16,11 @@ public class NavBoatControl : BoatBase {
 	private float weakTurnStrength = 4f;
 	private float strongTurnStrength = 5f;
 	private float turningRate = 60f;
-	private float rudderRotation =40f;
+	private float maxRudderRotation =40f;
 	private float deadZone = 45f;
 
 	private float currBoomRotation = 0f;
-	private float currRutterRotation = 0f;			// in degrees
-	private float maxRutterRotation = 170f;			// in degrees
+	private float currBoomValue = 0f;
 	private float rutterRotationSpeed = 5f;			// in deg/s
  
 	private Quaternion comeAboutStart, comeAboutEnd;
@@ -37,10 +36,23 @@ public class NavBoatControl : BoatBase {
 	public Transform red1,red2,green1,green2;
 
 	public Text pointOfSail;
+	public Slider boomSlider;
+	public Slider rudderSlider;
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
 		myTransform = GetComponent<Transform>();
+
+		// Subscribe to boom slider update event
+		if( boomSlider != null )
+			boomSlider.onValueChanged.AddListener( delegate {UpdateBoomAngle();} );
+		else
+			Debug.LogError( "NavBoatControl doesn't have a reference to the Boom Slider." );
+		// Subscribe to rudder slider update event
+		if( rudderSlider != null )
+			rudderSlider.onValueChanged.AddListener( delegate {UpdateRudderAngle();} );
+		else
+			Debug.LogError( "NavBoatControl doesn't have a reference to the Rudder Slider." );
 	}
 
 	void Awake() {
@@ -52,8 +64,6 @@ public class NavBoatControl : BoatBase {
 	}
 
 	void Update () {
-		HandleRutterRotation();
-
 		MastRotation();
 
 		ApplyBoatAngle();
@@ -99,22 +109,9 @@ public class NavBoatControl : BoatBase {
 		}
 	}
 
-	void FixedUpdate () {
-	
+	void FixedUpdate () {	
 		if (canMove) {
-			if(Input.GetKey(KeyCode.LeftArrow)) {
-				myRigidbody.AddRelativeTorque (-Vector3.up*turnStrength);
-				targetRudderRotation = Quaternion.Euler(0, rudderRotation,0);
-			} else if(Input.GetKey(KeyCode.RightArrow)) {
-				myRigidbody.AddRelativeTorque (Vector3.up*turnStrength);
-				targetRudderRotation = Quaternion.Euler(0, -rudderRotation,0);
-
-			} else {
-				targetRudderRotation = Quaternion.identity;	
-			}
-
-//			rudderR.localRotation = Quaternion.RotateTowards(rudderR.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
-//			rudderL.localRotation = Quaternion.RotateTowards(rudderL.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
+			HandleRutterRotation();
 
 			myRigidbody.AddForce (transform.forward * currThrust);
 		}
@@ -140,10 +137,26 @@ public class NavBoatControl : BoatBase {
 	}
 
 	private void HandleRutterRotation() {
-		float x = Input.GetAxis( "Horizontal" );
+		float horizontalInput = Input.GetAxis( "Horizontal" );
+		
+		if( horizontalInput < -0.1f ) {
+			// If player is pressing left
+			myRigidbody.AddRelativeTorque (-Vector3.up*turnStrength);
+			targetRudderRotation = Quaternion.Euler(0, maxRudderRotation,0);
+			rudderSlider.value = -1f;
+		} else if( horizontalInput > 0.1f ) {
+			// If player is pressing right
+			myRigidbody.AddRelativeTorque (Vector3.up*turnStrength);
+			targetRudderRotation = Quaternion.Euler(0, -maxRudderRotation,0);
+			rudderSlider.value = 1f;
+		} else {
+			targetRudderRotation = Quaternion.identity;
+			rudderSlider.value = 0f;
+		}
+		
+		rudderR.localRotation = Quaternion.RotateTowards(rudderR.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
+		rudderL.localRotation = Quaternion.RotateTowards(rudderL.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
 
-		rudderR.localRotation = Quaternion.RotateTowards(rudderR.localRotation, targetRudderRotation, rutterRotationSpeed * Time.deltaTime);
-		rudderL.localRotation = Quaternion.RotateTowards(rudderL.localRotation, targetRudderRotation, rutterRotationSpeed * Time.deltaTime);
 	}
 
 	private void ApplyBoatAngle() {
@@ -194,5 +207,13 @@ public class NavBoatControl : BoatBase {
 		}
 		
 		boatKeel.SetFloat("rotation", animatorBlendVal);
+	}
+	
+	public void UpdateBoomAngle() {
+		currBoomValue = boomSlider.value;
+	}
+
+	public void UpdateRudderAngle() {
+		targetRudderRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value*maxRudderRotation, 0f ) );
 	}
 }
