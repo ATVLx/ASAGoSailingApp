@@ -67,10 +67,10 @@ public class NavBoatControl : BoatBase {
 		if ( angleWithRespectToWind < (inIronsNullZone+inIronsBufferZone) )
 			effectiveAngle = angleWithRespectToWind > inIronsNullZone ? angleWithRespectToWind - inIronsNullZone : 0f;
 	
-		float optimalAngle = myTransform.rotation.y * 0.45f;			//TODO Fiddle around with the constant to see what works for us
-		float sailEffectiveness = currBoomRotation / optimalAngle;
+		float optimalAngle = myTransform.rotation.y * 0.45f;								//TODO Fiddle around with the constant to see what works for us
+		float sailEffectiveness = optimalAngle != 0f ? currBoomRotation / optimalAngle : 0f;
 
-		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 10f; //TODO Fiddle with this constant for speed of boat
+		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 10f; 	//TODO Fiddle with this constant for speed of boat
 		currThrust = boatThrust;
 //		if (Mathf.Abs(Vector3.Angle(WindManager.s_instance.directionOfWind, transform.forward)) < deadZone) {
 //			if(currThrust > 0) {
