@@ -13,15 +13,13 @@ public class NavBoatControl : BoatBase {
 	private float weakThrust = 150f, strongThrust = 2500f;
 	private float angleToAdjustTo;
 	private float turnStrength = 5f;
-	private float weakTurnStrength = 4f;
-	private float strongTurnStrength = 5f;
-	private float turningRate = 60f;
-	private float maxRudderRotation =40f;
+	private float currRudderRotation = 0f;
+	private float rudderRotationSpeed = 100f;
+	private float maxRudderRotation = 60f;
 	private float deadZone = 45f;
 
 	private float currBoomRotation = 0f;
 	private float currBoomValue = 0f;
-	private float rutterRotationSpeed = 5f;			// in deg/s
  
 	private Quaternion comeAboutStart, comeAboutEnd;
 	private Quaternion targetRudderRotation = Quaternion.identity;
@@ -44,13 +42,17 @@ public class NavBoatControl : BoatBase {
 		myTransform = GetComponent<Transform>();
 
 		// Subscribe to boom slider update event
-		if( boomSlider != null )
-			boomSlider.onValueChanged.AddListener( delegate {UpdateBoomAngle();} );
+		if( boomSlider != null ) {
+			//boomSlider.onValueChanged.AddListener( delegate {UpdateBoomAngle();} );
+		}
 		else
 			Debug.LogError( "NavBoatControl doesn't have a reference to the Boom Slider." );
 		// Subscribe to rudder slider update event
-		if( rudderSlider != null )
-			rudderSlider.onValueChanged.AddListener( delegate {UpdateRudderAngle();} );
+		if( rudderSlider != null ) {
+			//rudderSlider.onValueChanged.AddListener( delegate {UpdateRudderAngle();} );
+			rudderSlider.maxValue = maxRudderRotation;
+			rudderSlider.minValue = -maxRudderRotation;
+		}
 		else
 			Debug.LogError( "NavBoatControl doesn't have a reference to the Rudder Slider." );
 	}
@@ -138,25 +140,29 @@ public class NavBoatControl : BoatBase {
 
 	private void HandleRutterRotation() {
 		float horizontalInput = Input.GetAxis( "Horizontal" );
-		
-		if( horizontalInput < -0.1f ) {
+		float rudderDirectionScalar = 0f;
+
+//		if( horizontalInput >= -0.1f && horizontalInput <= 0.1f ) {
+//			rudderR.localRotation = Quaternion.RotateTowards(rudderR.localRotation, Quaternion.identity, rudderRotationSpeed * Time.deltaTime);
+//			rudderL.localRotation = Quaternion.RotateTowards(rudderL.localRotation, Quaternion.identity, rudderRotationSpeed * Time.deltaTime);
+//			return;
+//		} else 
+		if( horizontalInput < 0f ) {
 			// If player is pressing left
 			myRigidbody.AddRelativeTorque (-Vector3.up*turnStrength);
-			targetRudderRotation = Quaternion.Euler(0, maxRudderRotation,0);
-			rudderSlider.value = -1f;
-		} else if( horizontalInput > 0.1f ) {
+			rudderDirectionScalar = 1f;
+		} else if( horizontalInput > 0f ) {
 			// If player is pressing right
 			myRigidbody.AddRelativeTorque (Vector3.up*turnStrength);
-			targetRudderRotation = Quaternion.Euler(0, -maxRudderRotation,0);
-			rudderSlider.value = 1f;
-		} else {
-			targetRudderRotation = Quaternion.identity;
-			rudderSlider.value = 0f;
+			rudderDirectionScalar = -1f;
 		}
-		
-		rudderR.localRotation = Quaternion.RotateTowards(rudderR.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
-		rudderL.localRotation = Quaternion.RotateTowards(rudderL.localRotation, targetRudderRotation, turningRate * Time.deltaTime);
 
+		rudderSlider.value += rudderRotationSpeed*rudderDirectionScalar*Time.deltaTime;
+
+		rudderL.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
+		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
+
+		//rudderSlider.value = -currRudderRotation / maxRudderRotation;
 	}
 
 	private void ApplyBoatAngle() {
@@ -207,13 +213,5 @@ public class NavBoatControl : BoatBase {
 		}
 		
 		boatKeel.SetFloat("rotation", animatorBlendVal);
-	}
-	
-	public void UpdateBoomAngle() {
-		currBoomValue = boomSlider.value;
-	}
-
-	public void UpdateRudderAngle() {
-		targetRudderRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value*maxRudderRotation, 0f ) );
 	}
 }
