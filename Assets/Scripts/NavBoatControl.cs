@@ -12,15 +12,13 @@ public class NavBoatControl : BoatBase {
 	private float currThrust = 0f;
 	private float weakThrust = 150f, strongThrust = 2500f;
 	private float angleToAdjustTo;
-	private float turnStrength = .01f;
+	private float turnStrength = .04f;
 	private float currRudderRotation = 0f;
 	private float rudderRotationSpeed = 100f;
 	private float maxRudderRotation = 60f;
 	private float deadZone = 45f;
 	private float boatVelocityScalar = 1f;
 
-	private float currBoomRotation = 0f;
-	private float currBoomValue = 0f;
  
 	private Quaternion comeAboutStart, comeAboutEnd;
 	private Quaternion targetRudderRotation = Quaternion.identity;
@@ -30,6 +28,7 @@ public class NavBoatControl : BoatBase {
 	public AudioSource correct;
 	public Animator boatKeel;
 	public GameObject arrow;
+	public Transform boom;
 	public Transform rudderR, rudderL;
 	public GameObject redNavObj, greenNavObj;
 	public Transform red1,red2,green1,green2;
@@ -68,23 +67,9 @@ public class NavBoatControl : BoatBase {
 
 	void Update () {
 		MastRotation();
-		ApplyBoatRotation ();
+		ApplyBoomRotation ();
 		IdentifyPointOfSail();
 
-		float inIronsBufferZone = 15f;
-		float inIronsNullZone = 30f;
-		float effectiveAngle = 15f;
-		float angleWithRespectToWind = Mathf.Abs(Vector3.Angle(WindManager.s_instance.directionOfWind, transform.forward));
-
-		// If we are within the in irons range check to see if we are in the buffer zone
-		if ( angleWithRespectToWind < (inIronsNullZone+inIronsBufferZone) )
-			effectiveAngle = angleWithRespectToWind > inIronsNullZone ? angleWithRespectToWind - inIronsNullZone : 0f;
-	
-		float optimalAngle = myTransform.rotation.y * 0.45f;								//TODO Fiddle around with the constant to see what works for us
-		float sailEffectiveness = optimalAngle != 0f ? currBoomRotation / optimalAngle : 0f;
-
-		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 10f; 	//TODO Fiddle with this constant for speed of boat
-		currThrust = boatThrust;
 //		if (Mathf.Abs(Vector3.Angle(WindManager.s_instance.directionOfWind, transform.forward)) < deadZone) {
 //			if(currThrust > 0) {
 //				currThrust -= 10f;
@@ -115,7 +100,8 @@ public class NavBoatControl : BoatBase {
 	void FixedUpdate () {	
 		if (canMove) {
 			HandleRutterRotation();
-
+			ApplyForwardThrust ();
+			ApplyBoatRotation ();
 			myRigidbody.AddForce (transform.forward * currThrust);
 		}
 	}
@@ -156,7 +142,31 @@ public class NavBoatControl : BoatBase {
 		rudderL.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
-	
+
+	private void ApplyBoomRotation () {
+		boom.localRotation = Quaternion.Euler (0, boomSlider.value, 0);
+	}
+
+	private void ApplyForwardThrust () {
+		float inIronsBufferZone = 15f;
+		float inIronsNullZone = 30f;
+		float effectiveAngle;
+
+		// If we are within the in irons range check to see if we are in the buffer zone
+		if (angleWRTWind < (inIronsNullZone + inIronsBufferZone))
+			effectiveAngle = angleWRTWind > inIronsNullZone ? angleWRTWind - inIronsNullZone : 0f;
+		else {
+			effectiveAngle = 15f;
+		}
+		
+		float optimalAngle = myTransform.rotation.y * 0.45f;								//TODO Fiddle around with the constant to see what works for us
+		float sailEffectiveness = optimalAngle != 0f ? boomSlider.value / optimalAngle : 0f;
+		
+		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 10f; 	//TODO Fiddle with this constant for speed of boat
+		print ("BOAT THRUST " + boatThrust);
+		myRigidbody.AddForce (transform.forward * boatThrust);
+	}
+
 	private void ApplyBoatRotation() {
 		// Depending on forward velocity of the boat, it will rotate faster or slower.
 		// We will have a base level rotation speed for when the boat is still.

@@ -16,6 +16,7 @@ public class BoatBase : MonoBehaviour {
 	protected void MastRotation() {
 		//handles sail blend shape, jibes, and mast rotation
 
+
 		lastAngleWRTWind = angleWRTWind;
 		directionWindComingFrom = WindManager.s_instance.directionOfWind;
 		
