@@ -74,7 +74,7 @@ public class BoatBase : MonoBehaviour {
 	void Update() {
 	}
 
-	protected void Jibe(float negative) {
+	protected override void Jibe(float negative) {
 		print ("JIBE");
 		isJibing = true;
 		lerpTimer = Time.time;
