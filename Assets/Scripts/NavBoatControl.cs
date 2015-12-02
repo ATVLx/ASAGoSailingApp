@@ -40,7 +40,6 @@ public class NavBoatControl : MonoBehaviour {
 	protected float lerpTimer, lerpDuration=1f, blendFloatValue, lastAngleWRTWind;
 	public bool rotateMast = false;
 	protected bool isJibing = false;
-	public GameObject mast;
 	protected Quaternion lerpStart, lerpEnd;
 	protected Vector3 boatDirection;
 
@@ -253,9 +252,9 @@ public class NavBoatControl : MonoBehaviour {
 			
 		} else if (isJibing) {
 			float percentageLerp = (Time.time - lerpTimer)/lerpDuration;
-			mast.transform.rotation = Quaternion.Lerp(lerpStart, lerpEnd, percentageLerp);
+			boom.rotation = Quaternion.Lerp(lerpStart, lerpEnd, percentageLerp);
 			if (percentageLerp > .98) {
-				mast.transform.rotation = Quaternion.Lerp(lerpStart, lerpEnd, 1);
+				boom.rotation = Quaternion.Lerp(lerpStart, lerpEnd, 1);
 				isJibing = false;
 			}
 		}
@@ -266,8 +265,8 @@ public class NavBoatControl : MonoBehaviour {
 		print ("JIBE");
 		isJibing = true;
 		lerpTimer = Time.time;
-		lerpStart = Quaternion.Inverse(mast.transform.localRotation);
-		lerpEnd = Quaternion.Inverse(mast.transform.localRotation * Quaternion.Inverse(Quaternion.Euler(0,negative*180f,0)));
+		lerpStart = Quaternion.Inverse(boom.localRotation);
+		lerpEnd = Quaternion.Inverse(boom.localRotation * Quaternion.Inverse(Quaternion.Euler(0,negative*180f,0)));
 		
 	}
 
