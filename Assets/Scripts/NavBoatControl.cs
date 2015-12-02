@@ -30,8 +30,6 @@ public class NavBoatControl : BoatBase {
 	public GameObject arrow;
 	public Transform boom;
 	public Transform rudderR, rudderL;
-	public GameObject redNavObj, greenNavObj;
-	public Transform red1,red2,green1,green2;
 
 	public Text pointOfSail;
 	public Slider boomSlider;
@@ -102,7 +100,6 @@ public class NavBoatControl : BoatBase {
 			HandleRutterRotation();
 			ApplyForwardThrust ();
 			ApplyBoatRotation ();
-			myRigidbody.AddForce (transform.forward * currThrust);
 		}
 	}
 
@@ -162,9 +159,9 @@ public class NavBoatControl : BoatBase {
 		float optimalAngle = myTransform.rotation.y * 0.45f;								//TODO Fiddle around with the constant to see what works for us
 		float sailEffectiveness = optimalAngle != 0f ? boomSlider.value / optimalAngle : 0f;
 		
-		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 10f; 	//TODO Fiddle with this constant for speed of boat
+		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 1f; 	//TODO Fiddle with this constant for speed of boat
 		print ("BOAT THRUST " + boatThrust);
-		myRigidbody.AddForce (transform.forward * boatThrust);
+		myRigidbody.AddRelativeForce( myTransform.forward * boatThrust);//.AddForce (Vector3.forward * boatThrust);
 	}
 
 	private void ApplyBoatRotation() {
