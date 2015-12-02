@@ -17,8 +17,8 @@ public class NavBoatControl : BoatBase {
 	private float rudderRotationSpeed = 100f;
 	private float maxRudderRotation = 60f;
 	private float deadZone = 45f;
-	private float boatVelocityScalar = 1f;
-
+	private float boatRotationVelocityScalar = 1f;
+	private float boatMovementVelocityScalar = 500f;
  
 	private Quaternion comeAboutStart, comeAboutEnd;
 	private Quaternion targetRudderRotation = Quaternion.identity;
@@ -151,16 +151,16 @@ public class NavBoatControl : BoatBase {
 
 		// If we are within the in irons range check to see if we are in the buffer zone
 		if (angleWRTWind < (inIronsNullZone + inIronsBufferZone))
-			effectiveAngle = angleWRTWind > inIronsNullZone ? angleWRTWind - inIronsNullZone : 0f;
+			effectiveAngle = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? angleWRTWind - inIronsNullZone : 0f;
 		else {
 			effectiveAngle = 15f;
 		}
+		Debug.Log( "Effective angle: " + effectiveAngle );
+		//Debug.Log( "AngleWRTWind: " + angleWRTWind );
 		
-		float optimalAngle = myTransform.rotation.y * 0.45f;								//TODO Fiddle around with the constant to see what works for us
-		float sailEffectiveness = optimalAngle != 0f ? boomSlider.value / optimalAngle : 0f;
-		
-		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 10f; 	//TODO Fiddle with this constant for speed of boat
-		print ("BOAT THRUST " + boatThrust);
+		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.45f;		//TODO Fiddle around with the constant to see what works for us
+		float sailEffectiveness = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? boomSlider.value / optimalAngle : 0f;
+		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
 	}
 
@@ -172,7 +172,7 @@ public class NavBoatControl : BoatBase {
 		if (myRigidbody.velocity.magnitude == 0) {
 			velocityScalar = 1;
 		} else {
-			velocityScalar = 1f + myRigidbody.velocity.magnitude * boatVelocityScalar;
+			velocityScalar = 1f + myRigidbody.velocity.magnitude * boatRotationVelocityScalar;
 		}
 		myRigidbody.AddTorque (-Vector3.up*rudderSlider.value*turnStrength*velocityScalar);
 	}
