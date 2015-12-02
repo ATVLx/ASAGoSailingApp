@@ -270,5 +270,11 @@ public class NavBoatControl : MonoBehaviour {
 		
 	}
 
-
+	private void SetBoomRotation() {
+		if( angleWRTWind >= 180f ) {
+			boom.rotation = Quaternion.Euler( 0f, -boomSlider.value, 0f );
+		} else {
+			boom.rotation = Quaternion.Euler( 0f, boomSlider.value, 0f );
+		}
+	}
 }
