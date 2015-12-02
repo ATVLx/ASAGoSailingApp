@@ -30,13 +30,19 @@ public class NavBoatControl : MonoBehaviour {
 	public GameObject arrow;
 	public Transform boom;
 	public Transform rudderR, rudderL;
-
+	/// <summary>
+	/// This is the text file that we store in Unity Project folder that holds the values in CSV format of all of the points of sail names and angles associated with them
+	/// </summary>
 	public Text pointOfSail;
 	public Slider boomSlider;
 	public Slider rudderSlider;
 
 	//Jibe Logic Vars
-	protected float lerpTimer, lerpDuration=1f, blendFloatValue, angleWRTWind, lastAngleWRTWind;
+	/// <summary>
+	/// The angle WRT wind returns the value of 0-360 which is used to determine which side of the wind you are on.
+	/// </summary>
+	private float angleWRTWind;
+	protected float lerpTimer, lerpDuration=1f, blendFloatValue, lastAngleWRTWind;
 	public bool rotateMast = false;
 	protected bool isJibing = false;
 	public GameObject mast;
@@ -247,7 +253,8 @@ public class NavBoatControl : MonoBehaviour {
 		lastAngleWRTWind = angleWRTWind;
 
 		boatDirection = transform.forward;
-		angleWRTWind = Vector3.Angle(boatDirection, Vector3.forward);
+		///angleWRTWind gives a value between 0-360
+		angleWRTWind = Vector3.Angle(boatDirection, Vector3.forward); 
 		if (transform.rotation.eulerAngles.y > 180f ) {
 			angleWRTWind = 360-angleWRTWind;
 		}
@@ -280,15 +287,7 @@ public class NavBoatControl : MonoBehaviour {
 				isJibing = false;
 			}
 		}
-		
-		//TODO replace euler angle conditions with WRT to wind conditions in the case of variable wind
-		if (transform.rotation.eulerAngles.y  > 355f) {
-			blendFloatValue = 50 - (360f-transform.rotation.eulerAngles.y ) * 10f;
-		}
-		else if (transform.rotation.eulerAngles.y  < 5f) {
-			blendFloatValue = (transform.rotation.eulerAngles.y) * 10f + 50f;
 
-		}
 	}
 	
 	protected override void Jibe(float negative) {
