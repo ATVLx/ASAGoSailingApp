@@ -8,20 +8,15 @@ public class NavBoatControl : MonoBehaviour {
 	public static NavBoatControl s_instance;
 
 	private Rigidbody myRigidbody;
-	private Transform myTransform;
 	private float currThrust = 0f;
-	private float weakThrust = 150f, strongThrust = 2500f;
 	private float angleToAdjustTo;
 	private float turnStrength = .04f;
-	private float currRudderRotation = 0f;
 	private float rudderRotationSpeed = 100f;
 	private float maxRudderRotation = 60f;
-	private float deadZone = 45f;
 	private float boatRotationVelocityScalar = 1f;
 	private float boatMovementVelocityScalar = 500f;
  
 	private Quaternion comeAboutStart, comeAboutEnd;
-	private Quaternion targetRudderRotation = Quaternion.identity;
 
 	public ParticleSystem left, right;
 	public bool canMove = false;
@@ -53,7 +48,6 @@ public class NavBoatControl : MonoBehaviour {
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
-		myTransform = GetComponent<Transform>();
 
 		// Subscribe to boom slider update event
 		if( boomSlider != null ) {
@@ -268,7 +262,7 @@ public class NavBoatControl : MonoBehaviour {
 
 	}
 	
-	protected override void Jibe(float negative) {
+	protected virtual void Jibe(float negative) {
 		print ("JIBE");
 		isJibing = true;
 		lerpTimer = Time.time;
