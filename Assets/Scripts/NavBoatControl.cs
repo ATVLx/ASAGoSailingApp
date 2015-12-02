@@ -84,28 +84,6 @@ public class NavBoatControl : MonoBehaviour {
 		ApplyBoomRotation ();
 		IdentifyPointOfSail();
 
-//		if (Mathf.Abs(Vector3.Angle(WindManager.s_instance.directionOfWind, transform.forward)) < deadZone) {
-//			if(currThrust > 0) {
-//				currThrust -= 10f;
-//			} else {
-//				currThrust = 0;
-//				left.enableEmission = false;
-//				right.enableEmission = false;
-//			}
-//			turnStrength = weakTurnStrength;
-//		} else {
-//			left.enableEmission = true;
-//			right.enableEmission = true;
-//			if (currThrust < strongThrust) {
-//				currThrust += 10f;
-//			} else {
-//				currThrust = strongThrust;
-//			}
-//			turnStrength = strongTurnStrength;
-//		}
-//
-//		print (currThrust + "CT");
-
 		if (NavManager.s_instance.gameState == NavManager.GameState.Win) {
 			arrow.SetActive(false);
 		}
@@ -277,7 +255,7 @@ public class NavBoatControl : MonoBehaviour {
 		
 		if (!isJibing) {
 			//			get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
-			mast.transform.localRotation = Quaternion.Lerp (Quaternion.identity, Quaternion.Inverse(transform.localRotation), 0.5f);
+			ApplyBoomRotation();
 			
 		} else if (isJibing) {
 			float percentageLerp = (Time.time - lerpTimer)/lerpDuration;
