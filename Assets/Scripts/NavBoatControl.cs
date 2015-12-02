@@ -74,7 +74,8 @@ public class NavBoatControl : MonoBehaviour {
 
 	void Update () {
 		MastRotation();
-		ApplyBoomRotation ();
+		GetBoomRotationFromSlider ();
+		SetBoomRotation();
 		IdentifyPointOfSail();
 
 		if (NavManager.s_instance.gameState == NavManager.GameState.Win) {
@@ -127,7 +128,7 @@ public class NavBoatControl : MonoBehaviour {
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
 
-	private void ApplyBoomRotation () {
+	private void GetBoomRotationFromSlider () {
 		boom.localRotation = Quaternion.Euler (0, boomSlider.value, 0);
 	}
 
@@ -248,7 +249,7 @@ public class NavBoatControl : MonoBehaviour {
 		
 		if (!isJibing) {
 			//			get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
-			ApplyBoomRotation();
+			GetBoomRotationFromSlider();
 			
 		} else if (isJibing) {
 			float percentageLerp = (Time.time - lerpTimer)/lerpDuration;
