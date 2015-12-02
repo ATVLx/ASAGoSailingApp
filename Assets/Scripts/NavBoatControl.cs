@@ -12,13 +12,12 @@ public class NavBoatControl : BoatBase {
 	private float currThrust = 0f;
 	private float weakThrust = 150f, strongThrust = 2500f;
 	private float angleToAdjustTo;
-	private float turnStrength = 5f;
+	private float turnStrength = .01f;
 	private float currRudderRotation = 0f;
 	private float rudderRotationSpeed = 100f;
 	private float maxRudderRotation = 60f;
 	private float deadZone = 45f;
-	private float boatRotationSpeed = 10f;
-	private float boatMaxForwardVelocity = 20f;
+	private float boatVelocityScalar = 1f;
 
 	private float currBoomRotation = 0f;
 	private float currBoomValue = 0f;
@@ -69,7 +68,7 @@ public class NavBoatControl : BoatBase {
 
 	void Update () {
 		MastRotation();
-
+		ApplyBoatRotation ();
 		IdentifyPointOfSail();
 
 		float inIronsBufferZone = 15f;
@@ -146,11 +145,9 @@ public class NavBoatControl : BoatBase {
 
 		if( horizontalInput < 0f ) {
 			// If player is pressing left
-			myRigidbody.AddRelativeTorque (-Vector3.up*turnStrength);
 			rudderDirectionScalar = 1f;
 		} else if( horizontalInput > 0f ) {
 			// If player is pressing right
-			myRigidbody.AddRelativeTorque (Vector3.up*turnStrength);
 			rudderDirectionScalar = -1f;
 		}
 
@@ -164,7 +161,13 @@ public class NavBoatControl : BoatBase {
 		// Depending on forward velocity of the boat, it will rotate faster or slower.
 		// We will have a base level rotation speed for when the boat is still.
 		// We will always apply torque with a scalar whose value is dependent on velocity
-		float scalar;
+		float velocityScalar;
+		if (myRigidbody.velocity.magnitude == 0) {
+			velocityScalar = 1;
+		} else {
+			velocityScalar = 1f + myRigidbody.velocity.magnitude * boatVelocityScalar;
+		}
+		myRigidbody.AddTorque (-Vector3.up*rudderSlider.value*turnStrength*velocityScalar);
 	}
 
 	private void IdentifyPointOfSail() {
