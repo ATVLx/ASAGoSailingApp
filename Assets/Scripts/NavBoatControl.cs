@@ -17,6 +17,8 @@ public class NavBoatControl : BoatBase {
 	private float rudderRotationSpeed = 100f;
 	private float maxRudderRotation = 60f;
 	private float deadZone = 45f;
+	private float boatRotationSpeed = 10f;
+	private float boatMaxForwardVelocity = 20f;
 
 	private float currBoomRotation = 0f;
 	private float currBoomValue = 0f;
@@ -68,7 +70,7 @@ public class NavBoatControl : BoatBase {
 	void Update () {
 		MastRotation();
 
-		ApplyBoatAngle();
+		IdentifyPointOfSail();
 
 		float inIronsBufferZone = 15f;
 		float inIronsNullZone = 30f;
@@ -142,11 +144,6 @@ public class NavBoatControl : BoatBase {
 		float horizontalInput = Input.GetAxis( "Horizontal" );
 		float rudderDirectionScalar = 0f;
 
-//		if( horizontalInput >= -0.1f && horizontalInput <= 0.1f ) {
-//			rudderR.localRotation = Quaternion.RotateTowards(rudderR.localRotation, Quaternion.identity, rudderRotationSpeed * Time.deltaTime);
-//			rudderL.localRotation = Quaternion.RotateTowards(rudderL.localRotation, Quaternion.identity, rudderRotationSpeed * Time.deltaTime);
-//			return;
-//		} else 
 		if( horizontalInput < 0f ) {
 			// If player is pressing left
 			myRigidbody.AddRelativeTorque (-Vector3.up*turnStrength);
@@ -161,11 +158,16 @@ public class NavBoatControl : BoatBase {
 
 		rudderL.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
-
-		//rudderSlider.value = -currRudderRotation / maxRudderRotation;
+	}
+	
+	private void ApplyBoatRotation() {
+		// Depending on forward velocity of the boat, it will rotate faster or slower.
+		// We will have a base level rotation speed for when the boat is still.
+		// We will always apply torque with a scalar whose value is dependent on velocity
+		float scalar;
 	}
 
-	private void ApplyBoatAngle() {
+	private void IdentifyPointOfSail() {
 		//add keeling into the boat rotation
 		float animatorBlendVal;
 		
