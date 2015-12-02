@@ -158,7 +158,7 @@ public class NavBoatControl : BoatBase {
 		Debug.Log( "Effective angle: " + effectiveAngle );
 		//Debug.Log( "AngleWRTWind: " + angleWRTWind );
 		
-		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.45f;		//TODO Fiddle around with the constant to see what works for us
+		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f;		//TODO Fiddle around with the constant to see what works for us
 		float sailEffectiveness = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? boomSlider.value / optimalAngle : 0f;
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
