@@ -159,9 +159,9 @@ public class NavBoatControl : BoatBase {
 		float optimalAngle = myTransform.rotation.y * 0.45f;								//TODO Fiddle around with the constant to see what works for us
 		float sailEffectiveness = optimalAngle != 0f ? boomSlider.value / optimalAngle : 0f;
 		
-		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 1f; 	//TODO Fiddle with this constant for speed of boat
+		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * 10f; 	//TODO Fiddle with this constant for speed of boat
 		print ("BOAT THRUST " + boatThrust);
-		myRigidbody.AddRelativeForce( myTransform.forward * boatThrust);//.AddForce (Vector3.forward * boatThrust);
+		myRigidbody.AddForce( transform.forward * boatThrust);
 	}
 
 	private void ApplyBoatRotation() {
