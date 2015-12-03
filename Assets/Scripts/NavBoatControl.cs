@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 public class NavBoatControl : MonoBehaviour {
 
+	//test
+	public Text thrustVal, velocity;
+
 	public enum BoatSideFacingWind {Port, Starboard};
 	public static NavBoatControl s_instance;
 
@@ -22,7 +25,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float maxRudderRotation = 60f;
 	private float rudderNullZone = 0.1f;
 	private float boatRotationVelocityScalar = 1f;
-	private float boatMovementVelocityScalar = 500f;
+	private float boatMovementVelocityScalar = 100f;
 	private Quaternion comeAboutStart, comeAboutEnd;
 
 	public ParticleSystem left, right;
@@ -147,10 +150,12 @@ public class NavBoatControl : MonoBehaviour {
 		Debug.Log( "Effective angle: " + effectiveAngle );
 		//Debug.Log( "AngleWRTWind: " + angleWRTWind );
 		
-		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f;		//TODO Fiddle around with the constant to see what works for us
-		float sailEffectiveness = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? boomSlider.value / optimalAngle : 0f;
+		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
+		float sailEffectiveness = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? optimalAngle / (Mathf.Abs( boomSlider.value - optimalAngle) + optimalAngle) : 0f;
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
+		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
+		velocity.text = "velocity: " + Mathf.Round(myRigidbody.velocity.magnitude);
 	}
 	
 	private void ApplyBoatRotation() {
