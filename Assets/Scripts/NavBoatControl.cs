@@ -267,10 +267,8 @@ public class NavBoatControl : MonoBehaviour {
 		// If we're less than 90 degrees from in irons clamp boom's max angle
 		if( Vector3.Angle( Vector3.forward, transform.forward) <= 90f )
 			maxBoomAngle = Vector3.Angle( Vector3.forward, transform.forward );
-
 		float clampedBoomAngle = Mathf.Clamp( boomSlider.value, 0f, maxBoomAngle );
-
-		// Mirror canva's position dependingon what way we are facing the wind.
+		// Mirror canvas's position dependingon what way we are facing the wind.
 		if( angleWRTWind >= 180f ) {
 			boom.localRotation = Quaternion.Euler( 0f, clampedBoomAngle, 0f );
 		} else {
