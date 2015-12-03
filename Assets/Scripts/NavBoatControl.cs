@@ -235,13 +235,13 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		if ((angleWRTWind >= 180 && lastAngleWRTWind <= 180 
 		     && angleWRTWind <190)) {
-			if (lastAngleWRTWind!=0){
+			if (lastAngleWRTWind!=0 && !isJibing){
 				Jibe (-1f);
 			}
 		}
 		if(angleWRTWind <= 180 && lastAngleWRTWind >= 180
 		   && angleWRTWind > 170) {
-			if (lastAngleWRTWind!=0){
+			if (lastAngleWRTWind!=0 && !isJibing){
 				Jibe (1f);
 			}
 		}
@@ -262,7 +262,6 @@ public class NavBoatControl : MonoBehaviour {
 	}
 	
 	protected virtual void Jibe(float negative) {
-		print ("JIBE");
 		isJibing = true;
 		lerpTimer = Time.time;
 		lerpStart = Quaternion.Inverse(boom.localRotation);
