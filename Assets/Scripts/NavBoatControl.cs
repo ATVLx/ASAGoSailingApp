@@ -17,15 +17,16 @@ public class NavBoatControl : MonoBehaviour {
 	/// <summary>
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
-	private float rudderRotationSpeed = 100f;
+	private float rudderRotationSpeed = 60f;
 	/// <summary>
 	/// The boom trim speed in degrees/sec.
 	/// </summary>
-	private float boomTrimSpeed = 50f;
+	private float boomTrimSpeed = 30f;
 	private float maxRudderRotation = 60f;
-	private float rudderNullZone = 0.1f;
-	private float boatRotationVelocityScalar = .01f;
-	private float boatMovementVelocityScalar = 10000f;
+
+	private float rudderNullZone = 0.15f;
+	private float boatRotationVelocityScalar = 1f;
+	private float boatMovementVelocityScalar = 100f;
 	private Quaternion comeAboutStart, comeAboutEnd;
 
 	public ParticleSystem left, right;
