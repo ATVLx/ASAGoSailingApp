@@ -282,10 +282,12 @@ public class NavBoatControl : MonoBehaviour {
 			maxBoomAngle = Vector3.Angle( Vector3.forward, transform.forward );
 		float clampedBoomAngle = Mathf.Clamp( boomSlider.value, 0f, maxBoomAngle );
 		// Mirror canvas's position dependingon what way we are facing the wind.
+		Vector3 newBoomDirection = boom.localRotation * Vector3.forward;    
 		if( angleWRTWind >= 180f ) {
-			boom.localRotation = Quaternion.Euler( 0f, clampedBoomAngle, 0f );
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.1f, 0.1f);
 		} else {
-			boom.localRotation = Quaternion.Euler( 0f, -clampedBoomAngle, 0f );
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.1f, 0.1f);
 		}
+		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
 	}
 }
