@@ -254,6 +254,7 @@ public class NavBoatControl : MonoBehaviour {
 				fracJourney=1;
 				lerpAngleFloatVal = Mathf.Lerp(lerpStart, lerpEnd, fracJourney);
 				boom.localRotation = Quaternion.Euler(0,lerpAngleFloatVal,0);
+				rudderSlider.interactable = true;
 			}
 		}
 
@@ -264,7 +265,7 @@ public class NavBoatControl : MonoBehaviour {
 		lerpTimer = Time.time;
 		lerpStart = boom.localRotation.eulerAngles.y > 180 ? boom.localRotation.eulerAngles.y - 360 : boom.localRotation.eulerAngles.y;
 		lerpEnd = -lerpStart;
-		
+		rudderSlider.interactable = false;
 	}
 
 	private void SetBoomRotation() {
