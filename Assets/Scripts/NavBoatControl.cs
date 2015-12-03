@@ -20,6 +20,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// </summary>
 	private float boomTrimSpeed = 50f;
 	private float maxRudderRotation = 60f;
+	private float rudderNullZone = 0.1f;
 	private float boatRotationVelocityScalar = 1f;
 	private float boatMovementVelocityScalar = 500f;
 	private Quaternion comeAboutStart, comeAboutEnd;
@@ -162,7 +163,8 @@ public class NavBoatControl : MonoBehaviour {
 		} else {
 			velocityScalar = 1f + myRigidbody.velocity.magnitude * boatRotationVelocityScalar;
 		}
-		myRigidbody.AddTorque (-Vector3.up*rudderSlider.value*turnStrength*velocityScalar);
+		if( Mathf.Abs(rudderSlider.value) > rudderNullZone )
+			myRigidbody.AddTorque (-Vector3.up*rudderSlider.value*turnStrength*velocityScalar);
 	}
 
 	private void IdentifyPointOfSail() {
