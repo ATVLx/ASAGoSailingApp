@@ -15,7 +15,6 @@ public class NavBoatControl : MonoBehaviour {
 	private float maxRudderRotation = 60f;
 	private float boatRotationVelocityScalar = 1f;
 	private float boatMovementVelocityScalar = 500f;
- 
 	private Quaternion comeAboutStart, comeAboutEnd;
 
 	public ParticleSystem left, right;
@@ -42,7 +41,6 @@ public class NavBoatControl : MonoBehaviour {
 	protected bool isJibing = false;
 	protected Quaternion lerpStart, lerpEnd;
 	protected Vector3 boatDirection;
-
 
 
 	void Start () {
@@ -74,7 +72,6 @@ public class NavBoatControl : MonoBehaviour {
 
 	void Update () {
 		MastRotation();
-		ApplyBoomRotation ();
 		IdentifyPointOfSail();
 
 		if (NavManager.s_instance.gameState == NavManager.GameState.Win) {
@@ -125,10 +122,6 @@ public class NavBoatControl : MonoBehaviour {
 
 		rudderL.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
-	}
-
-	private void ApplyBoomRotation () {
-		boom.localRotation = Quaternion.Euler (0, boomSlider.value, 0);
 	}
 
 	private void ApplyForwardThrust () {
@@ -247,8 +240,8 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		
 		if (!isJibing) {
-			//			get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
-			ApplyBoomRotation();
+			// get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
+			SetBoomRotation();
 			
 		} else if (isJibing) {
 			float percentageLerp = (Time.time - lerpTimer)/lerpDuration;
@@ -269,5 +262,19 @@ public class NavBoatControl : MonoBehaviour {
 		
 	}
 
+	private void SetBoomRotation() {
+		float maxBoomAngle = boomSlider.maxValue;
+		// If we're less than 90 degrees from in irons clamp boom's max angle
+		if( Vector3.Angle( Vector3.forward, transform.forward) <= 90f )
+			maxBoomAngle = Vector3.Angle( Vector3.forward, transform.forward );
 
+		float clampedBoomAngle = Mathf.Clamp( boomSlider.value, 0f, maxBoomAngle );
+
+		// Mirror canva's position dependingon what way we are facing the wind.
+		if( angleWRTWind >= 180f ) {
+			boom.localRotation = Quaternion.Euler( 0f, clampedBoomAngle, 0f );
+		} else {
+			boom.localRotation = Quaternion.Euler( 0f, -clampedBoomAngle, 0f );
+		}
+	}
 }
