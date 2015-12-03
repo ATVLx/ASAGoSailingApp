@@ -54,14 +54,12 @@ public class NavBoatControl : MonoBehaviour {
 		myRigidbody = GetComponent<Rigidbody>();
 
 		// Subscribe to boom slider update event
-		if( boomSlider != null ) {
-			//boomSlider.onValueChanged.AddListener( delegate {UpdateBoomAngle();} );
+		if( boomSlider != null ){
 		}
 		else
 			Debug.LogError( "NavBoatControl doesn't have a reference to the Boom Slider." );
 		// Subscribe to rudder slider update event
 		if( rudderSlider != null ) {
-			//rudderSlider.onValueChanged.AddListener( delegate {UpdateRudderAngle();} );
 			rudderSlider.maxValue = maxRudderRotation;
 			rudderSlider.minValue = -maxRudderRotation;
 		}
@@ -255,6 +253,7 @@ public class NavBoatControl : MonoBehaviour {
 				lerpAngleFloatVal = Mathf.Lerp(lerpStart, lerpEnd, fracJourney);
 				boom.localRotation = Quaternion.Euler(0,lerpAngleFloatVal,0);
 				rudderSlider.interactable = true;
+				boomSlider.interactable = true;
 			}
 		}
 
@@ -266,6 +265,7 @@ public class NavBoatControl : MonoBehaviour {
 		lerpStart = boom.localRotation.eulerAngles.y > 180 ? boom.localRotation.eulerAngles.y - 360 : boom.localRotation.eulerAngles.y;
 		lerpEnd = -lerpStart;
 		rudderSlider.interactable = false;
+		boomSlider.interactable = false;
 	}
 
 	private void SetBoomRotation() {
