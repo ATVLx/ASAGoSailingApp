@@ -25,8 +25,8 @@ public class NavBoatControl : MonoBehaviour {
 	private float maxRudderRotation = 60f;
 
 	private float rudderNullZone = 0.2f;
-	private float boatRotationVelocityScalar = .08f;
-	private float boatMovementVelocityScalar = 10000f;
+	private float boatRotationVelocityScalar = .07f;
+	private float boatMovementVelocityScalar = 7000f;
 	private Quaternion comeAboutStart, comeAboutEnd;
 
 	public ParticleSystem left, right;
