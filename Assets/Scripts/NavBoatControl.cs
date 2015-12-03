@@ -11,7 +11,13 @@ public class NavBoatControl : MonoBehaviour {
 	private float currThrust = 0f;
 	private float angleToAdjustTo;
 	private float turnStrength = .02f;
+	/// <summary>
+	/// The rudder rotation speed in degrees/sec.
+	/// </summary>
 	private float rudderRotationSpeed = 100f;
+	/// <summary>
+	/// The boom trim speed in degrees/sec.
+	/// </summary>
 	private float boomTrimSpeed = 50f;
 	private float maxRudderRotation = 60f;
 	private float boatRotationVelocityScalar = 1f;
@@ -72,7 +78,8 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void Update () {
-		MastRotation();
+		MastRotation();		
+		HandleRudderRotation();
 		IdentifyPointOfSail();
 
 		if (NavManager.s_instance.gameState == NavManager.GameState.Win) {
@@ -82,7 +89,6 @@ public class NavBoatControl : MonoBehaviour {
 
 	void FixedUpdate () {	
 		if (canMove) {
-			HandleRutterRotation();
 			ApplyForwardThrust ();
 			ApplyBoatRotation ();
 		}
@@ -107,7 +113,7 @@ public class NavBoatControl : MonoBehaviour {
 		}
 	}
 
-	private void HandleRutterRotation() {
+	private void HandleRudderRotation() {
 		float horizontalInput = Input.GetAxis( "Horizontal" );
 		float rudderDirectionScalar = 0f;
 
@@ -208,16 +214,11 @@ public class NavBoatControl : MonoBehaviour {
 		boatKeel.SetFloat("rotation", animatorBlendVal);
 	}
 
-
-	//Start Jibe Logic
-
 	protected void MastRotation() {
 		//handles sail blend shape, jibes, and mast rotation
-		
-		
 		lastAngleWRTWind = angleWRTWind;
-
 		boatDirection = transform.forward;
+
 		///angleWRTWind gives a value between 0-360
 		angleWRTWind = Vector3.Angle(boatDirection, Vector3.forward); 
 		if (transform.rotation.eulerAngles.y > 180f ) {
