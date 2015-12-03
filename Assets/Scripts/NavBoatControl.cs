@@ -10,7 +10,7 @@ public class NavBoatControl : MonoBehaviour {
 	private Rigidbody myRigidbody;
 	private float currThrust = 0f;
 	private float angleToAdjustTo;
-	private float turnStrength = .02f;
+	private float turnStrength = .04f;
 	/// <summary>
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
@@ -46,7 +46,7 @@ public class NavBoatControl : MonoBehaviour {
 	protected float lerpTimer, lerpDuration=.5f, blendFloatValue, lastAngleWRTWind;
 	public bool rotateMast = false;
 	protected bool isJibing = false;
-	protected Quaternion lerpStart, lerpEnd;
+	protected float lerpStart, lerpEnd;
 	protected Vector3 boatDirection;
 
 
@@ -246,11 +246,14 @@ public class NavBoatControl : MonoBehaviour {
 			SetBoomRotation();
 			
 		} else if (isJibing) {
-			float percentageLerp = (Time.time - lerpTimer)/lerpDuration;
-			boom.rotation = Quaternion.Lerp(lerpStart, lerpEnd, percentageLerp);
-			if (percentageLerp > .98) {
-				boom.rotation = Quaternion.Lerp(lerpStart, lerpEnd, 1);
+			float fracJourney = (Time.time - lerpTimer)/lerpDuration;
+			float lerpAngleFloatVal = Mathf.Lerp(lerpStart, lerpEnd, fracJourney);
+			boom.localRotation = Quaternion.Euler(0,lerpAngleFloatVal,0);
+			if (fracJourney > .99f) {
 				isJibing = false;
+				fracJourney=1;
+				lerpAngleFloatVal = Mathf.Lerp(lerpStart, lerpEnd, fracJourney);
+				boom.localRotation = Quaternion.Euler(0,lerpAngleFloatVal,0);
 			}
 		}
 
@@ -259,14 +262,14 @@ public class NavBoatControl : MonoBehaviour {
 	protected virtual void Jibe(float negative) {
 		isJibing = true;
 		lerpTimer = Time.time;
-		lerpStart = Quaternion.Inverse(boom.localRotation);
-		lerpEnd = Quaternion.Inverse(Quaternion.Euler(0,boom.localRotation.y,0) * Quaternion.Inverse(Quaternion.Euler(0,negative*180f,0)));
+		lerpStart = boom.localRotation.eulerAngles.y > 180 ? boom.localRotation.eulerAngles.y - 360 : boom.localRotation.eulerAngles.y;
+		lerpEnd = -lerpStart;
 		
 	}
 
 	private void SetBoomRotation() {
 		float input = Input.GetAxis( "Vertical" );
-
+//		Quaternion.ro
 		// If player is pressing down
 		if( input < 0f ) {
 			boomSlider.value += boomTrimSpeed * Time.deltaTime;
