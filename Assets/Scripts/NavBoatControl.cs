@@ -10,7 +10,7 @@ public class NavBoatControl : MonoBehaviour {
 	private Rigidbody myRigidbody;
 	private float currThrust = 0f;
 	private float angleToAdjustTo;
-	private float turnStrength = .04f;
+	private float turnStrength = .02f;
 	private float rudderRotationSpeed = 100f;
 	private float maxRudderRotation = 60f;
 	private float boatRotationVelocityScalar = 1f;
@@ -36,7 +36,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// The angle WRT wind returns the value of 0-360 which is used to determine which side of the wind you are on.
 	/// </summary>
 	private float angleWRTWind;
-	protected float lerpTimer, lerpDuration=1f, blendFloatValue, lastAngleWRTWind;
+	protected float lerpTimer, lerpDuration=.5f, blendFloatValue, lastAngleWRTWind;
 	public bool rotateMast = false;
 	protected bool isJibing = false;
 	protected Quaternion lerpStart, lerpEnd;
@@ -258,7 +258,7 @@ public class NavBoatControl : MonoBehaviour {
 		isJibing = true;
 		lerpTimer = Time.time;
 		lerpStart = Quaternion.Inverse(boom.localRotation);
-		lerpEnd = Quaternion.Inverse(boom.localRotation * Quaternion.Inverse(Quaternion.Euler(0,negative*180f,0)));
+		lerpEnd = Quaternion.Inverse(Quaternion.Euler(0,boom.localRotation.y,0) * Quaternion.Inverse(Quaternion.Euler(0,negative*180f,0)));
 		
 	}
 
