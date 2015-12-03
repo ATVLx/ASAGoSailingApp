@@ -26,6 +26,7 @@ public class NavBoatControl : MonoBehaviour {
 
 	public ParticleSystem left, right;
 	public bool canMove = false;
+	public bool controlsAreActive = true;
 	public AudioSource correct;
 	public Animator boatKeel;
 	public GameObject arrow;
@@ -115,12 +116,14 @@ public class NavBoatControl : MonoBehaviour {
 		float horizontalInput = Input.GetAxis( "Horizontal" );
 		float rudderDirectionScalar = 0f;
 
-		if( horizontalInput < 0f ) {
-			// If player is pressing left
-			rudderDirectionScalar = 1f;
-		} else if( horizontalInput > 0f ) {
-			// If player is pressing right
-			rudderDirectionScalar = -1f;
+		if( controlsAreActive ) {
+			if( horizontalInput < 0f ) {
+				// If player is pressing left
+				rudderDirectionScalar = 1f;
+			} else if( horizontalInput > 0f ) {
+				// If player is pressing right
+				rudderDirectionScalar = -1f;
+			}
 		}
 
 		rudderSlider.value += rudderRotationSpeed*rudderDirectionScalar*Time.deltaTime;
@@ -254,6 +257,7 @@ public class NavBoatControl : MonoBehaviour {
 				boom.localRotation = Quaternion.Euler(0,lerpAngleFloatVal,0);
 				rudderSlider.interactable = true;
 				boomSlider.interactable = true;
+				controlsAreActive = true;
 			}
 		}
 
@@ -266,24 +270,27 @@ public class NavBoatControl : MonoBehaviour {
 		lerpEnd = -lerpStart;
 		rudderSlider.interactable = false;
 		boomSlider.interactable = false;
+		controlsAreActive = false;
 	}
 
 	private void SetBoomRotation() {
-		float input = Input.GetAxis( "Vertical" );
-//		Quaternion.ro
-		// If player is pressing down
-		if( input < 0f ) {
-			boomSlider.value += boomTrimSpeed * Time.deltaTime;
-		}
-		// If player is pressing up
-		if( input > 0f ) {			
-			boomSlider.value -= boomTrimSpeed * Time.deltaTime;
+		if( controlsAreActive ) {
+			float input = Input.GetAxis( "Vertical" );
+			// If player is pressing down
+			if( input < 0f ) {
+				boomSlider.value += boomTrimSpeed * Time.deltaTime;
+			}
+			// If player is pressing up
+			if( input > 0f ) {			
+				boomSlider.value -= boomTrimSpeed * Time.deltaTime;
+			}
 		}
 
 		float maxBoomAngle = boomSlider.maxValue;
 		// If we're less than 90 degrees from in irons clamp boom's max angle
 		if( Vector3.Angle( Vector3.forward, transform.forward) <= 90f )
 			maxBoomAngle = Vector3.Angle( Vector3.forward, transform.forward );
+
 		float clampedBoomAngle = Mathf.Clamp( boomSlider.value, 0f, maxBoomAngle );
 		// Mirror canvas's position dependingon what way we are facing the wind.
 		Vector3 newBoomDirection = boom.localRotation * Vector3.forward;    
