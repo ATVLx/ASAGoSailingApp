@@ -12,6 +12,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float angleToAdjustTo;
 	private float turnStrength = .04f;
 	private float rudderRotationSpeed = 100f;
+	private float boomTrimSpeed = 50f;
 	private float maxRudderRotation = 60f;
 	private float boatRotationVelocityScalar = 1f;
 	private float boatMovementVelocityScalar = 500f;
@@ -263,6 +264,17 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	private void SetBoomRotation() {
+		float input = Input.GetAxis( "Vertical" );
+
+		// If player is pressing down
+		if( input < 0f ) {
+			boomSlider.value += boomTrimSpeed * Time.deltaTime;
+		}
+		// If player is pressing up
+		if( input > 0f ) {			
+			boomSlider.value -= boomTrimSpeed * Time.deltaTime;
+		}
+
 		float maxBoomAngle = boomSlider.maxValue;
 		// If we're less than 90 degrees from in irons clamp boom's max angle
 		if( Vector3.Angle( Vector3.forward, transform.forward) <= 90f )
