@@ -23,7 +23,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// </summary>
 	private float boomTrimSpeed = 30f;
 	private float maxRudderRotation = 60f;
-
+	private float sailEffectiveness;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
 	private float boatMovementVelocityScalar = 7000f;
@@ -148,11 +148,12 @@ public class NavBoatControl : MonoBehaviour {
 		else {
 			effectiveAngle = 15f;
 		}
-		Debug.Log( "Effective angle: " + effectiveAngle );
+		//Debug.Log( "Effective angle: " + effectiveAngle );
 		//Debug.Log( "AngleWRTWind: " + angleWRTWind );
 		
 		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
-		float sailEffectiveness = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? optimalAngle / (Mathf.Abs( boomSlider.value - optimalAngle) + optimalAngle) : 0f;
+		sailEffectiveness = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? optimalAngle / (Mathf.Abs( boomSlider.value - optimalAngle) + optimalAngle) : 0f;
+		sailEffectiveness *= sailEffectiveness;
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
 		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
