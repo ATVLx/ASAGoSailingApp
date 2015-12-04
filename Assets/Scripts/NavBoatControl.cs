@@ -26,7 +26,8 @@ public class NavBoatControl : MonoBehaviour {
 	private float sailEffectiveness;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 7000f;
+	private float boatMovementVelocityScalar = 4000f;
+	private float keelCoefficient = 30f;
 	private Quaternion comeAboutStart, comeAboutEnd;
 
 	public ParticleSystem left, right;
@@ -156,8 +157,27 @@ public class NavBoatControl : MonoBehaviour {
 		sailEffectiveness *= sailEffectiveness;
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
-		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
-		velocity.text = "velocity: " + Mathf.Round(myRigidbody.velocity.magnitude);
+//		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
+		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude/4);
+
+		float zAxisRotation = 0f;
+		float isNegative = -1f;
+		float angle = angleWRTWind;
+		if (angleWRTWind > 270f) {
+			angle = 360f - angleWRTWind;
+			isNegative = 1f;
+		}
+
+		if (angle < 45f && angle > 30f) {
+			zAxisRotation = (((3*(angle-30f))) / 45f) * sailEffectiveness;
+		} 
+		else if (angle > 45f && angle < 90f) {
+			zAxisRotation = (((45f-angle)+45f)/45) * sailEffectiveness;
+		}
+		print (zAxisRotation + " ZAXIS");
+		Vector3 newRotation = transform.rotation.eulerAngles;
+		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative);
+		transform.rotation = Quaternion.Euler (newRotation); 
 	}
 	
 	private void ApplyBoatRotation() {
@@ -179,14 +199,8 @@ public class NavBoatControl : MonoBehaviour {
 
 	private void IdentifyPointOfSail() {
 		//add keeling into the boat rotation
-		float animatorBlendVal;
-		
-		if (angleWRTWind < 360f && angleWRTWind > 180f) {
-			animatorBlendVal = (angleWRTWind-180f)/360f;
-		}
-		else {
-			animatorBlendVal = (angleWRTWind/360f + .5f);
-		}
+
+
 		
 		if ((angleWRTWind < 360f && angleWRTWind > 315f) ||
 		    (angleWRTWind > 0f && angleWRTWind < 45f)) {
@@ -224,7 +238,6 @@ public class NavBoatControl : MonoBehaviour {
 			pointOfSail.text = "Close-Hauled Port Tack";
 		}
 		
-		boatKeel.SetFloat("rotation", animatorBlendVal);
 	}
 
 	protected void MastRotation() {
