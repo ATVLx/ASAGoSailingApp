@@ -101,6 +101,7 @@ ModelImporter:
     7400004: Sail_Right_Full
     7400006: SailClose_Right_Full
     7400008: SailOpen_Left_Full
+    7400010: Sail_Left_Full
     9500000: //RootNode
     13700000: Sail_GEO
   materials:
@@ -598,6 +599,122 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/joint39
+        weight: 1
+      - path: root/joint39/joint1
+        weight: 1
+      - path: root/joint39/joint1/joint8
+        weight: 1
+      - path: root/joint39/joint1/joint8/joint6
+        weight: 1
+      - path: root/joint39/joint1/joint8/joint6/joint7
+        weight: 1
+      - path: root/joint39/joint1/joint8/joint6/joint7/joint5
+        weight: 1
+      - path: root/joint39/joint40
+        weight: 1
+      - path: root/joint39/joint40/joint9
+        weight: 1
+      - path: root/joint39/joint40/joint9/joint12
+        weight: 1
+      - path: root/joint39/joint40/joint9/joint12/joint11
+        weight: 1
+      - path: root/joint39/joint40/joint9/joint12/joint11/joint13
+        weight: 1
+      - path: root/joint39/joint40/joint9/joint12/joint11/joint13/joint10
+        weight: 1
+      - path: root/joint39/joint40/joint41
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint14
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint14/joint17
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint14/joint17/joint16
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint14/joint17/joint16/joint18
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint14/joint17/joint16/joint18/joint15
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint19
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint19/joint22
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint19/joint22/joint21
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint19/joint22/joint21/joint23
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint19/joint22/joint21/joint23/joint20
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint25
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint25/joint27
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint25/joint27/joint26
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint25/joint27/joint26/joint28
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint25/joint27/joint26/joint28/joint24
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint31
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint31/joint34
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint31/joint34/joint33
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint31/joint34/joint33/joint35
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint31/joint34/joint33/joint35/joint32
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint45
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint45/joint29
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint45/joint29/joint37
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint45/joint29/joint37/joint36
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint45/joint29/joint37/joint36/joint38
+        weight: 1
+      - path: root/joint39/joint40/joint41/joint42/joint43/joint44/joint45/joint29/joint37/joint36/joint38/joint30
+        weight: 1
+      - path: Sail_GEO
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Sail_Left_Full
+      takeName: Take 001
+      firstFrame: 154
+      lastFrame: 162
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
