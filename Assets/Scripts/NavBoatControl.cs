@@ -175,7 +175,7 @@ public class NavBoatControl : MonoBehaviour {
 		} else {
 			blendFloatValue = sailEffectiveness;
 		}
-		sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);
+		sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);// -1 bc jon setup animator backwards
 
 		float zAxisRotation = 0f; //what we use to set the keel value
 
