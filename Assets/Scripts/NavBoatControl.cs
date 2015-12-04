@@ -13,7 +13,7 @@ public class NavBoatControl : MonoBehaviour {
 	private Rigidbody myRigidbody;
 	private float currThrust = 0f;
 	private float angleToAdjustTo;
-	private float turnStrength = .01f;
+	private float turnStrength = .005f;
 	/// <summary>
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
@@ -154,7 +154,7 @@ public class NavBoatControl : MonoBehaviour {
 		
 		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
 		sailEffectiveness = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? optimalAngle / (Mathf.Abs( boomSlider.value - optimalAngle) + optimalAngle) : 0f;
-		sailEffectiveness *= sailEffectiveness;
+		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
 //		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
@@ -168,13 +168,13 @@ public class NavBoatControl : MonoBehaviour {
 			isNegative = 1f;
 		}
 
+		//handle keeling
 		if (angle < 45f && angle > 30f) {
 			zAxisRotation = (((3*(angle-30f))) / 45f) * sailEffectiveness;
 		} 
 		else if (angle > 45f && angle < 90f) {
 			zAxisRotation = (((45f-angle)+45f)/45) * sailEffectiveness;
 		}
-		print (zAxisRotation + " ZAXIS");
 		Vector3 newRotation = transform.rotation.eulerAngles;
 		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative);
 		transform.rotation = Quaternion.Euler (newRotation); 
