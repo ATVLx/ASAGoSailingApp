@@ -61,7 +61,7 @@ public class NavManager : MonoBehaviour {
 	void Update () {
 		switch (gameState) {
 		case GameState.Idle :
-			if (Input.GetKeyDown(KeyCode.Space)){
+			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
 				NavBoatControl.s_instance.arrow.SetActive(false);
 				idlePage.SetActive(false);
 				reviewPage.SetActive(true);
@@ -72,7 +72,7 @@ public class NavManager : MonoBehaviour {
 			}
 			break;
 		case GameState.Review :
-			if (Input.GetKeyDown(KeyCode.Space)){
+			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
 				reviewPage.SetActive(false);
 				instructionsPage.SetActive(true);
 				gameState = GameState.Instructions;
@@ -81,7 +81,7 @@ public class NavManager : MonoBehaviour {
 			}
 			break;
 		case GameState.Instructions :
-			if (Input.GetKeyDown(KeyCode.Space)){
+			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
 				instructionsPage.SetActive(false);
 			//	Camera.main.GetComponent<HoverFollowCam>().enabled = false;
 //Camera.main.GetComponent<Cinematographer>().RollCamera();
