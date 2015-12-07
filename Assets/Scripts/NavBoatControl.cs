@@ -18,7 +18,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// <summary>
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
-	private float rudderRotationSpeed = 60f;
+	private float rudderRotationSpeed = 50f;
 	/// <summary>
 	/// The boom trim speed in degrees/sec.
 	/// </summary>
@@ -27,7 +27,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float sailEffectiveness;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 4000f;
+	private float boatMovementVelocityScalar = 2500f;
 	private float keelCoefficient = 10f;
 	private Quaternion comeAboutStart, comeAboutEnd;
 
