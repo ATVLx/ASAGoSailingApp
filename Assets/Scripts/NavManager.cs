@@ -6,20 +6,16 @@ public class NavManager : MonoBehaviour {
 	public enum GameState {Idle, Review, Instructions, CameraPan, Gameplay, Win, Lose};
 	public GameState gameState = GameState.Idle;
 	public GameObject[] navigationPoints;
-	public GameObject reviewPage, idlePage, instructionsPage, gamePlayPage, winPage;
 	public static NavManager s_instance;
 	public bool hasReachedAllTargets;
 	public bool hasFinishedCameraPanning;
 	public int currNavPoint = 0;
-	public Text currTarget;
 	public AudioSource beep;
 	public AudioSource[] tracksMusic;
 	private float startTime;
 	public float elapsedTime;
-	public Text timeText;
 	[System.NonSerialized]
 	public int rating;
-	public GameObject[] ratingObjects;
 	public GameObject directionalArrow;
 
 	void Awake() {
@@ -40,8 +36,6 @@ public class NavManager : MonoBehaviour {
 		}
 		else {
 			hasReachedAllTargets= true;
-			winPage.SetActive(true);
-			gamePlayPage.SetActive(false);
 			NavBoatControl.s_instance.transform.GetChild(0).gameObject.SetActive(false);
 
 		}
@@ -65,8 +59,6 @@ public class NavManager : MonoBehaviour {
 		case GameState.Idle :
 			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
 				NavBoatControl.s_instance.arrow.SetActive(false);
-				idlePage.SetActive(false);
-				reviewPage.SetActive(true);
 				gameState = GameState.Review;
 				beep.Play();
 				int rand = Random.Range(0,tracksMusic.Length);
@@ -75,30 +67,24 @@ public class NavManager : MonoBehaviour {
 			break;
 		case GameState.Review :
 			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
-				reviewPage.SetActive(false);
-				instructionsPage.SetActive(true);
 				gameState = GameState.Instructions;
 				beep.Play();
-
 			}
 			break;
 		case GameState.Instructions :
 			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
-				instructionsPage.SetActive(false);
 			//	Camera.main.GetComponent<HoverFollowCam>().enabled = false;
 //Camera.main.GetComponent<Cinematographer>().RollCamera();
 				gameState = GameState.CameraPan;
 			}
 			break;
 		case GameState.CameraPan: 
-				instructionsPage.SetActive(false);
 				Camera.main.GetComponent<HoverFollowCam>().enabled = true;
 				NavBoatControl.s_instance.arrow.SetActive(true);
 
 				gameState = GameState.Gameplay;
 				NavBoatControl.s_instance.canMove = true;
 				NavBoatControl.s_instance.GetComponent<GhostPathRecorder>().StartRecording();
-				gamePlayPage.SetActive(true);
 				beep.Play();
 				StartClock();
 
@@ -119,15 +105,11 @@ public class NavManager : MonoBehaviour {
 				else {
 					rating = 1;
 				}
-				ratingObjects[rating].SetActive(true);
 				gameState = GameState.Win;
 				break;
 			}
 			directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);
-			elapsedTime = Time.time - startTime;
-			currTarget.text = "Destination: " + navigationPoints[currNavPoint].name;
-			timeText.text = "Elapsed time: " + elapsedTime.ToString("F2") + "s";
-			                                   
+			elapsedTime = Time.time - startTime;			                                   
 			break;
 		case GameState.Win :
 			break;
