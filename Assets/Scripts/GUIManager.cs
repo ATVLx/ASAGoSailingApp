@@ -3,12 +3,12 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class GUIManager : MonoBehaviour {
-	private static GUIManager s_instance;
+	public static GUIManager s_instance;
 
-	public static GameObject reviewPage, idlePage, instructionsPage, gamePlayPage, winPage;
-	public static Text currTarget;
-	public static Text timeText;
-	public static GameObject[] ratingObjects;
+	public GameObject reviewPage, idlePage, instructionsPage, gamePlayPage, winPage;
+	public Text currTarget;
+	public Text timeText;
+	public GameObject[] ratingObjects;
 
 	void Awake() {
 		if( s_instance == null )
@@ -39,7 +39,7 @@ public class GUIManager : MonoBehaviour {
 		}
 	}
 
-	public static void ChangeState() {
+	public void ChangeState() {
 		switch (NavManager.s_instance.gameState) {
 		case NavManager.GameState.Idle :
 			//NavBoatControl.s_instance.arrow.SetActive(false);
