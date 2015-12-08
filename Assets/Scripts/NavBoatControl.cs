@@ -29,6 +29,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float boatRotationVelocityScalar = .07f;
 	private float boatMovementVelocityScalar = 2500f;
 	private float keelCoefficient = 10f;
+	private float velocityKeelCoefficient = 20f; //assumes max speed of 20
 	private Quaternion comeAboutStart, comeAboutEnd;
 
 	public ParticleSystem left, right;
@@ -84,6 +85,7 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void Update () {
+		print (myRigidbody.velocity.magnitude);
 		switch( NavManager.s_instance.gameState )
 		{
 		case NavManager.GameState.Gameplay:
@@ -192,7 +194,7 @@ public class NavBoatControl : MonoBehaviour {
 			zAxisRotation = (((45f-angle)+45f)/45) * sailEffectiveness;
 		}
 		Vector3 newRotation = transform.rotation.eulerAngles;
-		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative);
+		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative*myRigidbody.velocity.magnitude/velocityKeelCoefficient);
 		transform.rotation = Quaternion.Euler (newRotation); 
 	}
 	
