@@ -84,12 +84,16 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void Update () {
-		MastRotation();		
-		HandleRudderRotation();
-		IdentifyPointOfSail();
-
-		if (NavManager.s_instance.gameState == NavManager.GameState.Win) {
+		switch( NavManager.s_instance.gameState )
+		{
+		case NavManager.GameState.Gameplay:
+			MastRotation();		
+			HandleRudderRotation();
+			IdentifyPointOfSail();
+			break;
+		case NavManager.GameState.Win:
 			arrow.SetActive(false);
+			break;
 		}
 	}
 
@@ -109,8 +113,9 @@ public class NavBoatControl : MonoBehaviour {
 
 		if (other.tag == "CollisionObject") {
 			myRigidbody.AddForce (transform.forward * -1 * currThrust);
+			canMove = false;
+			BoatHasCrashed();
 		}
-	
 	}
 
 	void OnTriggerStay(Collider other){
@@ -336,5 +341,9 @@ public class NavBoatControl : MonoBehaviour {
 			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.1f, 0.1f);
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
+	}
+
+	private void BoatHasCrashed() {
+
 	}
 }
