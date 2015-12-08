@@ -63,19 +63,22 @@ public class NavManager : MonoBehaviour {
 				beep.Play();
 				int rand = Random.Range(0,tracksMusic.Length);
 				tracksMusic[rand].Play();
+				GUIManager.s_instance.UpdateState();
 			}
 			break;
 		case GameState.Review :
 			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
 				gameState = GameState.Instructions;
 				beep.Play();
+				GUIManager.s_instance.UpdateState();
 			}
 			break;
 		case GameState.Instructions :
 			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
 			//	Camera.main.GetComponent<HoverFollowCam>().enabled = false;
-//Camera.main.GetComponent<Cinematographer>().RollCamera();
+			//Camera.main.GetComponent<Cinematographer>().RollCamera();
 				gameState = GameState.CameraPan;
+				GUIManager.s_instance.UpdateState();
 			}
 			break;
 		case GameState.CameraPan: 
@@ -87,7 +90,7 @@ public class NavManager : MonoBehaviour {
 				NavBoatControl.s_instance.GetComponent<GhostPathRecorder>().StartRecording();
 				beep.Play();
 				StartClock();
-
+				GUIManager.s_instance.UpdateState();
 			break;
 		case GameState.Gameplay :
 			if (hasReachedAllTargets) {
@@ -106,6 +109,7 @@ public class NavManager : MonoBehaviour {
 					rating = 1;
 				}
 				gameState = GameState.Win;
+				GUIManager.s_instance.UpdateState();
 				break;
 			}
 			directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);

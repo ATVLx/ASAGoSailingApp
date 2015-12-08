@@ -31,6 +31,9 @@ public class GUIManager : MonoBehaviour {
 		case NavManager.GameState.CameraPan:
 			break;
 		case NavManager.GameState.Gameplay:
+			//directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);
+			currTarget.text = "Destination: " + NavManager.s_instance.navigationPoints[NavManager.s_instance.currNavPoint].name;
+			timeText.text = "Elapsed time: " + NavManager.s_instance.elapsedTime.ToString("F2") + "s";
 			break;
 		case NavManager.GameState.Win:
 			break;
@@ -39,29 +42,29 @@ public class GUIManager : MonoBehaviour {
 		}
 	}
 
-	public void ChangeState() {
+	/// <summary>
+	/// Updates the GUI to match NavManager's(GameManager) state.
+	/// </summary>
+	public void UpdateState() {
 		switch (NavManager.s_instance.gameState) {
 		case NavManager.GameState.Idle :
+			break;
+		case NavManager.GameState.Review :
 			//NavBoatControl.s_instance.arrow.SetActive(false);
 			idlePage.SetActive(false);
 			reviewPage.SetActive(true);
 			break;
-		case NavManager.GameState.Review :
+		case NavManager.GameState.Instructions :
 			reviewPage.SetActive(false);
 			instructionsPage.SetActive(true);
 			break;
-		case NavManager.GameState.Instructions :
+		case NavManager.GameState.CameraPan:
 			instructionsPage.SetActive(false);
 			break;
-		case NavManager.GameState.CameraPan: 
+		case NavManager.GameState.Gameplay :
 			instructionsPage.SetActive(false);
 			//NavBoatControl.s_instance.arrow.SetActive(true);
 			gamePlayPage.SetActive(true);
-			break;
-		case NavManager.GameState.Gameplay :
-			//directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);
-			currTarget.text = "Destination: " + NavManager.s_instance.navigationPoints[NavManager.s_instance.currNavPoint].name;
-			timeText.text = "Elapsed time: " + NavManager.s_instance.elapsedTime.ToString("F2") + "s";			
 			break;
 		case NavManager.GameState.Win :
 			//NavBoatControl.s_instance.arrow.SetActive(false);
