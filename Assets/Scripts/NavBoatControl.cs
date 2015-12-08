@@ -14,7 +14,7 @@ public class NavBoatControl : MonoBehaviour {
 	private Rigidbody myRigidbody;
 	private float currThrust = 0f;
 	private float angleToAdjustTo;
-	private float turnStrength = .01f;
+	private float turnStrength = 50f;
 	/// <summary>
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
@@ -27,16 +27,14 @@ public class NavBoatControl : MonoBehaviour {
 	private float sailEffectiveness;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 2500f;
+	private float boatMovementVelocityScalar = 40000f;
 	private float keelCoefficient = 10f;
-	private float velocityKeelCoefficient = 20f; //assumes max speed of 20
+	private float velocityKeelCoefficient = 7f; //assumes max speed of 7
 	private Quaternion comeAboutStart, comeAboutEnd;
 
-	public ParticleSystem left, right;
 	public bool canMove = false;
 	public bool controlsAreActive = true;
 	public AudioSource correct;
-	public Animator boatKeel;
 	public GameObject arrow;
 	public Transform boom;
 	public Transform rudderR, rudderL;
@@ -85,25 +83,16 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void Update () {
-		print (myRigidbody.velocity.magnitude);
-		switch( NavManager.s_instance.gameState )
-		{
-		case NavManager.GameState.Gameplay:
-			MastRotation();		
-			HandleRudderRotation();
-			IdentifyPointOfSail();
-			break;
-		case NavManager.GameState.Win:
-			arrow.SetActive(false);
-			break;
-		}
+
+		MastRotation();		
+		HandleRudderRotation();
+		IdentifyPointOfSail();
+
 	}
 
 	void FixedUpdate () {	
-		if (canMove) {
 			ApplyForwardThrust ();
 			ApplyBoatRotation ();
-		}
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -166,7 +155,7 @@ public class NavBoatControl : MonoBehaviour {
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
 //		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
-		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude/4);
+		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude);
 
 		//sail animator
 		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360
