@@ -3,20 +3,22 @@ using System.Collections;
 using UnityEngine.UI;
 public class NavManager : MonoBehaviour {
 
-	public enum GameState {Idle, Review, Instructions, CameraPan, Gameplay, Win};
+	public enum GameState {Idle, Review, Instructions, CameraPan, Gameplay, Win, Lose};
 	public GameState gameState = GameState.Idle;
 	public GameObject[] navigationPoints;
 	public GameObject reviewPage, idlePage, instructionsPage, gamePlayPage, winPage;
 	public static NavManager s_instance;
 	public bool hasReachedAllTargets;
 	public bool hasFinishedCameraPanning;
-	int currNavPoint = 0;
+	public int currNavPoint = 0;
 	public Text currTarget;
 	public AudioSource beep;
 	public AudioSource[] tracksMusic;
-	float startTime, elapsedTime;
+	private float startTime;
+	public float elapsedTime;
 	public Text timeText;
-	int rating;
+	[System.NonSerialized]
+	public int rating;
 	public GameObject[] ratingObjects;
 	public GameObject directionalArrow;
 
