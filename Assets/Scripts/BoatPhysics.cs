@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Boat : MonoBehaviour
+public class BoatPhysics : MonoBehaviour
 {
 
 //  //commented out to integrate with Pablo's script
