@@ -10,14 +10,15 @@ public class NavBoatControl : MonoBehaviour {
 	public enum BoatSideFacingWind {Port, Starboard};
 	public static NavBoatControl s_instance;
 
+	public Animator sail;
 	private Rigidbody myRigidbody;
 	private float currThrust = 0f;
 	private float angleToAdjustTo;
-	private float turnStrength = .005f;
+	private float turnStrength = .01f;
 	/// <summary>
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
-	private float rudderRotationSpeed = 60f;
+	private float rudderRotationSpeed = 50f;
 	/// <summary>
 	/// The boom trim speed in degrees/sec.
 	/// </summary>
@@ -26,8 +27,9 @@ public class NavBoatControl : MonoBehaviour {
 	private float sailEffectiveness;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 4000f;
-	private float keelCoefficient = 30f;
+	private float boatMovementVelocityScalar = 2500f;
+	private float keelCoefficient = 10f;
+	private float velocityKeelCoefficient = 20f; //assumes max speed of 20
 	private Quaternion comeAboutStart, comeAboutEnd;
 
 	public ParticleSystem left, right;
@@ -83,12 +85,17 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void Update () {
-		MastRotation();		
-		HandleRudderRotation();
-		IdentifyPointOfSail();
-
-		if (NavManager.s_instance.gameState == NavManager.GameState.Win) {
+		print (myRigidbody.velocity.magnitude);
+		switch( NavManager.s_instance.gameState )
+		{
+		case NavManager.GameState.Gameplay:
+			MastRotation();		
+			HandleRudderRotation();
+			IdentifyPointOfSail();
+			break;
+		case NavManager.GameState.Win:
 			arrow.SetActive(false);
+			break;
 		}
 	}
 
@@ -108,8 +115,9 @@ public class NavBoatControl : MonoBehaviour {
 
 		if (other.tag == "CollisionObject") {
 			myRigidbody.AddForce (transform.forward * -1 * currThrust);
+			canMove = false;
+			BoatHasCrashed();
 		}
-	
 	}
 
 	void OnTriggerStay(Collider other){
@@ -160,13 +168,23 @@ public class NavBoatControl : MonoBehaviour {
 //		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
 		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude/4);
 
-		float zAxisRotation = 0f;
-		float isNegative = -1f;
-		float angle = angleWRTWind;
-		if (angleWRTWind > 270f) {
+		//sail animator
+		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360
+		float angle = angleWRTWind; //angle is an acute angle rather than 0-360
+		if (angleWRTWind > 180f) {
 			angle = 360f - angleWRTWind;
 			isNegative = 1f;
 		}
+		if (sailEffectiveness > .85f) {
+			blendFloatValue = 1f;
+		} else if (sailEffectiveness < -.85f) {
+			blendFloatValue = -1f;
+		} else {
+			blendFloatValue = sailEffectiveness;
+		}
+		sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);// -1 bc jon setup animator backwards
+
+		float zAxisRotation = 0f; //what we use to set the keel value
 
 		//handle keeling
 		if (angle < 45f && angle > 30f) {
@@ -176,7 +194,7 @@ public class NavBoatControl : MonoBehaviour {
 			zAxisRotation = (((45f-angle)+45f)/45) * sailEffectiveness;
 		}
 		Vector3 newRotation = transform.rotation.eulerAngles;
-		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative);
+		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative*myRigidbody.velocity.magnitude/velocityKeelCoefficient);
 		transform.rotation = Quaternion.Euler (newRotation); 
 	}
 	
@@ -325,5 +343,9 @@ public class NavBoatControl : MonoBehaviour {
 			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.1f, 0.1f);
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
+	}
+
+	private void BoatHasCrashed() {
+
 	}
 }
