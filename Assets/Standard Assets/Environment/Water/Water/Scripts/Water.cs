@@ -14,7 +14,8 @@ namespace UnityStandardAssets.Water
             Refractive = 2,
         };
 
-
+		float windMultiplier = 1;
+		public GameObject windDir1, windDir2;
         public WaterMode waterMode = WaterMode.Refractive;
         public bool disablePixelLights = true;
         public int textureSize = 256;
@@ -187,7 +188,9 @@ namespace UnityStandardAssets.Water
 
         // This just sets up some matrices in the material; for really
         // old cards to make water texture scroll.
-        void Update()
+     
+
+		void Update()
         {
             if (!GetComponent<Renderer>())
             {
@@ -198,18 +201,18 @@ namespace UnityStandardAssets.Water
             {
                 return;
             }
-
-            Vector4 waveSpeed = mat.GetVector("WaveSpeed");
+			Vector4 waveSpeed = new Vector4 (windDir1.transform.localPosition.x * windMultiplier, windDir1.transform.localPosition.z * windMultiplier, windDir2.transform.localPosition.x * windMultiplier, windDir2.transform.localPosition.z * windMultiplier);
+            //Vector4 waveSpeed = mat.GetVector("WaveSpeed");
             float waveScale = mat.GetFloat("_WaveScale");
-            Vector4 waveScale4 = new Vector4(waveScale, waveScale, waveScale * 0.4f, waveScale * 0.45f);
+           Vector4 waveScale4 = new Vector4(waveScale, waveScale, waveScale * 0.4f, waveScale * 0.45f);
 
             // Time since level load, and do intermediate calculations with doubles
-            double t = Time.timeSinceLevelLoad / 20.0;
+			double t = Time.timeSinceLevelLoad / 20.0;
             Vector4 offsetClamped = new Vector4(
-                (float)Math.IEEERemainder(waveSpeed.x * waveScale4.x * t, 1.0),
-                (float)Math.IEEERemainder(waveSpeed.y * waveScale4.y * t, 1.0),
-                (float)Math.IEEERemainder(waveSpeed.z * waveScale4.z * t, 1.0),
-                (float)Math.IEEERemainder(waveSpeed.w * waveScale4.w * t, 1.0)
+                (float)Math.IEEERemainder(waveSpeed.x * t, 1.0),
+                (float)Math.IEEERemainder(waveSpeed.y * t, 1.0),
+                (float)Math.IEEERemainder(waveSpeed.z * t, 1.0),
+                (float)Math.IEEERemainder(waveSpeed.w * t, 1.0)
                 );
 
             mat.SetVector("_WaveOffset", offsetClamped);
