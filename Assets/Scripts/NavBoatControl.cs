@@ -210,10 +210,10 @@ public class NavBoatControl : MonoBehaviour {
 
 		
 		if ((angleWRTWind < 360f && angleWRTWind > 315f) ||
-		    (angleWRTWind > 0f && angleWRTWind < 45f)) {
+		    (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "In Irons";
 		}
-		else if ((angleWRTWind < 315f && angleWRTWind > 293f) ||
+		else if ((angleWRTWind < 330f && angleWRTWind > 293f) ||
 		         (angleWRTWind > 0f && angleWRTWind < 45f)) {
 			pointOfSail.text = "Close-Hauled Starboard Tack";
 		}
@@ -241,7 +241,7 @@ public class NavBoatControl : MonoBehaviour {
 		else if (angleWRTWind > 66f && angleWRTWind < 90f) {
 			pointOfSail.text = "Close Reach Port Tack";
 		}
-		else if (angleWRTWind > 45f && angleWRTWind < 66f){
+		else if (angleWRTWind > 30f && angleWRTWind < 66f){
 			pointOfSail.text = "Close-Hauled Port Tack";
 		}
 		
