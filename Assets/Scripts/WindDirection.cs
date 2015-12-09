@@ -16,6 +16,7 @@ public class WindDirection : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
 		windObj.transform.rotation = Quaternion.Euler (windObj.transform.rotation.x, 0.0f, windObj.transform.rotation.z);
 	}
 }

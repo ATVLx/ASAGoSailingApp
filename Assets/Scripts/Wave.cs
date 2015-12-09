@@ -65,6 +65,7 @@ public class Wave : MonoBehaviour
 	
 	void LateUpdate()
 	{
+		transform.position = new Vector3 (transform.position.x, 0, transform.position.z);
 		transform.rotation = Quaternion.identity;
 		transform.position = new Vector3 (transform.position.x, 0.0f, transform.position.z);
 	}
