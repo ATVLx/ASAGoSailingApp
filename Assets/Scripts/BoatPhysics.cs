@@ -9,6 +9,7 @@ public class BoatPhysics : MonoBehaviour
 //	public Rigidbody boomRG;
 //	public Slider heelSlider;
 //	public Slider boomSlider;
+	public GameObject waterObj;
 	public float density = 500;
 	public int slicesPerAxis = 2;
 	public bool isConcave = false;
@@ -23,13 +24,13 @@ public class BoatPhysics : MonoBehaviour
 	private List<Vector3> voxels;
 	private bool isMeshCollider;
 	private List<Vector3[]> forces; 
-	
+	Mesh waterMesh;
 	/// <summary>
 	/// Provides initialization.
 	/// </summary>
 	private void Start()
 	{
-
+		waterMesh = waterObj.GetComponent<MeshFilter> ().mesh;
 		forces = new List<Vector3[]>(); //force gizmos
 		
 		// original rotation and position
@@ -84,7 +85,7 @@ public class BoatPhysics : MonoBehaviour
 		
 			}
 
-//	//commented out Update for integration into Pablo's script
+	//commented out Update for integration into Pablo's script
 //	void Update(){
 //
 //		if(Input.GetKey(KeyCode.W)){
@@ -100,7 +101,7 @@ public class BoatPhysics : MonoBehaviour
 //			gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * -thrust);
 //		}
 //
-//		boomRG.AddTorque(transform.up * boomSlider.value);
+//		//boomRG.AddTorque(transform.up * boomSlider.value);
 //		//gameObject.GetComponent<Rigidbody> ().AddTorque (transform.forward * heelSlider.value);
 //
 //	}
@@ -245,9 +246,25 @@ public class BoatPhysics : MonoBehaviour
 	/// </summary>
 	private float GetWaterLevel(float x, float z)
 	{
+		float waterLevelMultiplier = -1;
+		float minDistanceSqr = Mathf.Infinity;
+		Vector3 nearestVert = new Vector3 (x, 0, z);
+		foreach (Vector3 vertex in waterMesh.vertices) 
+		{
+			Vector3 diff = nearestVert-vertex;
+			float distSqr = diff.sqrMagnitude;
+
+			if(distSqr < minDistanceSqr)
+			{
+				minDistanceSqr = distSqr;
+				nearestVert = vertex;
+			}
+			return vertex.y * waterLevelMultiplier + 0.5f;
+		}
 		//return Mathf.Sin(Time.time * 2f);
 		//print (Mathf.Sin(Time.time));
 		return 0.0f;
+
 	}
 
 
