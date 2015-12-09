@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -47,7 +47,7 @@ public class Cinematographer : MonoBehaviour {
 				else {
 					textUIObjects[currentIndex].SetActive(false);
 					Camera.main.GetComponent<HoverFollowCam>().enabled = true;
-					NavManager.s_instance.hasFinishedCameraPanning = true;
+					GameManager.s_instance.hasFinishedCameraPanning = true;
 					hasStarted = false;
 				}
 

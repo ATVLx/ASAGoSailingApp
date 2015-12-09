@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -21,23 +21,23 @@ public class GUIManager : MonoBehaviour {
 	}
 
 	void Update () {
-		switch( NavManager.s_instance.gameState ) {
-		case NavManager.GameState.Idle:
+		switch( GameManager.s_instance.gameState ) {
+		case GameManager.GameState.Idle:
 			break;
-		case NavManager.GameState.Review:
+		case GameManager.GameState.Review:
 			break;
-		case NavManager.GameState.Instructions:
+		case GameManager.GameState.Instructions:
 			break;
-		case NavManager.GameState.CameraPan:
+		case GameManager.GameState.CameraPan:
 			break;
-		case NavManager.GameState.Gameplay:
+		case GameManager.GameState.Gameplay:
 			//directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);
-			currTarget.text = "Destination: " + NavManager.s_instance.navigationPoints[NavManager.s_instance.currNavPoint].name;
-			timeText.text = "Elapsed time: " + NavManager.s_instance.elapsedTime.ToString("F2") + "s";
+			currTarget.text = "Destination: " + GameManager.s_instance.navigationPoints[GameManager.s_instance.currNavPoint].name;
+			timeText.text = "Elapsed time: " + GameManager.s_instance.elapsedTime.ToString("F2") + "s";
 			break;
-		case NavManager.GameState.Win:
+		case GameManager.GameState.Win:
 			break;
-		case NavManager.GameState.Lose:
+		case GameManager.GameState.Lose:
 			break;
 		}
 	}
@@ -46,31 +46,31 @@ public class GUIManager : MonoBehaviour {
 	/// Updates the GUI to match NavManager's(GameManager) state.
 	/// </summary>
 	public void UpdateState() {
-		switch (NavManager.s_instance.gameState) {
-		case NavManager.GameState.Idle :
+		switch (GameManager.s_instance.gameState) {
+		case GameManager.GameState.Idle :
 			break;
-		case NavManager.GameState.Review :
+		case GameManager.GameState.Review :
 			//NavBoatControl.s_instance.arrow.SetActive(false);
 			idlePage.SetActive(false);
 			reviewPage.SetActive(true);
 			break;
-		case NavManager.GameState.Instructions :
+		case GameManager.GameState.Instructions :
 			reviewPage.SetActive(false);
 			instructionsPage.SetActive(true);
 			break;
-		case NavManager.GameState.CameraPan:
+		case GameManager.GameState.CameraPan:
 			instructionsPage.SetActive(false);
 			break;
-		case NavManager.GameState.Gameplay :
+		case GameManager.GameState.Gameplay :
 			instructionsPage.SetActive(false);
 			//NavBoatControl.s_instance.arrow.SetActive(true);
 			gamePlayPage.SetActive(true);
 			break;
-		case NavManager.GameState.Win :
+		case GameManager.GameState.Win :
 			//NavBoatControl.s_instance.arrow.SetActive(false);
 			//GameObject.FindGameObjectWithTag("arrow").SetActive(false);
 			//directionalArrow.SetActive(false);
-			ratingObjects[NavManager.s_instance.rating].SetActive(true);
+			ratingObjects[GameManager.s_instance.rating].SetActive(true);
 			break;
 		}
 	}

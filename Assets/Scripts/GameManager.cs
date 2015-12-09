@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
-public class NavManager : MonoBehaviour {
+
+public class GameManager : MonoBehaviour {
 
 	public enum GameState {Idle, Review, Instructions, CameraPan, Gameplay, Win, Lose};
 	public GameState gameState = GameState.Idle;
 	public GameObject[] navigationPoints;
-	public static NavManager s_instance;
+	public static GameManager s_instance;
 	public bool hasReachedAllTargets;
 	public bool hasFinishedCameraPanning;
 	public int currNavPoint = 0;
