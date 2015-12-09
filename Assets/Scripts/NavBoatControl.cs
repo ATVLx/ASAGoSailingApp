@@ -6,7 +6,7 @@ public class NavBoatControl : MonoBehaviour {
 
 	//test
 	public Text thrustVal, velocity;
-
+	public GameObject boatModel;
 	public enum BoatSideFacingWind {Port, Starboard};
 	public static NavBoatControl s_instance;
 
@@ -27,7 +27,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float sailEffectiveness;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 40000f;
+	private float boatMovementVelocityScalar = 12000f;
 	private float keelCoefficient = 10f;
 	private float velocityKeelCoefficient = 7f; //assumes max speed of 7
 	private Quaternion comeAboutStart, comeAboutEnd;
@@ -184,7 +184,7 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		Vector3 newRotation = transform.rotation.eulerAngles;
 		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative*myRigidbody.velocity.magnitude/velocityKeelCoefficient);
-		transform.rotation = Quaternion.Euler (newRotation); 
+		boatModel.transform.rotation = Quaternion.Euler (newRotation); 
 	}
 	
 	private void ApplyBoatRotation() {
