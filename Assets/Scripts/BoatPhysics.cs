@@ -86,25 +86,25 @@ public class BoatPhysics : MonoBehaviour
 			}
 
 	//commented out Update for integration into Pablo's script
-	void Update(){
-
-		if(Input.GetKey(KeyCode.W)){
-			gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * thrust);
-		}
-		if(Input.GetKey(KeyCode.D)){
-			gameObject.GetComponent<Rigidbody>().AddTorque(transform.up * turnSpeed);
-		}
-		if(Input.GetKey(KeyCode.A)){
-			gameObject.GetComponent<Rigidbody>().AddTorque(transform.up * -turnSpeed);
-		}
-		if(Input.GetKey(KeyCode.S)){
-			gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * -thrust);
-		}
-
-		//boomRG.AddTorque(transform.up * boomSlider.value);
-		//gameObject.GetComponent<Rigidbody> ().AddTorque (transform.forward * heelSlider.value);
-
-	}
+//	void Update(){
+//
+//		if(Input.GetKey(KeyCode.W)){
+//			gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * thrust);
+//		}
+//		if(Input.GetKey(KeyCode.D)){
+//			gameObject.GetComponent<Rigidbody>().AddTorque(transform.up * turnSpeed);
+//		}
+//		if(Input.GetKey(KeyCode.A)){
+//			gameObject.GetComponent<Rigidbody>().AddTorque(transform.up * -turnSpeed);
+//		}
+//		if(Input.GetKey(KeyCode.S)){
+//			gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * -thrust);
+//		}
+//
+//		//boomRG.AddTorque(transform.up * boomSlider.value);
+//		//gameObject.GetComponent<Rigidbody> ().AddTorque (transform.forward * heelSlider.value);
+//
+//	}
 	
 	/// <summary>
 	/// Slices object into number of voxels represented by their center points.
