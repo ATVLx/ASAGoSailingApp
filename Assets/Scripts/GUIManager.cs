@@ -22,13 +22,7 @@ public class GUIManager : MonoBehaviour {
 
 	void Update () {
 		switch( GameManager.s_instance.gameState ) {
-		case GameManager.GameState.Idle:
-			break;
-		case GameManager.GameState.Review:
-			break;
 		case GameManager.GameState.Instructions:
-			break;
-		case GameManager.GameState.CameraPan:
 			break;
 		case GameManager.GameState.Gameplay:
 			//directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);
@@ -47,19 +41,9 @@ public class GUIManager : MonoBehaviour {
 	/// </summary>
 	public void UpdateState() {
 		switch (GameManager.s_instance.gameState) {
-		case GameManager.GameState.Idle :
-			break;
-		case GameManager.GameState.Review :
-			//NavBoatControl.s_instance.arrow.SetActive(false);
-			idlePage.SetActive(false);
-			reviewPage.SetActive(true);
-			break;
 		case GameManager.GameState.Instructions :
-			reviewPage.SetActive(false);
+			idlePage.SetActive(false);
 			instructionsPage.SetActive(true);
-			break;
-		case GameManager.GameState.CameraPan:
-			instructionsPage.SetActive(false);
 			break;
 		case GameManager.GameState.Gameplay :
 			instructionsPage.SetActive(false);
