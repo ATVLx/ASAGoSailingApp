@@ -64,11 +64,11 @@ public class GameManager : MonoBehaviour {
 			break;
 
 		case GameState.Instructions:
-			NavBoatControl.s_instance.arrow.SetActive(false);
-			beep.Play();
-			int rand = Random.Range(0,tracksMusic.Length);
-			tracksMusic[rand].Play();
-			GUIManager.s_instance.UpdateState();
+			//NavBoatControl.s_instance.arrow.SetActive(false);
+//			beep.Play();
+//			int rand = Random.Range(0,tracksMusic.Length);
+//			tracksMusic[rand].Play();
+//			GUIManager.s_instance.UpdateState();
 			break;
 
 		case GameState.Gameplay:
