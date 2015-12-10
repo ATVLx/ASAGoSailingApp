@@ -29,30 +29,6 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void SwitchNavigationPoint() {
-		navigationPoints[currNavPoint].transform.GetChild(0).gameObject.SetActive(false);
-
-		currNavPoint++;
-		if (currNavPoint < navigationPoints.Length) {
-			navigationPoints[currNavPoint].transform.GetChild(0).gameObject.SetActive(true);
-		}
-		else {
-			hasReachedAllTargets= true;
-			NavBoatControl.s_instance.transform.GetChild(0).gameObject.SetActive(false);
-
-		}
-
-	}
-
-	public string ReturnCurrNavPointName() {
-		if (currNavPoint<navigationPoints.Length) {
-			return navigationPoints[currNavPoint].name;
-		}
-		else {
-			return "";
-		}
-	}
-	// Update is called once per frame
 	void Update () {
 		switch (gameState) 
 		{
@@ -88,11 +64,11 @@ public class GameManager : MonoBehaviour {
 			break;
 
 		case GameState.Instructions:
-			NavBoatControl.s_instance.arrow.SetActive(false);
-			beep.Play();
-			int rand = Random.Range(0,tracksMusic.Length);
-			tracksMusic[rand].Play();
-			GUIManager.s_instance.UpdateState();
+			//NavBoatControl.s_instance.arrow.SetActive(false);
+//			beep.Play();
+//			int rand = Random.Range(0,tracksMusic.Length);
+//			tracksMusic[rand].Play();
+//			GUIManager.s_instance.UpdateState();
 			break;
 
 		case GameState.Gameplay:
@@ -137,5 +113,28 @@ public class GameManager : MonoBehaviour {
 
 	void StartClock() {
 		startTime = Time.time;
+	}
+
+	public void SwitchNavigationPoint() {
+		navigationPoints[currNavPoint].transform.GetChild(0).gameObject.SetActive(false);
+		
+		currNavPoint++;
+		if (currNavPoint < navigationPoints.Length) {
+			navigationPoints[currNavPoint].transform.GetChild(0).gameObject.SetActive(true);
+		}
+		else {
+			hasReachedAllTargets= true;
+			NavBoatControl.s_instance.transform.GetChild(0).gameObject.SetActive(false);
+			
+		}
+	}
+	
+	public string ReturnCurrNavPointName() {
+		if (currNavPoint<navigationPoints.Length) {
+			return navigationPoints[currNavPoint].name;
+		}
+		else {
+			return "";
+		}
 	}
 }
