@@ -2,22 +2,18 @@
 using System.Collections;
 
 public class GameManager : MonoBehaviour {
+	public static GameManager s_instance;
 
 	public enum GameState {IntroCredit, MainMenu, Pause, Instructions, Gameplay, Win, Lose, GameOver};
-	[System.NonSerialized]
 	public GameState gameState = GameState.Instructions;
 	public GameObject[] navigationPoints;
-	public static GameManager s_instance;
 	public bool hasReachedAllTargets;
-	public bool hasFinishedCameraPanning;
 	public int currNavPoint = 0;
-	public AudioSource beep;
-	public AudioSource[] tracksMusic;
 	private float startTime;
 	public float elapsedTime;
-	[System.NonSerialized]
-	public int rating;
-	public GameObject directionalArrow;
+//	[System.NonSerialized]
+//	public int rating;
+//	public GameObject directionalArrow;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -43,7 +39,7 @@ public class GameManager : MonoBehaviour {
 				ChangeState( GameState.Win );
 				break;
 			}
-			directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);
+//			directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);
 			elapsedTime = Time.time - startTime;			                                   
 			break;
 
@@ -53,8 +49,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void ChangeState( GameState newState ) {
-		gameState = newState;
-
 		switch( newState )
 		{
 		case GameState.IntroCredit:
@@ -65,7 +59,7 @@ public class GameManager : MonoBehaviour {
 
 		case GameState.Instructions:
 			//NavBoatControl.s_instance.arrow.SetActive(false);
-//			beep.Play();
+//			//beep.Play();
 //			int rand = Random.Range(0,tracksMusic.Length);
 //			tracksMusic[rand].Play();
 //			GUIManager.s_instance.UpdateState();
@@ -77,7 +71,7 @@ public class GameManager : MonoBehaviour {
 
 			NavBoatControl.s_instance.canMove = true;
 			NavBoatControl.s_instance.GetComponent<GhostPathRecorder>().StartRecording();
-			beep.Play();
+			//beep.Play();
 			StartClock();
 			break;
 
@@ -88,17 +82,17 @@ public class GameManager : MonoBehaviour {
 			NavBoatControl.s_instance.arrow.SetActive(false);
 			Camera.main.GetComponent<HoverFollowCam>().PanOut();
 			GameObject.FindGameObjectWithTag("arrow").SetActive(false);
-			directionalArrow.SetActive(false);
+//			directionalArrow.SetActive(false);
 			NavBoatControl.s_instance.canMove = false;
-			if (elapsedTime > 200f) {
-				rating = 0;
-			}
-			else if (elapsedTime < 150f) {
-				rating = 2;
-			}
-			else {
-				rating = 1;
-			}
+//			if (elapsedTime > 200f) {
+////				rating = 0;
+//			}
+//			else if (elapsedTime < 150f) {
+////				rating = 2;
+//			}
+//			else {
+////				rating = 1;
+//			}
 			break;
 
 		case GameState.Lose:
@@ -108,6 +102,7 @@ public class GameManager : MonoBehaviour {
 			break;
 		}
 
+		gameState = newState;
 		GUIManager.s_instance.UpdateState();
 	}
 
