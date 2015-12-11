@@ -12,6 +12,7 @@ public class NavBoatControl : MonoBehaviour {
 
 	public Animator sail;
 	private Rigidbody myRigidbody;
+	private const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 	private float currThrust = 0f;
 	private float angleToAdjustTo;
 	private float turnStrength = 50f;
@@ -155,7 +156,7 @@ public class NavBoatControl : MonoBehaviour {
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
 //		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
-		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude);
+		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 
 		//sail animator
 		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360

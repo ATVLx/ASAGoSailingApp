@@ -47,7 +47,7 @@ public class Cinematographer : MonoBehaviour {
 				else {
 					textUIObjects[currentIndex].SetActive(false);
 					Camera.main.GetComponent<HoverFollowCam>().enabled = true;
-					GameManager.s_instance.hasFinishedCameraPanning = true;
+//					GameManager.s_instance.hasFinishedCameraPanning = true;
 					hasStarted = false;
 				}
 
