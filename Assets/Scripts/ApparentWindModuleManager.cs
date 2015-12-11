@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class GameManagerFromPOS : MonoBehaviour {
+public class ApparentWindModuleManager : MonoBehaviour {
 
 	//Manages the Points of Sail Module
 	public enum GameState {Idle, Instructions, TestPage, Config, ImageLoad, Intro, SetRound, Playing, CheckAnswer, WrongAnswer, CorrectAnswer, WinScreen, Challenge};
@@ -44,7 +44,7 @@ public class GameManagerFromPOS : MonoBehaviour {
 	public Timer1 timer;
 	public string currAnimState;
 
-	public static GameManagerFromPOS s_instance;
+	public static ApparentWindModuleManager s_instance;
 
 
 	void Awake() {
@@ -153,6 +153,7 @@ public class GameManagerFromPOS : MonoBehaviour {
 				beep.Play ();
 				challengePage.SetActive(false);
 				GameplayPage.SetActive(true);
+				
 			}
 			break;
 		case GameState.CheckAnswer :
