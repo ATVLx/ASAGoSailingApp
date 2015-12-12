@@ -16,6 +16,7 @@ public class WindManager : MonoBehaviour {
 			s_instance = this;
 		}
 		else {
+			Debug.LogWarning( "Deleting gameobject \"" + gameObject.name + "\" because it has a duplicate WindManager." );
 			Destroy(gameObject);
 		}
 	}

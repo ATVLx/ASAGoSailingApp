@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ApparentWindModuleManager : MonoBehaviour {
 
 	//Manages the Points of Sail Module
-	public enum GameState {Idle, Instructions, TestPage, Config, ImageLoad, Intro, SetRound, Playing, CheckAnswer, WrongAnswer, CorrectAnswer, WinScreen, Challenge};
+	public enum GameState { Intro, Playing, Complete };
 	public GameState gameState;
 	public List<Term> listOfPOSTerms,tempListPointTerms,randomListPoints;
 	List<pointOfSail> allPoints;
@@ -74,126 +74,126 @@ public class ApparentWindModuleManager : MonoBehaviour {
 			Camera.main.transform.rotation = Quaternion.Lerp(lerpStart, lerpFinish, fracJourney);
 		}
 		switch (gameState) {
-		case GameState.Idle :
-			if (clickedStart){
-				clickedStart = false;	
-				IdlePage.SetActive(false);
-				TestPage.SetActive(true);
-				gameState = GameState.TestPage;
-				beep.Play();
-			}
-			break;
+//		case GameState.Idle :
+//			if (clickedStart){
+//				clickedStart = false;	
+//				IdlePage.SetActive(false);
+//				TestPage.SetActive(true);
+//				gameState = GameState.TestPage;
+//				beep.Play();
+//			}
+//			break;
 	
-		case GameState.TestPage :
-			if (Input.GetKeyDown(KeyCode.Space)){
-				TestPage.SetActive(false);
-				InstructionsPage.SetActive(true);
-				gameState = GameState.Instructions;
-				beep.Play();
-			}
-			break;
-		case GameState.Instructions :
-			if (Input.GetKeyDown(KeyCode.Space)){
-				InstructionsPage.SetActive(false);
-				GameplayPage.SetActive(true);
-				gameState = GameState.Config;
-				beep.Play();
-				Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
-			}
-			break;
-		case GameState.Config :
-			numberWrong = 0;
-			numberCorrect = 0;
-			directionOfWind = new Vector3(0,0,1f);
-			allPoints = new List<pointOfSail>();
-			allPoints = TextParser.Parse(pointsOfSailTxt);
-			listOfPOSTerms = new List<Term>();
-			randomListPoints = new List<Term>();
-
-			for (int i = 0; i < allPoints.Count; i++) { //fill out list of Term class instances
-				Term tempTerm = new Term();
-				tempTerm.initIndex = i;
-				tempTerm.pointOfSailAnswer = allPoints[i].sailTitle;
-				listOfPOSTerms.Add(tempTerm);
-			}
+//		case GameState.TestPage :
+//			if (Input.GetKeyDown(KeyCode.Space)){
+//				TestPage.SetActive(false);
+//				InstructionsPage.SetActive(true);
+//				gameState = GameState.Instructions;
+//				beep.Play();
+//			}
+//			break;
+//		case GameState.Instructions :
+//			if (Input.GetKeyDown(KeyCode.Space)){
+//				InstructionsPage.SetActive(false);
+//				GameplayPage.SetActive(true);
+//				gameState = GameState.Config;
+//				beep.Play();
+//				Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
+//			}
+//			break;
+//		case GameState.Config :
+//			numberWrong = 0;
+//			numberCorrect = 0;
+//			directionOfWind = new Vector3(0,0,1f);
+//			allPoints = new List<pointOfSail>();
+//			allPoints = TextParser.Parse(pointsOfSailTxt);
+//			listOfPOSTerms = new List<Term>();
+//			randomListPoints = new List<Term>();
+//
+//			for (int i = 0; i < allPoints.Count; i++) { //fill out list of Term class instances
+//				Term tempTerm = new Term();
+//				tempTerm.initIndex = i;
+//				tempTerm.pointOfSailAnswer = allPoints[i].sailTitle;
+//				listOfPOSTerms.Add(tempTerm);
+//			}
+//			
+//			tempListPointTerms = new List<Term>(listOfPOSTerms);
+//			while (tempListPointTerms.Count > 0) //shuffle list
+//			{
+//				int randomIndex = Mathf.FloorToInt(Random.Range(0, tempListPointTerms.Count));//r.Next(0, inputList.Count); //Choose a random object in the list
+//				randomListPoints.Add(tempListPointTerms[randomIndex]); //add it to the new, random list
+//				tempListPointTerms.RemoveAt(randomIndex); //remove to avoid duplicates
+//			}
+//
+//			totalMastery = requiredMastery * listOfPOSTerms.Count;
+//			gameState = GameState.Intro;
+//			break;
 			
-			tempListPointTerms = new List<Term>(listOfPOSTerms);
-			while (tempListPointTerms.Count > 0) //shuffle list
-			{
-				int randomIndex = Mathf.FloorToInt(Random.Range(0, tempListPointTerms.Count));//r.Next(0, inputList.Count); //Choose a random object in the list
-				randomListPoints.Add(tempListPointTerms[randomIndex]); //add it to the new, random list
-				tempListPointTerms.RemoveAt(randomIndex); //remove to avoid duplicates
-			}
-
-			totalMastery = requiredMastery * listOfPOSTerms.Count;
-			gameState = GameState.Intro;
-			break;
+//		case GameState.Intro : 
+//			if (userClickedStart) {
+//				gameState = GameState.SetRound;
+//			}
+//			break;
 			
-		case GameState.Intro : 
-			if (userClickedStart) {
-				gameState = GameState.SetRound;
-			}
-			break;
-			
-		case GameState.SetRound :
-			CheckForSequenceMastery(); //eliminate mastered sequences
-			InitiateTerm();
-			gameState = GameState.Playing;
-			circle2.SetActive(true);
-			circle1.SetActive(false);
-			break;
+//		case GameState.SetRound :
+//			CheckForSequenceMastery(); //eliminate mastered sequences
+//			InitiateTerm();
+//			gameState = GameState.Playing;
+//			circle2.SetActive(true);
+//			circle1.SetActive(false);
+//			break;
 		case GameState.Playing :
 			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
-				gameState = GameState.CheckAnswer;
+//				gameState = GameState.CheckAnswer;
 			}
 			break;
-		case GameState.Challenge :
-			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
-				gameState = GameState.Config;
-				beep.Play ();
-				challengePage.SetActive(false);
-				GameplayPage.SetActive(true);
-				
-			}
-			break;
-		case GameState.CheckAnswer :
-			if (Checker()) {
-				gameState = GameState.CorrectAnswer;
-				if (currentLevel == 1) {
-					RotateCameraRandom();
-				}
-			}
-			else {
-				gameState = GameState.WrongAnswer;
-			}
-			break;
+//		case GameState.Challenge :
+//			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
+//				gameState = GameState.Config;
+//				beep.Play ();
+//				challengePage.SetActive(false);
+//				GameplayPage.SetActive(true);
+//				
+//			}
+//			break;
+//		case GameState.CheckAnswer :
+//			if (Checker()) {
+//				gameState = GameState.CorrectAnswer;
+//				if (currentLevel == 1) {
+//					RotateCameraRandom();
+//				}
+//			}
+//			else {
+//				gameState = GameState.WrongAnswer;
+//			}
+//			break;
 			
-		case GameState.CorrectAnswer :
-			if (AnswerCorrect()){
-				WinRound();
-				gameState = GameState.WinScreen;
-			}
-			else {
-				gameState = GameState.SetRound;
-			}
-			break;
+//		case GameState.CorrectAnswer :
+//			if (AnswerCorrect()){
+//				WinRound();
+//				gameState = GameState.WinScreen;
+//			}
+//			else {
+//				gameState = GameState.SetRound;
+//			}
+//			break;
 			
-		case GameState.WrongAnswer :
-			AnswerWrong();
-			gameState = GameState.Playing;
-			break;
+//		case GameState.WrongAnswer :
+//			AnswerWrong();
+//			gameState = GameState.Playing;
+//			break;
 			
-		case GameState.WinScreen :
-			GameplayPage.SetActive(false);
-			winPage.SetActive(true);
-			if (currentLevel == 1) {
-				thisBreatheAnimation.enabled = true;
-				thisColorChange.enabled = true;
-				youbeatlevel2.text = "you beat level 2";
-				endOfLevel2Text.text = "Click here to play level 2 again";
-			}
-			winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
-			break;
+//		case GameState.WinScreen :
+//			GameplayPage.SetActive(false);
+//			winPage.SetActive(true);
+//			if (currentLevel == 1) {
+//				thisBreatheAnimation.enabled = true;
+//				thisColorChange.enabled = true;
+//				youbeatlevel2.text = "you beat level 2";
+//				endOfLevel2Text.text = "Click here to play level 2 again";
+//			}
+//			winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
+//			break;
 		}
 	}
 
@@ -304,16 +304,16 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
 
 		currentLevel = 1;
-		if (gameState == GameState.WinScreen) {
-			currMastery = 0;
-			masteryMeter.value = 0;
-			currentLevel = 1;
-			masteryMeter.transform.GetChild (1).transform.GetChild (1).GetComponent<Text> ().text = "Mastery 0%";
-			foreach (Term x in listOfPOSTerms) {
-				x.mastery = 0;
-			}
-		}
-		gameState = GameState.Challenge;
+//		if (gameState == GameState.WinScreen) {
+//			currMastery = 0;
+//			masteryMeter.value = 0;
+//			currentLevel = 1;
+//			masteryMeter.transform.GetChild (1).transform.GetChild (1).GetComponent<Text> ().text = "Mastery 0%";
+//			foreach (Term x in listOfPOSTerms) {
+//				x.mastery = 0;
+//			}
+//		}
+//		gameState = GameState.Challenge;
 	}
 
 	public void CheckForSequenceMastery() {
