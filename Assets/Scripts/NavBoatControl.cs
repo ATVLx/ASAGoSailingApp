@@ -14,6 +14,7 @@ public class NavBoatControl : MonoBehaviour {
 	private Rigidbody myRigidbody;
 	private const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 	private float currThrust = 0f;
+	private float sinkMultiplier;
 	private float angleToAdjustTo;
 	private float turnStrength = 50f;
 	/// <summary>
@@ -32,7 +33,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float keelCoefficient = 10f;
 	private float velocityKeelCoefficient = 7f; //assumes max speed of 7
 	private Quaternion comeAboutStart, comeAboutEnd;
-
+	private bool isCrashing;
 	public bool canMove = false;
 	public bool controlsAreActive = true;
 	public AudioSource correct;
@@ -336,6 +337,34 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	private void BoatHasCrashed() {
+		isCrashing = true;
+		StartCoroutine ("Sink");
+	}
 
+	IEnumerator Sink() {
+		myRigidbody.mass *= 10f;
+		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = true;
+		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().text = "You crashed and sank, try again!";
+		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.stationary;
+
+		yield return new WaitForSeconds (4f);
+		transform.position = Vector3.zero;
+		transform.rotation = Quaternion.identity;
+		myRigidbody.mass /= 10f;
+		myRigidbody.isKinematic = true;
+		yield return new WaitForSeconds (.1f);
+		myRigidbody.isKinematic = false;
+
+		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = false;
+		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.follow;
+		isCrashing = false;
+
+
+	}
+
+	void OnCollisionEnter (Collision thisCollision) {
+		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
+			BoatHasCrashed ();
+		}
 	}
 }

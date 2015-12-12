@@ -7,7 +7,7 @@ public class HoverFollowCam : MonoBehaviour
 
 	Transform player, camPos;
 	float camDistanceToCamPos;
-	float smoothRate = 8f;
+	float smoothRate = 1f;
 	float verticalLookOffset = 5f;
 	public enum CameraMode {stationary, follow, lerpToDestination};
 	public CameraMode thisCameraMode = CameraMode.stationary;
