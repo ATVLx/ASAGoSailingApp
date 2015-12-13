@@ -135,6 +135,13 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void ApplyForwardThrust () {
+		//handles sail blend shape, jibes, and mast rotation
+		lastAngleWRTWind = angleWRTWind;
+		boatDirection = transform.forward;
+
+		///angleWRTWind gives a value between 0-360
+		angleWRTWind = Vector3.Angle(boatDirection, Vector3.forward);
+
 		float inIronsBufferZone = 15f;
 		float inIronsNullZone = 30f;
 		float effectiveAngle;
@@ -152,15 +159,12 @@ public class NavBoatControl : MonoBehaviour {
 		if (boomSlider != null) {
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (boomSlider.value - optimalAngle) + optimalAngle) : 0f;
 		} else {
-			if (angleWRTWind > 180f) {
-				angleWRTWind -= 180f;
-			}
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (angleWRTWind - optimalAngle) + optimalAngle) : 0f;
-
-
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
+		print ("effectiveAngle " + effectiveAngle);
+		print ("effectiveAngle " + effectiveAngle);
 		myRigidbody.AddForce( transform.forward * boatThrust);
 //		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
 
@@ -255,12 +259,7 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void MastRotation() {
-		//handles sail blend shape, jibes, and mast rotation
-		lastAngleWRTWind = angleWRTWind;
-		boatDirection = transform.forward;
-
-		///angleWRTWind gives a value between 0-360
-		angleWRTWind = Vector3.Angle(boatDirection, Vector3.forward); 
+		
 		if (transform.rotation.eulerAngles.y > 180f ) {
 			angleWRTWind = 360-angleWRTWind;
 		}
