@@ -5,7 +5,8 @@ public class HoverFollowCam : MonoBehaviour
 {
 	//Camera that follows the boat during navigation mode
 	[SerializeField]
-	bool ignoreYAxis;
+	bool ignoreYAxis, lookAtPlayer;
+
 	Transform player, camPos;
 	float camDistanceToCamPos;
 	float smoothRate = 8f;
@@ -27,7 +28,9 @@ public class HoverFollowCam : MonoBehaviour
 	
 	void Update()
 	{
-		transform.LookAt(new Vector3(player.position.x, player.position.y+verticalLookOffset, player.position.z));
+		if (lookAtPlayer) {
+			transform.LookAt (new Vector3 (player.position.x, player.position.y + verticalLookOffset, player.position.z));
+		}
 	}
 
 	void FixedUpdate() {
