@@ -6,6 +6,9 @@ public class NavBoatControl : MonoBehaviour {
 
 	//test
 	public Text thrustVal, velocity;
+	/// <summary>
+	/// The boat model referring to a child transform with all non-physics components
+	/// </summary>
 	public GameObject boatModel;
 	public static NavBoatControl s_instance;
 
