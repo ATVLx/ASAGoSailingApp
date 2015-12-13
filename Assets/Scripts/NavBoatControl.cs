@@ -7,11 +7,10 @@ public class NavBoatControl : MonoBehaviour {
 	//test
 	public Text thrustVal, velocity;
 	public GameObject boatModel;
-	public enum BoatSideFacingWind {Port, Starboard};
 	public static NavBoatControl s_instance;
 
 	public Animator sail;
-	private Rigidbody myRigidbody;
+	protected Rigidbody myRigidbody;
 	private const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 	private float currThrust = 0f;
 	private float angleToAdjustTo;
@@ -25,7 +24,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// </summary>
 	private float boomTrimSpeed = 30f;
 	private float maxRudderRotation = 60f;
-	private float sailEffectiveness;
+	protected float sailEffectiveness;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
 	private float boatMovementVelocityScalar = 12000f;
@@ -35,7 +34,6 @@ public class NavBoatControl : MonoBehaviour {
 
 	public bool canMove = false;
 	public bool controlsAreActive = true;
-	public AudioSource correct;
 	public GameObject arrow;
 	public Transform boom;
 	public Transform rudderR, rudderL;
@@ -84,6 +82,7 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void Update () {
+		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 
 		MastRotation();		
 		HandleRudderRotation();
@@ -100,7 +99,6 @@ public class NavBoatControl : MonoBehaviour {
 //		print (other.tag + " " + NavManager.s_instance.ReturnCurrNavPointName());
 		if (other.tag == "NavTarget" && other.name == GameManager.s_instance.ReturnCurrNavPointName() && Vector3.Distance(transform.position, other.transform.position) <100f) {
 			GameManager.s_instance.SwitchNavigationPoint();
-			correct.Play();
 		}
 
 		if (other.tag == "CollisionObject") {
@@ -136,7 +134,7 @@ public class NavBoatControl : MonoBehaviour {
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
 
-	private void ApplyForwardThrust () {
+	protected void ApplyForwardThrust () {
 		float inIronsBufferZone = 15f;
 		float inIronsNullZone = 30f;
 		float effectiveAngle;
@@ -151,12 +149,20 @@ public class NavBoatControl : MonoBehaviour {
 		//Debug.Log( "AngleWRTWind: " + angleWRTWind );
 		
 		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
-		sailEffectiveness = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? optimalAngle / (Mathf.Abs( boomSlider.value - optimalAngle) + optimalAngle) : 0f;
+		if (boomSlider != null) {
+			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (boomSlider.value - optimalAngle) + optimalAngle) : 0f;
+		} else {
+			if (angleWRTWind > 180f) {
+				angleWRTWind -= 180f;
+			}
+			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (angleWRTWind - optimalAngle) + optimalAngle) : 0f;
+
+
+		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
 		myRigidbody.AddForce( transform.forward * boatThrust);
 //		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
-		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 
 		//sail animator
 		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360
@@ -205,7 +211,7 @@ public class NavBoatControl : MonoBehaviour {
 		}
 	}
 
-	private void IdentifyPointOfSail() {
+	protected void IdentifyPointOfSail() {
 		//add keeling into the boat rotation
 
 
