@@ -14,6 +14,7 @@ public class TrimBoatControl : NavBoatControl {
 	// Update is called once per frame
 	void Update () {
 		MastRotation ();
+		IdentifyPointOfSail ();
 		sailEffiencySlider.value = sailEffectiveness;
 		print (sailEffectiveness);
 	}
