@@ -28,7 +28,8 @@ public class WindManager : MonoBehaviour {
 			Vector3 tempPosition = GameObject.FindGameObjectWithTag ("Player").transform.position;
 			transform.position = new Vector3 (tempPosition.x, 2f, tempPosition.z + distFromBoatToSpawn);
 			int rand = Random.Range (0, spawnPositions.Length-1);
-			Instantiate (arrowPrefab, spawnPositions [rand].position, Quaternion.Euler(new Vector3(0,180,0)));
+			float xDisplace = Random.Range (-4f, 4f);
+			Instantiate (arrowPrefab, new Vector3(spawnPositions [rand].position.x + xDisplace, spawnPositions [rand].position.y, spawnPositions [rand].position.z), Quaternion.Euler(new Vector3(0,180,0)));
 		}
 	}
 }
