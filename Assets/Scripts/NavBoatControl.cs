@@ -48,7 +48,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// <summary>
 	/// The angle WRT wind returns the value of 0-360 which is used to determine which side of the wind you are on.
 	/// </summary>
-	private float angleWRTWind;
+	protected float angleWRTWind;
 	protected float lerpTimer, lerpDuration=.5f, blendFloatValue, lastAngleWRTWind;
 	public bool rotateMast = false;
 	protected bool isJibing = false;
@@ -135,12 +135,7 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void ApplyForwardThrust () {
-		//handles sail blend shape, jibes, and mast rotation
-		lastAngleWRTWind = angleWRTWind;
-		boatDirection = transform.forward;
-
-		///angleWRTWind gives a value between 0-360
-		angleWRTWind = Vector3.Angle(boatDirection, Vector3.forward);
+		
 
 		float inIronsBufferZone = 15f;
 		float inIronsNullZone = 30f;
@@ -259,7 +254,14 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void MastRotation() {
-		
+
+		//handles sail blend shape, jibes, and mast rotation
+		lastAngleWRTWind = angleWRTWind;
+		boatDirection = transform.forward;
+
+		///angleWRTWind gives a value between 0-360
+		angleWRTWind = Vector3.Angle(boatDirection, Vector3.forward);
+
 		if (transform.rotation.eulerAngles.y > 180f ) {
 			angleWRTWind = 360-angleWRTWind;
 		}
@@ -311,7 +313,7 @@ public class NavBoatControl : MonoBehaviour {
 		controlsAreActive = false;
 	}
 
-	private void SetBoomRotation() {
+	protected void SetBoomRotation() {
 		if( controlsAreActive ) {
 			float input = Input.GetAxis( "Vertical" );
 			// If player is pressing down

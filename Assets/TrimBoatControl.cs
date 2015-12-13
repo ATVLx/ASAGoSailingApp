@@ -13,11 +13,25 @@ public class TrimBoatControl : NavBoatControl {
 	
 	// Update is called once per frame
 	void Update () {
+		MastRotation ();
 		sailEffiencySlider.value = sailEffectiveness;
 		print (sailEffectiveness);
 	}
 
-	void FixedUpdate () {	
+	void FixedUpdate () {
+		///angleWRTWind gives a value between 0-360 logic was called in NavBoatControl fixed update needed to be re
+		SetAngleWRTWind();
 		ApplyForwardThrust ();
+	}
+
+	void SetAngleWRTWind () {
+		angleWRTWind = Vector3.Angle(boatDirection, Vector3.forward);
+		if (transform.rotation.eulerAngles.y > 180f ) {
+			angleWRTWind = 360-angleWRTWind;
+		}
+
+		if (float.IsNaN(angleWRTWind)) {
+			angleWRTWind=0;
+		}	
 	}
 }

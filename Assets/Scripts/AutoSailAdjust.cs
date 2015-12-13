@@ -35,7 +35,7 @@ public class AutoSailAdjust : MonoBehaviour {
 			angleWRTWind=0;
 		}
 //		transform.localRotation = Quaternion.Euler(0,angleWRTWind/2,0);
-		transform.rotation = Quaternion.Lerp(Quaternion.identity, boat.transform.rotation, 0.33f);
+		transform.localRotation = Quaternion.Lerp(Quaternion.identity, boat.transform.rotation, 0.33f);
 	}
 
 	void FixedUpdate () {
