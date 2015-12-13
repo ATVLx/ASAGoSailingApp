@@ -19,7 +19,12 @@ public class AutoSailAdjust : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		directionWindComingFrom = ApparentWindModuleManager.s_instance.directionOfWind;
+		if (ApparentWindModuleManager.s_instance != null) {
+			directionWindComingFrom = ApparentWindModuleManager.s_instance.directionOfWind;
+		}
+		else {
+			directionWindComingFrom = Vector3.forward;
+		}
 		//figure out angular relation ship between boat and wind
 		Vector3 localTarget = boat.transform.InverseTransformPoint(directionWindComingFrom);
 		//isNegative lets us know port vs starboard
