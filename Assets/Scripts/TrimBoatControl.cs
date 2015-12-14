@@ -22,6 +22,7 @@ public class TrimBoatControl : NavBoatControl {
 		///angleWRTWind gives a value between 0-360 logic was called in NavBoatControl fixed update needed to be re
 		SetAngleWRTWind();
 		ApplyForwardThrust ();
+		SetSailAnimator ();
 	}
 
 	void SetAngleWRTWind () {

@@ -28,7 +28,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// </summary>
 	private float boomTrimSpeed = 30f;
 	private float maxRudderRotation = 60f;
-	protected float sailEffectiveness;
+	protected float sailEffectiveness, optimalAngle;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
 	private float boatMovementVelocityScalar = 12000f;
@@ -149,7 +149,7 @@ public class NavBoatControl : MonoBehaviour {
 			effectiveAngle = 15f;
 		}
 
-		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
+		optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
 		if (boomSlider != null) {
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (boomSlider.value - optimalAngle) + optimalAngle) : 0f;
 		} else {
@@ -162,7 +162,7 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void SetSailAnimator () {
-		//sail animator
+		//sail animator handles luffing etc...
 		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360
 		float angle = angleWRTWind; //angle is an acute angle rather than 0-360
 		if (angleWRTWind > 180f) {
@@ -176,8 +176,16 @@ public class NavBoatControl : MonoBehaviour {
 		} else {
 			blendFloatValue = sailEffectiveness;
 		}
-		sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);// -1 bc jon setup animator backwards
 
+		if (boomSlider.value < optimalAngle && angle > 5f) {
+			blendFloatValue = isNegative;
+			print ("is Negative set to " + isNegative);
+			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
+
+		}
+		else {
+			sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);// -1 bc jon setup animator backwards
+		}
 		//handle keeling
 		float zAxisRotation = 0f; //what we use to set the keel value
 		if (angle < 45f && angle > 30f) {
