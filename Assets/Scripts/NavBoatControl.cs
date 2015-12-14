@@ -88,13 +88,13 @@ public class NavBoatControl : MonoBehaviour {
 	void Update () {
 		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 
-		MastRotation();		
 		HandleRudderRotation();
 		IdentifyPointOfSail();
 
 	}
 
 	void FixedUpdate () {	
+		MastRotation();		
 		ApplyForwardThrust ();
 		ApplyBoatRotation ();
 		SetSailAnimator ();
@@ -307,17 +307,17 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void ApplySailTrim() {
-		if( controlsAreActive ) {
-			float input = Input.GetAxis( "Vertical" );
-			// If player is pressing down
-			if( input < 0f ) {
-				boomSlider.value += boomTrimSpeed * Time.deltaTime;
-			}
-			// If player is pressing up
-			if( input > 0f ) {			
-				boomSlider.value -= boomTrimSpeed * Time.deltaTime;
-			}
-		}
+//		if( controlsAreActive ) {
+//			float input = Input.GetAxis( "Vertical" );
+//			// If player is pressing down
+//			if( input < 0f ) {
+//				boomSlider.value += boomTrimSpeed * Time.deltaTime;
+//			}
+//			// If player is pressing up
+//			if( input > 0f ) {			
+//				boomSlider.value -= boomTrimSpeed * Time.deltaTime;
+//			}
+//		}
 
 		float maxBoomAngle = boomSlider.maxValue;
 		// If we're less than 90 degrees from in irons clamp boom's max angle
@@ -328,8 +328,11 @@ public class NavBoatControl : MonoBehaviour {
 		// Mirror canvas's position dependingon what way we are facing the wind.
 		Vector3 newBoomDirection = boom.localRotation * Vector3.forward;    
 		if( angleWRTWind >= 180f ) {
+//			boom.localRotation = Quaternion.Euler (0, clampedBoomAngle, 0);
 			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
 		} else {
+//			boom.localRotation = Quaternion.Euler (0, -clampedBoomAngle, 0);
+
 			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
