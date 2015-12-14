@@ -28,7 +28,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// </summary>
 	private float boomTrimSpeed = 30f;
 	private float maxRudderRotation = 60f;
-	protected float sailEffectiveness;
+	protected float sailEffectiveness, optimalAngle;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
 	private float boatMovementVelocityScalar = 12000f;
@@ -88,13 +88,13 @@ public class NavBoatControl : MonoBehaviour {
 	void Update () {
 		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 
-		MastRotation();		
 		HandleRudderRotation();
 		IdentifyPointOfSail();
 
 	}
 
 	void FixedUpdate () {	
+		MastRotation();		
 		ApplyForwardThrust ();
 		ApplyBoatRotation ();
 		SetSailAnimator ();
@@ -132,9 +132,7 @@ public class NavBoatControl : MonoBehaviour {
 				rudderDirectionScalar = -1f;
 			}
 		}
-
 		rudderSlider.value += rudderRotationSpeed*rudderDirectionScalar*Time.deltaTime;
-
 		rudderL.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
@@ -151,7 +149,7 @@ public class NavBoatControl : MonoBehaviour {
 			effectiveAngle = 15f;
 		}
 
-		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
+		optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
 		if (boomSlider != null) {
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (boomSlider.value - optimalAngle) + optimalAngle) : 0f;
 		} else {
@@ -164,7 +162,7 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void SetSailAnimator () {
-		//sail animator
+		//sail animator handles luffing etc...
 		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360
 		float angle = angleWRTWind; //angle is an acute angle rather than 0-360
 		if (angleWRTWind > 180f) {
@@ -178,8 +176,16 @@ public class NavBoatControl : MonoBehaviour {
 		} else {
 			blendFloatValue = sailEffectiveness;
 		}
-		sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);// -1 bc jon setup animator backwards
 
+		if (boomSlider.value < optimalAngle && angle > 5f) {
+			blendFloatValue = isNegative;
+			print ("is Negative set to " + isNegative);
+			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
+
+		}
+		else {
+			sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);// -1 bc jon setup animator backwards
+		}
 		//handle keeling
 		float zAxisRotation = 0f; //what we use to set the keel value
 		if (angle < 45f && angle > 30f) {
@@ -211,10 +217,6 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void IdentifyPointOfSail() {
-		//add keeling into the boat rotation
-
-
-		
 		if ((angleWRTWind < 360f && angleWRTWind > 315f) ||
 		    (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "In Irons";
@@ -250,12 +252,11 @@ public class NavBoatControl : MonoBehaviour {
 		else if (angleWRTWind > 30f && angleWRTWind < 66f){
 			pointOfSail.text = "Close-Hauled Port Tack";
 		}
-		
 	}
 
 	protected void MastRotation() {
 
-		//handles sail blend shape, jibes, and mast rotation
+		//handles jibes, and mast rotation
 		lastAngleWRTWind = angleWRTWind;
 		boatDirection = transform.forward;
 
@@ -284,7 +285,7 @@ public class NavBoatControl : MonoBehaviour {
 		
 		if (!isJibing) {
 			// get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
-			SetBoomRotation();
+			ApplySailTrim();
 			
 		} else if (isJibing) {
 			float fracJourney = (Time.time - lerpTimer)/lerpDuration;
@@ -313,18 +314,18 @@ public class NavBoatControl : MonoBehaviour {
 		controlsAreActive = false;
 	}
 
-	protected void SetBoomRotation() {
-		if( controlsAreActive ) {
-			float input = Input.GetAxis( "Vertical" );
-			// If player is pressing down
-			if( input < 0f ) {
-				boomSlider.value += boomTrimSpeed * Time.deltaTime;
-			}
-			// If player is pressing up
-			if( input > 0f ) {			
-				boomSlider.value -= boomTrimSpeed * Time.deltaTime;
-			}
-		}
+	protected void ApplySailTrim() {
+//		if( controlsAreActive ) {
+//			float input = Input.GetAxis( "Vertical" );
+//			// If player is pressing down
+//			if( input < 0f ) {
+//				boomSlider.value += boomTrimSpeed * Time.deltaTime;
+//			}
+//			// If player is pressing up
+//			if( input > 0f ) {			
+//				boomSlider.value -= boomTrimSpeed * Time.deltaTime;
+//			}
+//		}
 
 		float maxBoomAngle = boomSlider.maxValue;
 		// If we're less than 90 degrees from in irons clamp boom's max angle
@@ -335,9 +336,12 @@ public class NavBoatControl : MonoBehaviour {
 		// Mirror canvas's position dependingon what way we are facing the wind.
 		Vector3 newBoomDirection = boom.localRotation * Vector3.forward;    
 		if( angleWRTWind >= 180f ) {
-			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.1f, 0.1f);
+//			boom.localRotation = Quaternion.Euler (0, clampedBoomAngle, 0);
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
 		} else {
-			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.1f, 0.1f);
+//			boom.localRotation = Quaternion.Euler (0, -clampedBoomAngle, 0);
+
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
 	}
