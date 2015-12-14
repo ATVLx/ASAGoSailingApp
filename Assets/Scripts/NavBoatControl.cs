@@ -95,8 +95,9 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void FixedUpdate () {	
-			ApplyForwardThrust ();
-			ApplyBoatRotation ();
+		ApplyForwardThrust ();
+		ApplyBoatRotation ();
+		SetSailAnimator ();
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -139,8 +140,6 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void ApplyForwardThrust () {
-		
-
 		float inIronsBufferZone = 15f;
 		float inIronsNullZone = 30f;
 		float effectiveAngle;
@@ -151,9 +150,7 @@ public class NavBoatControl : MonoBehaviour {
 		else {
 			effectiveAngle = 15f;
 		}
-		//Debug.Log( "Effective angle: " + effectiveAngle );
-		//Debug.Log( "AngleWRTWind: " + angleWRTWind );
-		
+
 		float optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
 		if (boomSlider != null) {
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (boomSlider.value - optimalAngle) + optimalAngle) : 0f;
@@ -162,11 +159,11 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
-		print ("effectiveAngle " + effectiveAngle);
-		print ("effectiveAngle " + effectiveAngle);
-		myRigidbody.AddForce( transform.forward * boatThrust);
-//		thrustVal.text = "boat Thrust: " + Mathf.Round(boatThrust*100);
 
+		myRigidbody.AddForce( transform.forward * boatThrust);
+	}
+
+	protected void SetSailAnimator () {
 		//sail animator
 		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360
 		float angle = angleWRTWind; //angle is an acute angle rather than 0-360
@@ -183,9 +180,8 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);// -1 bc jon setup animator backwards
 
-		float zAxisRotation = 0f; //what we use to set the keel value
-
 		//handle keeling
+		float zAxisRotation = 0f; //what we use to set the keel value
 		if (angle < 45f && angle > 30f) {
 			zAxisRotation = (((3*(angle-30f))) / 45f) * sailEffectiveness;
 		} 
