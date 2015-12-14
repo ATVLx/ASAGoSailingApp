@@ -177,11 +177,19 @@ public class NavBoatControl : MonoBehaviour {
 			blendFloatValue = sailEffectiveness;
 		}
 
-		if (boomSlider.value < optimalAngle && angle > 5f) {
-			blendFloatValue = isNegative;
+		if (boomSlider.value < optimalAngle && angle > 5f && angle <= 165f) {
+			blendFloatValue = isNegative *angle/5f;
 			print ("is Negative set to " + isNegative);
 			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
-
+		}
+		else if (boomSlider.value < optimalAngle && angle < 5f) {
+			isNegative = isNegative *(angle/5f);
+			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
+		}
+		else if (boomSlider.value < optimalAngle && angle > 165f){
+			isNegative = isNegative *((180-angle)/15f);
+			print ("angle " + angle);
+			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
 		}
 		else {
 			sail.SetFloat ("sailtrim", blendFloatValue*isNegative*-1);// -1 bc jon setup animator backwards
