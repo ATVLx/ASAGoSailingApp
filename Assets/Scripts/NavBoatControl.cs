@@ -132,9 +132,7 @@ public class NavBoatControl : MonoBehaviour {
 				rudderDirectionScalar = -1f;
 			}
 		}
-
 		rudderSlider.value += rudderRotationSpeed*rudderDirectionScalar*Time.deltaTime;
-
 		rudderL.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
@@ -211,10 +209,6 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	protected void IdentifyPointOfSail() {
-		//add keeling into the boat rotation
-
-
-		
 		if ((angleWRTWind < 360f && angleWRTWind > 315f) ||
 		    (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "In Irons";
@@ -250,12 +244,11 @@ public class NavBoatControl : MonoBehaviour {
 		else if (angleWRTWind > 30f && angleWRTWind < 66f){
 			pointOfSail.text = "Close-Hauled Port Tack";
 		}
-		
 	}
 
 	protected void MastRotation() {
 
-		//handles sail blend shape, jibes, and mast rotation
+		//handles jibes, and mast rotation
 		lastAngleWRTWind = angleWRTWind;
 		boatDirection = transform.forward;
 
@@ -284,7 +277,7 @@ public class NavBoatControl : MonoBehaviour {
 		
 		if (!isJibing) {
 			// get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
-			SetBoomRotation();
+			ApplySailTrim();
 			
 		} else if (isJibing) {
 			float fracJourney = (Time.time - lerpTimer)/lerpDuration;
@@ -313,7 +306,7 @@ public class NavBoatControl : MonoBehaviour {
 		controlsAreActive = false;
 	}
 
-	protected void SetBoomRotation() {
+	protected void ApplySailTrim() {
 		if( controlsAreActive ) {
 			float input = Input.GetAxis( "Vertical" );
 			// If player is pressing down
@@ -335,9 +328,9 @@ public class NavBoatControl : MonoBehaviour {
 		// Mirror canvas's position dependingon what way we are facing the wind.
 		Vector3 newBoomDirection = boom.localRotation * Vector3.forward;    
 		if( angleWRTWind >= 180f ) {
-			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.1f, 0.1f);
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
 		} else {
-			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.1f, 0.1f);
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
 	}
