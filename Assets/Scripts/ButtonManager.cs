@@ -10,7 +10,7 @@ public class ButtonManager : MonoBehaviour {
 
 	public void PointsOfSailButton () {
 		print ("POINTS OF SAIL CLICKED");
-		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( (bool answer) => {
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel("play the Points of Sail Module?", (bool answer) => {
 			if (answer) {
 				print("YES!!!!!");
 			}

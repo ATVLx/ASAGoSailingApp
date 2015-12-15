@@ -35,6 +35,9 @@ public class ConfirmationPopUp : MonoBehaviour {
 	public void InitializeConfirmationPanel (string descriptionOfAction, ConfirmationFunction thisFunction) {
 		confimationPanel.SetActive (true);
 		descriptionOfActionText.text = descriptionOfAction;
+		if (descriptionOfAction == null) {
+			Debug.LogError("Assign string in ConfirmationPanel Initialization");
+		}
 		myConfirmationDelegate = thisFunction;
 	}
 
