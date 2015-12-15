@@ -9,6 +9,7 @@ public class BoatPhysics : MonoBehaviour
 //	public Rigidbody boomRG;
 //	public Slider heelSlider;
 //	public Slider boomSlider;
+	public bool isMenu;
 	public GameObject waterObj;
 	public float density = 500;
 	public int slicesPerAxis = 2;
@@ -271,6 +272,9 @@ public class BoatPhysics : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		if (isMenu) {
+			GetComponent<Rigidbody> ().AddForce (transform.forward * 200f);
+		}
 		forces.Clear(); //force gizmos
 		
 		foreach (var point in voxels)
