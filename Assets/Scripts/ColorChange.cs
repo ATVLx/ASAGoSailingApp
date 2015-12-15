@@ -11,7 +11,7 @@ public class ColorChange : MonoBehaviour {
 	
 	public float changeColourTime = 2.0f;
 	
-	private float lastChange = 0.0f;
+//	private float lastChange = 0.0f;
 	private float timer = 0.0f;
 	
 	void Start() {

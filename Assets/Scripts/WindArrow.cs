@@ -2,15 +2,15 @@
 using System.Collections;
 
 public class WindArrow : MonoBehaviour {
-	float spawnTimer;
+//	float spawnTimer;
 	Transform player;
 	float deathDistance = 80f;
 	// Use this for initialization
-	float spawnFrequency = 40f;
+//	float spawnFrequency = 40f;
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player").transform;
-		spawnTimer = Time.time;
+//		spawnTimer = Time.time;
 	}
 	
 	// Update is called once per frame
