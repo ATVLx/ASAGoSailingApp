@@ -6,6 +6,8 @@ public class ConfirmationPopUp : MonoBehaviour {
 
 	[SerializeField]
 	GameObject confimationPanel;
+	[SerializeField]
+	Text descriptionOfActionText;
 
 	public static ConfirmationPopUp s_instance;
 
@@ -30,8 +32,9 @@ public class ConfirmationPopUp : MonoBehaviour {
 	
 	}
 
-	public void InitializeConfirmationPanel (ConfirmationFunction thisFunction) {
+	public void InitializeConfirmationPanel (string descriptionOfAction, ConfirmationFunction thisFunction) {
 		confimationPanel.SetActive (true);
+		descriptionOfActionText.text = descriptionOfAction;
 		myConfirmationDelegate = thisFunction;
 	}
 
