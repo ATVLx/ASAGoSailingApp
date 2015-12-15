@@ -91,17 +91,8 @@ public class posAnimState : MonoBehaviour {
 					displayPOS.text = "Close Hauled on a " + "<color=#00FF00> starboard tack </color>";  
 					displayPOS2.text = "The boat is sailing as close to the wind as possible (~45 degrees)";
 					break;
-
-
 				}
-
 			}
-
-
-		
 		}
-
-
-
 	}
 }
