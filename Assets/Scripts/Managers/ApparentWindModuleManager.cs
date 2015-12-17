@@ -41,7 +41,8 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		case GameState.Intro:
 			if( (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) || Input.GetMouseButtonDown( 0 ) ) {
 				instructionPanels[currentInstructionPanel].SetActive( false );
-				if( currentInstructionPanel-1 == instructionPanels.Length ) {
+
+				if( currentInstructionPanel == instructionPanels.Length-1 ) {
 					ChangeState( GameState.Playing );
 					return;
 				}
