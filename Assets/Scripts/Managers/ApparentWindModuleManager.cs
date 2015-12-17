@@ -49,8 +49,8 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	/// Action taken when the GUI "Done" button is pressed.
 	/// </summary>
 	public void DoneButton() {
-		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "move on to the next level?", (bool confirmationBool) => {
-			if( confirmationBool == true ) {
+		ConfirmationPopUp.InitializeConfirmationPanel( "move on to the next level?", (bool confirmed) => {
+			if( confirmed == true ) {
 				ChangeState( GameState.Complete );
 				Debug.Log( "Accepted to go to next level." );
 			} else {
