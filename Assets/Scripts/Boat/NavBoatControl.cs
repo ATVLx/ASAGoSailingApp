@@ -102,8 +102,8 @@ public class NavBoatControl : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 //		print (other.tag + " " + NavManager.s_instance.ReturnCurrNavPointName());
-		if (other.tag == "NavTarget" && other.name == GameManager.s_instance.ReturnCurrNavPointName() && Vector3.Distance(transform.position, other.transform.position) <100f) {
-			GameManager.s_instance.SwitchNavigationPoint();
+		if (other.tag == "NavTarget" && other.name == NavManager.s_instance.ReturnCurrNavPointName() && Vector3.Distance(transform.position, other.transform.position) <100f) {
+			NavManager.s_instance.SwitchNavigationPoint();
 		}
 
 		if (other.tag == "CollisionObject") {
