@@ -19,6 +19,8 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
 	public GameObject[] instructionPanels;
 
+	private int currentInstructionPanel = 0;
+
 	void Awake() {
 		if (s_instance == null) {
 			s_instance = this;
@@ -26,6 +28,28 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		else {
 			Destroy(gameObject);
 			Debug.LogWarning( "Deleting "+ gameObject.name +" because it is a duplicate ApparentWindModuleManager." );
+		}
+	}
+
+	void Start() {
+		if( gameState == GameState.Intro )
+			instructionPanels[0].SetActive( true );
+	}
+
+	void Update() {
+		switch( gameState ) {
+		case GameState.Intro:
+			if( (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) || Input.GetMouseButtonDown( 0 ) ) {
+				instructionPanels[currentInstructionPanel].SetActive( false );
+				if( currentInstructionPanel-1 == instructionPanels.Length ) {
+					ChangeState( GameState.Playing );
+					return;
+				}
+
+				currentInstructionPanel++;
+				instructionPanels[currentInstructionPanel].SetActive( true );
+			}
+			break;
 		}
 	}
 
