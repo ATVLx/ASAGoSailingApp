@@ -3,25 +3,16 @@ using System.Collections;
 
 public class ButtonManager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
 
-	public void PointsOfSailButton () {
-		print ("POINTS OF SAIL CLICKED");
-		ConfirmationPopUp.s_instance.InitializeConfirmationPanel("play the Points of Sail Module?", (bool answer) => {
+
+	public void ConfirmationButton (string confirmationQuestion) {
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel(confirmationQuestion, (bool answer) => {
 			if (answer) {
-				print("YES!!!!!");
+//				GameManager.s_instance.LoadLevel(levelValue);
 			}
 			else {
-				print("NOOOOOO");
+//				GameManager.s_instance.LoadLevel(levelValue);
 			}
 		});
-	}
-
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }
