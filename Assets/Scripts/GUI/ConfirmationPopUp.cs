@@ -34,10 +34,10 @@ public class ConfirmationPopUp : MonoBehaviour {
 
 	public void InitializeConfirmationPanel (string descriptionOfAction, ConfirmationFunction thisFunction) {
 		confimationPanel.SetActive (true);
-		descriptionOfActionText.text = descriptionOfAction;
-		if (descriptionOfAction == null) {
-			Debug.LogError("Assign string in ConfirmationPanel Initialization");
-		}
+		if( descriptionOfActionText != null )
+			descriptionOfActionText.text = descriptionOfAction;
+		else
+			Debug.LogError( gameObject.name +"'s ConfirmationPopUp component is missing a reference for DescriptionOfActionText.");
 		myConfirmationDelegate = thisFunction;
 	}
 
@@ -45,7 +45,6 @@ public class ConfirmationPopUp : MonoBehaviour {
 		myConfirmationDelegate (true);
 		myConfirmationDelegate = null;
 		confimationPanel.SetActive (false);
-
 	}
 
 	public void Deny () {
