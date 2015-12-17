@@ -27,6 +27,9 @@ public class NavManager : MonoBehaviour {
 	}
 
 	void Update () {
+		if( Input.GetKeyDown( KeyCode.Space ) )
+			ChangeState (GameState.Gameplay );
+
 		switch (gameState) 
 		{
 		case GameState.Instructions :
@@ -68,7 +71,7 @@ public class NavManager : MonoBehaviour {
 
 		case GameState.Gameplay:
 			Camera.main.GetComponent<HoverFollowCam>().enabled = true;
-			NavBoatControl.s_instance.arrow.SetActive(true);
+//			NavBoatControl.s_instance.arrow.SetActive(true);
 
 			NavBoatControl.s_instance.canMove = true;
 			NavBoatControl.s_instance.GetComponent<GhostPathRecorder>().StartRecording();
