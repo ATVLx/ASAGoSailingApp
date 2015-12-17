@@ -203,7 +203,7 @@ namespace UnityStandardAssets.Water
             }
 			Vector4 waveSpeed = new Vector4 (windDir1.transform.position.x * windMultiplier, windDir1.transform.position.z * windMultiplier, windDir2.transform.position.x * windMultiplier, windDir2.transform.position.z * windMultiplier);
             //Vector4 waveSpeed = mat.GetVector("WaveSpeed");
-            float waveScale = mat.GetFloat("_WaveScale");
+			float waveScale = 0f;//mat.GetFloat("_WaveScale");
            Vector4 waveScale4 = new Vector4(waveScale, waveScale, waveScale * 0.4f, waveScale * 0.45f);
 
             // Time since level load, and do intermediate calculations with doubles

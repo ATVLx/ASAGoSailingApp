@@ -12,18 +12,11 @@ public class ApparentWindModuleManager : MonoBehaviour {
 
 	public GameState gameState;
 	public List<Term> listOfPOSTerms,tempListPointTerms,randomListPoints;
+	[System.NonSerialized]
 	public bool hasClickedRun;
-	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
 	[System.NonSerialized]
 	public string currAnimState;
-
-	// For line renderer
-	/// <summary>
-	/// The origin of the lineRenderers for true and apparent wind.
-	/// </summary>
-//	public Transform lineOriginWind;
-//	public Transform linePositionBow;
-//	public Transform linePositionSail;
+	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
 
 	void Awake() {
 		if (s_instance == null) {
@@ -33,5 +26,27 @@ public class ApparentWindModuleManager : MonoBehaviour {
 			Destroy(gameObject);
 			Debug.LogWarning( "Deleting "+ gameObject.name +" because it is a duplicate ApparentWindModuleManager." );
 		}
+	}
+
+	/// <summary>
+	/// Action taken when the GUI "Done" button is pressed.
+	/// </summary>
+	public void DoneButton() {
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "move on to the next level?", (bool confirmationBool) => {
+			if( confirmationBool == true ) {
+				//TODO Uncomment this section when we are ready to change levels
+//				GameManager.s_instance.LoadNextLevel();
+				Debug.Log( "Accepted to go to next level." );
+			} else {
+				Debug.Log( "Declined to go to next level." );
+			}
+		});
+	}
+
+	/// <summary>
+	/// Action taken when the GUI pause button is pressed.
+	/// </summary>
+	public void PauseButton() {
+		//TODO Tell GameManager to show pause menu.
 	}
 }
