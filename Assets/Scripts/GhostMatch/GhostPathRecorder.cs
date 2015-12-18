@@ -10,9 +10,9 @@ public class GhostPathRecorder : MonoBehaviour {
 	public bool exportJSON = false;
 	public bool fetch = false;
 
+	public Transform transformToTrack;
 	public List<Vector3> recordedPositions;
 	public List<float> recordedYRotations;
-	private Transform thisTransform;
 	private float timer;
 	private Rester _Rester;
 	private JsonObject GETOBJ;
@@ -20,7 +20,6 @@ public class GhostPathRecorder : MonoBehaviour {
 	void Start () {
 		recordedPositions = new List<Vector3>();
 		recordedYRotations = new List<float>();
-		thisTransform = GetComponent<Transform>();
 
 		_Rester = GameObject.FindObjectOfType<Rester>();
 		if( _Rester == null ) {
@@ -49,8 +48,8 @@ public class GhostPathRecorder : MonoBehaviour {
 		if( isRecording ) {
 			if( timer >= sampleRate ) {
 				// Record position and rotation
-				recordedPositions.Add( thisTransform.position );
-				recordedYRotations.Add( thisTransform.rotation.y );
+				recordedPositions.Add( transformToTrack.position );
+				recordedYRotations.Add( transformToTrack.rotation.eulerAngles.y );
 
 				// Add the left over faction of time to the timer after reset
 				timer = timer % sampleRate;
@@ -104,8 +103,8 @@ public class GhostPathRecorder : MonoBehaviour {
 
 	public void StartRecording() {
 		isRecording = true;
-		recordedPositions.Add( thisTransform.position );
-		recordedYRotations.Add( thisTransform.rotation.y );
+		recordedPositions.Add( transformToTrack.position );
+		recordedYRotations.Add( transformToTrack.rotation.eulerAngles.y );
 	}
 
 	public void StopRecording() {

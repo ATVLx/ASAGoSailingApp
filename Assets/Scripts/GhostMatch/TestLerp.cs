@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class TestLerp : MonoBehaviour {
 
-	public bool findAttributes = false;
+	public bool getRecordedData = false;
 
 	private List<Vector3> positions;
 	private List<float> yRotations;
@@ -22,7 +22,7 @@ public class TestLerp : MonoBehaviour {
 	}
 
 	void Update () {
-		if( findAttributes ) {
+		if( getRecordedData ) {
 			FindAttributes();
 		}
 		if( isMoving ) {
@@ -43,6 +43,7 @@ public class TestLerp : MonoBehaviour {
 	}
 
 	void FindAttributes() {
+		getRecordedData = false;
 		GhostPathRecorder temp = GameObject.FindObjectOfType<GhostPathRecorder>();
 		if( temp == null ) {
 			Debug.LogError( "TestLerp coulnd't find a GhostPathRecorder in he scene." );
@@ -59,21 +60,22 @@ public class TestLerp : MonoBehaviour {
 
 		thisTransform.position = positions[0];
 		thisTransform.rotation = Quaternion.Euler( new Vector3( 0f, yRotations[0], 0f ) );
+
 		currentStartPos = positions[0];
 		currentEndPos = positions[1];
-		currentStartRot =Quaternion.Euler( new Vector3( 0f, yRotations[0], 0f ) );;
-		currentEndRot = Quaternion.Euler( new Vector3( 0f, yRotations[1], 0f ) );;
+		currentStartRot = Quaternion.Euler( new Vector3( 0f, yRotations[0], 0f ) );
+		currentEndRot = Quaternion.Euler( new Vector3( 0f, yRotations[1], 0f ) );
 
 		isMoving = true;
-		findAttributes = false;
+		getRecordedData = false;
 	}
 
 	void IterateToNextSegment() {
 		currentIndex++;
 		currentStartPos = positions[currentIndex];
 		currentEndPos = positions[currentIndex+1];
-		currentStartRot = Quaternion.Euler( new Vector3( 0f, yRotations[currentIndex], 0f ) );;
-		currentEndRot = Quaternion.Euler( new Vector3( 0f, yRotations[currentIndex+1], 0f ) );;
+		currentStartRot = Quaternion.Euler( new Vector3( 0f, yRotations[currentIndex], 0f ) );
+		currentEndRot = Quaternion.Euler( new Vector3( 0f, yRotations[currentIndex+1], 0f ) );
 
 		timer = timer%sampleRate;
 	}
