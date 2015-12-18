@@ -18,6 +18,8 @@ public class GhostPathRecorder : MonoBehaviour {
 	private JsonObject GETOBJ;
 
 	void Start () {
+		transformToTrack = transform;
+
 		recordedPositions = new List<Vector3>();
 		recordedYRotations = new List<float>();
 
