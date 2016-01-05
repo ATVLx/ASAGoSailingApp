@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+/*
+	This class sets the mast to swing at a constant rate wrt wind
+*/
 public class AutoSailAdjust : MonoBehaviour {
 
 	public Text angleWRTWindDebug,angleWRTWindDebug2;
@@ -12,11 +14,6 @@ public class AutoSailAdjust : MonoBehaviour {
 	public GameObject boat;
 	bool isJibing;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
 	// Update is called once per frame
 	void Update () {
 		if (ApparentWindModuleManager.s_instance != null) {
@@ -34,11 +31,7 @@ public class AutoSailAdjust : MonoBehaviour {
 		if (float.IsNaN(angleWRTWind)) {
 			angleWRTWind=0;
 		}
-//		transform.localRotation = Quaternion.Euler(0,angleWRTWind/2,0);
 		transform.localRotation = Quaternion.Lerp(Quaternion.identity, boat.transform.rotation, 0.33f);
 	}
 
-	void FixedUpdate () {
-
-	}
 }

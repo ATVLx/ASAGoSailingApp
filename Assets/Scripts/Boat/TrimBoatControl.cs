@@ -2,6 +2,10 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/*
+	This class handles player input and movement on the trim module, which only allows the player to adjust sail trim
+*/
+
 public class TrimBoatControl : NavBoatControl {
 
 	[SerializeField]

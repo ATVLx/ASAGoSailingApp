@@ -2,6 +2,11 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/*
+	This class uses a delegate to store a function to be executed after a callback if it returns true,
+	used for "are you sure you want to quit" type of prompts
+*/
+
 public class ConfirmationPopUp : MonoBehaviour {
 	public static ConfirmationPopUp s_instance;
 

@@ -2,6 +2,10 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+/*
+	This class keeps track of state the game is in wrt to levels and scenes 
+*/
+
 public class GameManager : MonoBehaviour {
 
 	public enum LevelState {MainMenu, POS, SailTrim, ApparentWind, LearnToTack, Docking, Navigation};

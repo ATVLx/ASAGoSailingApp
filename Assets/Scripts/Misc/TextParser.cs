@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+	This class parses text by comma and newline
+*/
+
 public static class TextParser {
 	
 

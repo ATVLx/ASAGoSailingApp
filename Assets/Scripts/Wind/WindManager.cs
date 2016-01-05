@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+	This class handles a direction of wind variable and instantiates wind arrows
+*/
+
 public class WindManager : MonoBehaviour {
 
 	public static WindManager s_instance;

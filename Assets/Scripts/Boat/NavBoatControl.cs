@@ -2,6 +2,11 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
+/*
+	This class controls the movement input and physics of the boat in the navigation module
+*/
+
+
 public class NavBoatControl : MonoBehaviour {
 
 	//test
@@ -23,10 +28,6 @@ public class NavBoatControl : MonoBehaviour {
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
 	private float rudderRotationSpeed = 50f;
-	/// <summary>
-	/// The boom trim speed in degrees/sec.
-	/// </summary>
-	private float boomTrimSpeed = 30f;
 	private float maxRudderRotation = 60f;
 	protected float sailEffectiveness, optimalAngle;
 	private float rudderNullZone = 0.2f;

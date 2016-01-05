@@ -2,6 +2,14 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/*
+ 	This class is a generic solution for cycling through slides like a slideshow
+	where the slides are contained within a game object and you set the time
+	between each gameobject activation via the inspector, you also can have
+	soundfiles that are played on each
+*/
+
+
 public class PowerPointPlayer : MonoBehaviour {
 
 	//must assign equal length to all of these in inspector
@@ -12,9 +20,7 @@ public class PowerPointPlayer : MonoBehaviour {
 	public float[] timeDelayUntilNextSlide;
 
 	float timer;
-
 	int currentIndex;
-	[SerializeField]
 	bool isPlaying;
 
 	/// <summary>

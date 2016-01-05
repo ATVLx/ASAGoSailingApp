@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+	This class forces the camera to follow the player in a cinematically friendly way
+*/
+
 public class HoverFollowCam : MonoBehaviour
 {
-	//Camera that follows the boat during navigation mode
 	[SerializeField]
-	bool ignoreYAxis, lookAtPlayer;
+	bool ignoreYAxis = false, lookAtPlayer = false;
 
 	Transform player, camPos;
 	float camDistanceToCamPos;

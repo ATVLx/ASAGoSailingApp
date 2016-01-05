@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+/*
+	This class handles game flow in the Trim Module
+*/
 public class TrimManager : MonoBehaviour {
 
 	enum TrimManagerState {Intro, Playing, Complete};

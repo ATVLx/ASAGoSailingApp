@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+	This class animates the ghostboat, which is the boat the follows a predetermined path
+	based on data from a user's playthrough
+*/
+
 public class GhostBoatAnimator : MonoBehaviour {
-
-
 	public Animator blendShape;
 	protected float lerpTimer, lerpDuration=1f, blendFloatValue, angleWRTWind, lastAngleWRTWind;
 	protected bool isJibing = false;
@@ -47,7 +50,7 @@ public class GhostBoatAnimator : MonoBehaviour {
 
 		if (!isJibing) {
 
-			//			get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
+			//get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
 			mast.transform.localRotation = Quaternion.Lerp (Quaternion.identity, Quaternion.Inverse(transform.localRotation), 0.33f);
 
 		}

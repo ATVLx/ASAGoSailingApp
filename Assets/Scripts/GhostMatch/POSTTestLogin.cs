@@ -3,6 +3,10 @@ using UnityEngine.UI;
 using SimpleJson;
 using System.Collections;
 
+/*
+	Tests POST request from Unity to server
+*/
+
 public class POSTTestLogin : MonoBehaviour {
 	
 	public string extension;

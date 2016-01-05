@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+/*
+	
+*/
 public class FollowBoatBowXPosition : MonoBehaviour {
 
 	public Transform followObject;

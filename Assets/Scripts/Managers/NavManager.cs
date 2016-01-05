@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+
+/*
+	This class handles the State machine for the boat navigation module
+  	it also handles the game flow and level progress logic
+*/
+
+
 public class NavManager : MonoBehaviour {
 
 	public static NavManager s_instance;
@@ -12,9 +19,6 @@ public class NavManager : MonoBehaviour {
 	public int currNavPoint = 0;
 	private float startTime;
 	public float elapsedTime;
-//	[System.NonSerialized]
-//	public int rating;
-//	public GameObject directionalArrow;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -62,11 +66,6 @@ public class NavManager : MonoBehaviour {
 			break;
 
 		case GameState.Instructions:
-			//NavBoatControl.s_instance.arrow.SetActive(false);
-//			//beep.Play();
-//			int rand = Random.Range(0,tracksMusic.Length);
-//			tracksMusic[rand].Play();
-//			GUIManager.s_instance.UpdateState();
 			break;
 
 		case GameState.Gameplay:
@@ -86,7 +85,6 @@ public class NavManager : MonoBehaviour {
 			NavBoatControl.s_instance.arrow.SetActive(false);
 			Camera.main.GetComponent<HoverFollowCam>().PanOut();
 			GameObject.FindGameObjectWithTag("arrow").SetActive(false);
-//			directionalArrow.SetActive(false);
 			NavBoatControl.s_instance.canMove = false;
 //			if (elapsedTime > 200f) {
 ////				rating = 0;

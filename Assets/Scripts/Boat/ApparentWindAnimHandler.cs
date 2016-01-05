@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+/*
+	This class handles the animations and text that are set during the apparent wind module
+*/
 public class ApparentWindAnimHandler : MonoBehaviour {
 
 	public Animator boatAnim;

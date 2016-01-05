@@ -2,6 +2,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+	This script was imported and modified to have the boat work on water with waves
+*/
+
 public class BoatPhysics : MonoBehaviour
 {
 

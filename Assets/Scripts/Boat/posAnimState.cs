@@ -2,6 +2,11 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/*
+	This class handles animation states and text that are used to teach points of sail
+	in the points of sail module
+*/
+
 public class posAnimState : MonoBehaviour {
 
 	public Animator boatAnim;

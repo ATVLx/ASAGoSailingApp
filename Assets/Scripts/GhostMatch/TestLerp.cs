@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+/*
+	This class moves the ghost boat across the map during ghostmatch play back
+*/
 public class TestLerp : MonoBehaviour {
 
 	public bool getRecordedData = false;

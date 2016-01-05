@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using SimpleJson;
 
+/*
+	This class stores the vector3s for position and rotation values and sends them up to server in a json object
+*/
+
 public class GhostPathRecorder : MonoBehaviour {
 
 	public float sampleRate = 0.25f;
