@@ -2,13 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-/*
-	This class parses text by comma and newline
-*/
-
+/// <summary>
+/// This class parses text by comma and newline
+/// </summary>
 public static class TextParser {
 	
-
 	public static List<pointOfSail> Parse(TextAsset csvString){
 		//get the array of lines
 		List<pointOfSail> arrayPointOfSail = new List<pointOfSail>();
