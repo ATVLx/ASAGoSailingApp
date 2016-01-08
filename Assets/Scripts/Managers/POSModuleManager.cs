@@ -24,8 +24,8 @@ public class POSModuleManager : MonoBehaviour {
 	float startTime, exitTime = 4f;
 	float currMastery;
 	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
-	public AudioSource wrong, correct, beep, waterPaddle;
-	public GameObject circle1, circle2;
+	//public AudioSource wrong, correct, beep, waterPaddle;
+	public GameObject tackHighlightCircle, baseTackCircle;
 
 	public GameObject IdlePage, TestPage, InstructionsPage, GameplayPage, winPage, challengePage;
 	GameObject currentPage;
@@ -58,7 +58,6 @@ public class POSModuleManager : MonoBehaviour {
 
 	void Update () 
 	{
-
 		if (isCameraRotating) {
 			float fracJourney = (Time.time - lerpTime)/ lerpDuration;
 			if (fracJourney > .99f) {
@@ -74,7 +73,7 @@ public class POSModuleManager : MonoBehaviour {
 				IdlePage.SetActive(false);
 				TestPage.SetActive(true);
 				gameState = GameState.TestPage;
-				beep.Play();
+				//beep.Play();
 			}
 			break;
 
@@ -83,7 +82,7 @@ public class POSModuleManager : MonoBehaviour {
 				TestPage.SetActive(false);
 				InstructionsPage.SetActive(true);
 				gameState = GameState.Instructions;
-				beep.Play();
+				//beep.Play();
 			}
 			break;
 		case GameState.Instructions :
@@ -91,7 +90,7 @@ public class POSModuleManager : MonoBehaviour {
 				InstructionsPage.SetActive(false);
 				GameplayPage.SetActive(true);
 				gameState = GameState.Config;
-				beep.Play();
+				//beep.Play();
 				Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
 			}
 			break;
@@ -133,18 +132,18 @@ public class POSModuleManager : MonoBehaviour {
 			CheckForSequenceMastery(); //eliminate mastered sequences
 			InitiateTerm();
 			gameState = GameState.Playing;
-			circle2.SetActive(true);
-			circle1.SetActive(false);
+			baseTackCircle.SetActive(true);
+			tackHighlightCircle.SetActive(false);
 			break;
 		case GameState.Playing :
-			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
+			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has` been rotated
 				gameState = GameState.CheckAnswer;
 			}
 			break;
 		case GameState.Challenge :
 			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
 				gameState = GameState.Config;
-				beep.Play ();
+				//beep.Play ();
 				challengePage.SetActive(false);
 				GameplayPage.SetActive(true);
 			}
@@ -206,9 +205,9 @@ public class POSModuleManager : MonoBehaviour {
 
 	}
 	bool AnswerCorrect(){
-		circle1.SetActive(false);
-		circle2.SetActive(true);
-		correct.Play ();
+		tackHighlightCircle.SetActive(false);
+		baseTackCircle.SetActive(true);
+		//correct.Play ();
 		wrongAnswerText.enabled = false;
 		correctText.enabled = true;
 		correctText.GetComponent<Fader>().StartFadeOut();
@@ -223,9 +222,9 @@ public class POSModuleManager : MonoBehaviour {
 	}
 	void AnswerWrong(){
 		numberWrong++;
-		circle2.SetActive(false);
-		circle1.SetActive(true);
-		wrong.Play ();
+		baseTackCircle.SetActive(false);
+		tackHighlightCircle.SetActive(true);
+		//wrong.Play ();
 		AdjustMasteryMeter(false);
 		timer.timesUp = true;
 		timer.pause = true;
@@ -284,7 +283,7 @@ public class POSModuleManager : MonoBehaviour {
 	}
 
 	public void SwitchToChallenge () {
-		beep.Play ();
+		//beep.Play ();
 		IdlePage.SetActive (false);
 		GameplayPage.SetActive (false);
 		challengePage.SetActive (true);
