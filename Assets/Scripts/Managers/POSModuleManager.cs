@@ -17,6 +17,8 @@ public class POSModuleManager : MonoBehaviour {
 	int totalMastery;
 	int numberCorrect, numberWrong;
 
+	public bool hasClickedRun;
+
 	public ColorChange thisColorChange;
 	public BreatheAnimation thisBreatheAnimation;
 
@@ -25,7 +27,8 @@ public class POSModuleManager : MonoBehaviour {
 	float currMastery;
 	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
 	//public AudioSource wrong, correct, beep, waterPaddle;
-	public GameObject tackHighlightCircle, baseTackCircle;
+	public GameObject circle1, circle2;
+	bool clickedStart;
 
 	public GameObject IdlePage, TestPage, InstructionsPage, GameplayPage, winPage, challengePage;
 	GameObject currentPage;
@@ -33,6 +36,7 @@ public class POSModuleManager : MonoBehaviour {
 	public TextAsset pointsOfSailTxt;
 	public Slider masteryMeter;
 	public Text youbeatlevel2;
+	public Text endOfLevel2Text;
 	public Text currentQuestion;
 	public Text wrongAnswerText;
 	public Text correctText;
@@ -41,6 +45,7 @@ public class POSModuleManager : MonoBehaviour {
 	public string currAnimState;
 
 	public static POSModuleManager s_instance;
+
 
 	void Awake() {
 		if (s_instance == null) {
@@ -53,11 +58,12 @@ public class POSModuleManager : MonoBehaviour {
 	}
 
 	public void MainMenu() {
-		Application.LoadLevel(0);
+		//Application.LoadLevel(0);
 	}
 
 	void Update () 
 	{
+
 		if (isCameraRotating) {
 			float fracJourney = (Time.time - lerpTime)/ lerpDuration;
 			if (fracJourney > .99f) {
@@ -69,14 +75,15 @@ public class POSModuleManager : MonoBehaviour {
 		}
 		switch (gameState) {
 		case GameState.Idle :
-			if (Input.GetKeyDown(KeyCode.Space)){
+			if (clickedStart){
+				clickedStart = false;	
 				IdlePage.SetActive(false);
 				TestPage.SetActive(true);
 				gameState = GameState.TestPage;
 				//beep.Play();
 			}
 			break;
-
+	
 		case GameState.TestPage :
 			if (Input.GetKeyDown(KeyCode.Space)){
 				TestPage.SetActive(false);
@@ -109,7 +116,7 @@ public class POSModuleManager : MonoBehaviour {
 				tempTerm.pointOfSailAnswer = allPoints[i].sailTitle;
 				listOfPOSTerms.Add(tempTerm);
 			}
-
+			
 			tempListPointTerms = new List<Term>(listOfPOSTerms);
 			while (tempListPointTerms.Count > 0) //shuffle list
 			{
@@ -121,22 +128,22 @@ public class POSModuleManager : MonoBehaviour {
 			totalMastery = requiredMastery * listOfPOSTerms.Count;
 			gameState = GameState.Intro;
 			break;
-
+			
 		case GameState.Intro : 
 			if (userClickedStart) {
 				gameState = GameState.SetRound;
 			}
 			break;
-
+			
 		case GameState.SetRound :
 			CheckForSequenceMastery(); //eliminate mastered sequences
 			InitiateTerm();
 			gameState = GameState.Playing;
-			baseTackCircle.SetActive(true);
-			tackHighlightCircle.SetActive(false);
+			circle2.SetActive(true);
+			circle1.SetActive(false);
 			break;
 		case GameState.Playing :
-			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has` been rotated
+			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
 				gameState = GameState.CheckAnswer;
 			}
 			break;
@@ -159,7 +166,7 @@ public class POSModuleManager : MonoBehaviour {
 				gameState = GameState.WrongAnswer;
 			}
 			break;
-
+			
 		case GameState.CorrectAnswer :
 			if (AnswerCorrect()){
 				WinRound();
@@ -169,12 +176,12 @@ public class POSModuleManager : MonoBehaviour {
 				gameState = GameState.SetRound;
 			}
 			break;
-
+			
 		case GameState.WrongAnswer :
 			AnswerWrong();
 			gameState = GameState.Playing;
 			break;
-
+			
 		case GameState.WinScreen :
 			GameplayPage.SetActive(false);
 			winPage.SetActive(true);
@@ -182,6 +189,7 @@ public class POSModuleManager : MonoBehaviour {
 				thisBreatheAnimation.enabled = true;
 				thisColorChange.enabled = true;
 				youbeatlevel2.text = "you beat level 2";
+				endOfLevel2Text.text = "Click here to play level 2 again";
 			}
 			winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
 			break;
@@ -205,8 +213,8 @@ public class POSModuleManager : MonoBehaviour {
 
 	}
 	bool AnswerCorrect(){
-		tackHighlightCircle.SetActive(false);
-		baseTackCircle.SetActive(true);
+		circle1.SetActive(false);
+		circle2.SetActive(true);
 		//correct.Play ();
 		wrongAnswerText.enabled = false;
 		correctText.enabled = true;
@@ -222,13 +230,17 @@ public class POSModuleManager : MonoBehaviour {
 	}
 	void AnswerWrong(){
 		numberWrong++;
-		baseTackCircle.SetActive(false);
-		tackHighlightCircle.SetActive(true);
+		circle2.SetActive(false);
+		circle1.SetActive(true);
 		//wrong.Play ();
 		AdjustMasteryMeter(false);
 		timer.timesUp = true;
 		timer.pause = true;
 		DisplayFeedbackText();
+	}
+
+	public void ClickStart () {
+		clickedStart = true;
 	}
 
 	void DisplayFeedbackText () {
@@ -238,26 +250,26 @@ public class POSModuleManager : MonoBehaviour {
 
 	}
 	void GotoNextModule(){
-		Application.LoadLevel(1);
+		//Application.LoadLevel(1);
 	}
 
 	void AdjustMasteryMeter(bool didAnswerCorrect) {
-
+		
 		if (didAnswerCorrect && !timer.timesUp) {
-
+			
 			listOfPOSTerms[randomListPoints[currIndex].initIndex].mastery += 1;
 		}
-
+		
 		else if (!didAnswerCorrect) {
 			if (listOfPOSTerms[randomListPoints[currIndex].initIndex].mastery > 0) {
-
+				
 				listOfPOSTerms[randomListPoints[currIndex].initIndex].mastery -= 1;
 			}
 		}
 		SetMastery();
-
+		
 	}
-
+	
 	void SetMastery() {
 		currMastery = 0;
 		foreach (Term x in listOfPOSTerms) {
@@ -321,4 +333,5 @@ public class POSModuleManager : MonoBehaviour {
 			}
 		}
 	}
+
 }
