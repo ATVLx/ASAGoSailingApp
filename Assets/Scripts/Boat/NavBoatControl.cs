@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 
 public class NavBoatControl : MonoBehaviour {
+	public const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 
 	//test
 	public Text thrustVal, velocity;
@@ -19,7 +20,6 @@ public class NavBoatControl : MonoBehaviour {
 
 	public Animator sail;
 	protected Rigidbody myRigidbody;
-	private const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 	private float currThrust = 0f;
 	private float sinkMultiplier;
 	private float angleToAdjustTo;
@@ -60,6 +60,8 @@ public class NavBoatControl : MonoBehaviour {
 	protected float lerpStart, lerpEnd;
 	protected Vector3 boatDirection;
 
+	private float boatThrust = 0f;
+
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
@@ -95,7 +97,8 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void FixedUpdate () {	
-		MastRotation();		
+		MastRotation();
+		CalculateForwardThrust();
 		ApplyForwardThrust ();
 		ApplyBoatRotation ();
 		SetSailAnimator ();
@@ -138,18 +141,18 @@ public class NavBoatControl : MonoBehaviour {
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
 
-	protected void ApplyForwardThrust () {
+	protected void CalculateForwardThrust() {
 		float inIronsBufferZone = 15f;
 		float inIronsNullZone = 30f;
 		float effectiveAngle;
-
+		
 		// If we are within the in irons range check to see if we are in the buffer zone
 		if (angleWRTWind < (inIronsNullZone + inIronsBufferZone))
 			effectiveAngle = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? angleWRTWind - inIronsNullZone : 0f;
 		else {
 			effectiveAngle = 15f;
 		}
-
+		
 		optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
 		if (boomSlider != null) {
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (boomSlider.value - optimalAngle) + optimalAngle) : 0f;
@@ -157,8 +160,10 @@ public class NavBoatControl : MonoBehaviour {
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (angleWRTWind - optimalAngle) + optimalAngle) : 0f;
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
-		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
+		boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
+	}
 
+	protected void ApplyForwardThrust () {
 		myRigidbody.AddForce( transform.forward * boatThrust);
 	}
 
