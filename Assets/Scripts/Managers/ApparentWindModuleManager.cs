@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 /// <summary>
 /// Manages the Apparent Wind module.
@@ -11,7 +10,6 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public enum GameState { Intro, Playing, Complete };
 
 	public GameState gameState = GameState.Intro;
-	public List<Term> listOfPOSTerms,tempListPointTerms,randomListPoints;
 	[System.NonSerialized]
 	public bool hasClickedRun;
 	[System.NonSerialized]
@@ -76,8 +74,8 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public void DoneButton() {
 		ConfirmationPopUp.InitializeConfirmationPanel( "move on to the next level?", (bool confirmed) => {
 			if( confirmed == true ) {
-				ChangeState( GameState.Complete );
 				Debug.Log( "Accepted to go to next level." );
+				ChangeState( GameState.Complete );
 			} else {
 				Debug.Log( "Declined to go to next level." );
 			}
