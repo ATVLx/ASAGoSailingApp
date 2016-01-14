@@ -17,10 +17,10 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 
 	void Start() {
 		if( moduleManager == null ) {
-			Debug.LogWarning( gameObject.name + "'s ApparentWIndAnimHandler component is missing a reference for moduleManager.\nNote: This is only a problem if we are in the ApparentWind module scene.");
+			Debug.LogWarning( gameObject.name + "'s ApparentWIndAnimHandler component is missing a reference for moduleManager.\n<color=#FFFFFFFF>Note: This is only a problem if we are in the ApparentWind module scene.</color>");
 		}
 		if( POSmoduleManager == null ) {
-			Debug.LogWarning( gameObject.name + "'s ApparentWIndAnimHandler component is missing a reference for POSmoduleManager.\nNote: This is only a problem if we are in the POS module scene.");
+			Debug.LogWarning( gameObject.name + "'s ApparentWIndAnimHandler component is missing a reference for POSmoduleManager.\n<color=#FFFFFFFF>Note: This is only a problem if we are in the POS module scene.</color>");
 		}
 	}
 
