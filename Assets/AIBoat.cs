@@ -13,6 +13,7 @@ public class AIBoat : MonoBehaviour {
 	Animator sail;
 	//FX
 	public List<GameObject> scenarioTriggers;
+	public Transform leeward, windward, port, starboard, overtaker;
 	bool accelerate, steer, strafe;
 
 
