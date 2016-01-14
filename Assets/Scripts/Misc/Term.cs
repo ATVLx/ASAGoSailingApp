@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/*
-	This class is used in the point of sail module 
-*/
-
+/// <summary>
+/// This class is used in the point of sail module.
+/// </summary>
 public class Term {
 	public int mastery = 0;
 	public string pointOfSailAnswer;
