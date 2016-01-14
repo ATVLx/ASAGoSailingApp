@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class AIBoat : MonoBehaviour {
@@ -8,16 +9,18 @@ public class AIBoat : MonoBehaviour {
 	public float accelerateStrength = 30000f;
 	public float turnStrength = 5000f;
 	float horizontalAxisDirection;
-
+	[SerializeField]
+	Animator sail;
 	//FX
-
+	public List<GameObject> scenarioTriggers;
 	bool accelerate, steer, strafe;
 
 
 	void Start()
 	{
 		m_body = GetComponent<Rigidbody>();
-
+		sail.SetFloat ("sailtrim", .8f);
+		accelerate = true;
 	}
 
 	void FixedUpdate()
