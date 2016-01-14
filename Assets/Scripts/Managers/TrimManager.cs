@@ -14,7 +14,7 @@ public class TrimManager : MonoBehaviour {
 	[SerializeField]
 	Button submitButton, gotoNextModule;
 	[SerializeField]
-	Slider sailEfficiencySlider;
+	Slider sailEfficiencySlider, trimSlider;
 	[SerializeField]
 	GameObject introText,goodJob,complete,panel;
 
@@ -53,8 +53,6 @@ public class TrimManager : MonoBehaviour {
 
 			break;
 		}
-
-	
 	}
 
 	public void BeginTutorial () {
@@ -65,7 +63,12 @@ public class TrimManager : MonoBehaviour {
 	}
 
 	public void NextPOSButton () {
+		trimSlider.value = 80;
 		posIndex++;
+		if (posIndex > 2 && posIndex < 6) {
+			trimSlider.value = 0;
+
+		}
 		goodJob.GetComponent<Fader> ().StartFade ();
 		if (posIndex >= listOfPositions.Length) {
 			switchToComplete = true;
