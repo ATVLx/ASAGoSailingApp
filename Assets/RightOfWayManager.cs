@@ -120,6 +120,7 @@ public class RightOfWayManager : MonoBehaviour {
 				MotorBoat.transform.position = overrun.position;
 				Player.transform.rotation = starboard.rotation;
 				MotorBoat.transform.rotation = overrun.rotation;
+				MotorBoat.GetComponent<EvilYacht> ().isMoving = true;
 				break;
 			}
 		
