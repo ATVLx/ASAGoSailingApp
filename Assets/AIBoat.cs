@@ -16,6 +16,7 @@ public class AIBoat : MonoBehaviour {
 	public Transform leeward, windward, port, starboard, overtaker;
 	bool accelerate, steer, strafe;
 
+	public Transform mast;
 
 	void Start()
 	{
@@ -56,6 +57,17 @@ public class AIBoat : MonoBehaviour {
 		}
 		else {
 			horizontalAxisDirection = 1f;
+		}
+	}
+
+	public void SetTack (bool isPort) {
+		if (isPort) {
+			sail.SetFloat ("sailtrim", 0.8f);
+			mast.transform.localRotation = Quaternion.Euler (0, -50f, 0);
+		} else {
+			sail.SetFloat ("sailtrim", -0.8f);
+			mast.transform.localRotation = Quaternion.Euler (0, 50f, 0);
+
 		}
 	}
 		
