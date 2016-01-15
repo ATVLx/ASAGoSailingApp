@@ -389,5 +389,8 @@ public class NavBoatControl : MonoBehaviour {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
 			BoatHasCrashed ();
 		}
+		if (thisCollision.gameObject.tag == "ROWFail") {
+			RightOfWayManager.s_instance.Fail ();
+		}
 	}
 }

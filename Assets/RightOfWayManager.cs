@@ -19,6 +19,7 @@ public class RightOfWayManager : MonoBehaviour {
 	[SerializeField]
 	Fader success;
 
+	bool isFailing;
 	public static RightOfWayManager s_instance;
 
 	void Awake() {
@@ -71,6 +72,7 @@ public class RightOfWayManager : MonoBehaviour {
 		AIboat.GetComponent<Rigidbody> ().isKinematic = !thisBool;
 		Player.GetComponent<Rigidbody> ().isKinematic = !thisBool;
 		MotorBoat.GetComponent<Rigidbody> ().isKinematic = !thisBool;
+
 	}
 
 	//TODO make boats turn after X seconds on each module
@@ -88,6 +90,7 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 1:
 			{
+				StartCoroutine ("level2");
 				sailtrim.value = 15f;
 				Player.transform.rotation = leeward.rotation;
 				Player.transform.position = leeward.position;
@@ -97,6 +100,8 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 2:
 			{
+				StartCoroutine ("level3");
+
 				sailtrim.value = 20f;
 				Player.transform.position = starboard.position;
 				AIboat.transform.position = port.position;
@@ -127,24 +132,56 @@ public class RightOfWayManager : MonoBehaviour {
 		}
 	}
 
+	IEnumerator level2 () {
+		yield return new WaitForSeconds (3f);
+		AIboat.GetComponent<AIBoat> ().SetSteering (true, true);
+		yield return new WaitForSeconds (1.5f);
+		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
+	}
+	IEnumerator level3 () {
+		yield return new WaitForSeconds (5.5f);
+		AIboat.GetComponent<AIBoat> ().SetSteering (true, false);
+		yield return new WaitForSeconds (3f);
+		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
+	}
+
 	IEnumerator PauseBoats () {
-		ToggleBoatMovement (false);
+
 		yield return new WaitForSeconds (2f);
+		ToggleBoatMovement (false);
+		yield return new WaitForSeconds (.0001f);
 		ToggleBoatMovement (true);
+		SetPositions ();
+		isFailing = false;
+
+	}
+
+	void WinModule() {
 
 	}
 
 	public void WinScenario() {
-		success.StartFadeOut ();
-		scenario++;
-		SetPositions ();
-		switchToReset = true;
+		if (!isFailing) {
+			isFailing = true;
+			success.StartFadeOut ();
+			AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario].SetActive (false);
+			scenario++;
+			if (scenario < AIboat.GetComponent<AIBoat> ().scenarioTriggers.Count) {
+				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario].SetActive (true);
+				switchToReset = true;
+			} else {
+				WinModule ();
+			}
+
+		}
 	}
 
 	public void Fail () {
-		failure.StartFadeOut ();
-		SetPositions ();
-		switchToReset = true;
+		if (!isFailing) {
+			isFailing = true;
+			failure.StartFadeOut ();
+			switchToReset = true;
+		}
 	}
 
 

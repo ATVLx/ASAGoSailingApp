@@ -18,8 +18,9 @@ public class BoolCollider : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Player") {
 			if (isTrue) {
-
+				RightOfWayManager.s_instance.WinScenario ();
 			} else {
+				RightOfWayManager.s_instance.Fail ();
 
 			}
 		}
