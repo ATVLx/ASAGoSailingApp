@@ -2,10 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
-/*
-	This class handles player input and movement on the trim module, which only allows the player to adjust sail trim
-*/
-
+/// <summary>
+/// This class handles player input and movement on the trim module, which only allows the player to adjust sail trim.
+/// </summary>
 public class TrimBoatControl : NavBoatControl {
 
 	[SerializeField]
@@ -25,7 +24,9 @@ public class TrimBoatControl : NavBoatControl {
 	void FixedUpdate () {
 		///angleWRTWind gives a value between 0-360 logic was called in NavBoatControl fixed update needed to be re
 		SetAngleWRTWind();
-		ApplyForwardThrust ();
+		CalculateForwardThrust();
+		if( canMove )				//TODO Refactor this so that the base class also uses canMove
+			ApplyForwardThrust();
 		SetSailAnimator ();
 	}
 

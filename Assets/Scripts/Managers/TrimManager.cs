@@ -14,7 +14,7 @@ public class TrimManager : MonoBehaviour {
 	[SerializeField]
 	Button submitButton, gotoNextModule;
 	[SerializeField]
-	Slider sailEfficiencySlider;
+	Slider sailEfficiencySlider, trimSlider;
 	[SerializeField]
 	GameObject introText,goodJob,complete,panel;
 
@@ -23,7 +23,7 @@ public class TrimManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		submitButton.gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -32,6 +32,7 @@ public class TrimManager : MonoBehaviour {
 		case TrimManagerState.Intro: 
 			if (switchToPlaying) {
 				thisTrimManagerState = TrimManagerState.Playing;
+				submitButton.gameObject.SetActive(true);
 				switchToPlaying = false;
 			}
 			break;
@@ -40,6 +41,7 @@ public class TrimManager : MonoBehaviour {
 			SubmitButtonLogic ();
 			if (switchToComplete) {
 				switchToComplete = false;
+				submitButton.gameObject.SetActive( false );
 				gotoNextModule.gameObject.SetActive (true);
 				complete.SetActive (true);
 				thisTrimManagerState = TrimManagerState.Complete;
@@ -51,8 +53,6 @@ public class TrimManager : MonoBehaviour {
 
 			break;
 		}
-
-	
 	}
 
 	public void BeginTutorial () {
@@ -63,7 +63,12 @@ public class TrimManager : MonoBehaviour {
 	}
 
 	public void NextPOSButton () {
+		trimSlider.value = 80;
 		posIndex++;
+		if (posIndex > 2 && posIndex < 6) {
+			trimSlider.value = 0;
+
+		}
 		goodJob.GetComponent<Fader> ().StartFade ();
 		if (posIndex >= listOfPositions.Length) {
 			switchToComplete = true;
