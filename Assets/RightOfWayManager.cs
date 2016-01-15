@@ -18,6 +18,8 @@ public class RightOfWayManager : MonoBehaviour {
 	Fader failure;
 	[SerializeField]
 	Fader success;
+	[SerializeField]
+	Text you,them,hint;
 
 	bool isFailing;
 	public static RightOfWayManager s_instance;
@@ -80,6 +82,9 @@ public class RightOfWayManager : MonoBehaviour {
 		switch (scenario) {
 		case 0:
 			{
+				you.text = "You: Windward Same Tack";
+				them.text = "Them: Leeward Same Tack";
+				hint.text = "What to do? Give way to them";
 				sailtrim.value = 40f;
 				AIboat.GetComponent<AIBoat> ().SetTack (false);
 				Player.transform.position = windward.position;
@@ -90,6 +95,9 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 1:
 			{
+				you.text = "You: Leeward on Same Tack";
+				them.text = "Them: Windward on Same Tack";
+				hint.text = "What to do? They give way to you";
 				StartCoroutine ("level2");
 				sailtrim.value = 15f;
 				Player.transform.rotation = leeward.rotation;
@@ -100,6 +108,9 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 2:
 			{
+				you.text = "You: Starboard Tack";
+				them.text = "Them: Port Tack";
+				hint.text = "What to do? They give way to you";
 				StartCoroutine ("level3");
 
 				sailtrim.value = 20f;
@@ -111,6 +122,9 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 3:
 			{
+				you.text = "You: Port Tack";
+				them.text = "Them: Starboard Tack";
+				hint.text = "What to do? Give way to them";
 				sailtrim.value = 14.5f;
 				Player.transform.position = port.position;
 				Player.transform.rotation = port.rotation;
@@ -120,6 +134,9 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 4:
 			{
+				you.text = "You: Sailboat";
+				them.text = "Them: Motorized Behemoth";
+				hint.text = "What to do? Get the heck out of the way!";
 				AIboat.SetActive (false);
 				Player.transform.position = starboard.position;
 				MotorBoat.transform.position = overrun.position;
@@ -157,19 +174,25 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 
 	void WinModule() {
-
+		you.text = "";
+		them.text = "";
+		hint.text = "";
 	}
 
 	public void WinScenario() {
 		if (!isFailing) {
 			isFailing = true;
 			success.StartFadeOut ();
-			AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario].SetActive (false);
 			scenario++;
 			if (scenario < AIboat.GetComponent<AIBoat> ().scenarioTriggers.Count) {
+				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario-1].SetActive (false);
 				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario].SetActive (true);
 				switchToReset = true;
-			} else {
+			}
+			else if (scenario == AIboat.GetComponent<AIBoat> ().scenarioTriggers.Count) {
+				switchToReset = true;
+			}
+			else {
 				WinModule ();
 			}
 
@@ -183,6 +206,4 @@ public class RightOfWayManager : MonoBehaviour {
 			switchToReset = true;
 		}
 	}
-
-
 }
