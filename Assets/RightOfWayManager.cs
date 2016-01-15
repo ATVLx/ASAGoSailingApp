@@ -14,7 +14,10 @@ public class RightOfWayManager : MonoBehaviour {
 	Transform windward, leeward, port, starboard, overrun;
 	[SerializeField]
 	int scenario = 0;
+	[SerializeField]
 	Fader failure;
+	[SerializeField]
+	Fader success;
 
 	public static RightOfWayManager s_instance;
 
@@ -70,11 +73,12 @@ public class RightOfWayManager : MonoBehaviour {
 		MotorBoat.GetComponent<Rigidbody> ().isKinematic = !thisBool;
 	}
 
+	//TODO make boats turn after X seconds on each module
 	void SetPositions() {
 		switch (scenario) {
 		case 0:
 			{
-				sailtrim.value = .5f;
+				sailtrim.value = 40f;
 				AIboat.GetComponent<AIBoat> ().SetTack (false);
 				Player.transform.position = windward.position;
 				AIboat.transform.position = leeward.position;
@@ -84,6 +88,7 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 1:
 			{
+				sailtrim.value = 15f;
 				Player.transform.rotation = leeward.rotation;
 				Player.transform.position = leeward.position;
 				AIboat.transform.rotation = windward.rotation;
@@ -92,6 +97,7 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 2:
 			{
+				sailtrim.value = 20f;
 				Player.transform.position = starboard.position;
 				AIboat.transform.position = port.position;
 				Player.transform.rotation = starboard.rotation;
@@ -100,6 +106,7 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 3:
 			{
+				sailtrim.value = 14.5f;
 				Player.transform.position = port.position;
 				Player.transform.rotation = port.rotation;
 				AIboat.transform.position = starboard.position;
@@ -126,13 +133,14 @@ public class RightOfWayManager : MonoBehaviour {
 
 	}
 
-	void WinScenario() {
+	public void WinScenario() {
+		success.StartFadeOut ();
 		scenario++;
 		SetPositions ();
 		switchToReset = true;
 	}
 
-	void Fail () {
+	public void Fail () {
 		failure.StartFadeOut ();
 		SetPositions ();
 		switchToReset = true;
