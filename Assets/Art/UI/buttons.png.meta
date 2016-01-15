@@ -1,0 +1,323 @@
+fileFormatVersion: 2
+guid: 2abc96675a8fbca49b368eb5c655e069
+timeCreated: 1452815296
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: back_active
+    21300002: back_light
+    21300004: back_pressed
+    21300006: forward_active
+    21300008: forward_light
+    21300010: forward_pressed
+    21300012: confirm_active
+    21300014: confirm_light
+    21300016: confirm_pressed
+    21300018: close_active
+    21300020: close_light
+    21300022: close_pressed
+    21300024: button_active
+    21300026: button_light
+    21300028: button_pressed
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: back_active
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 838
+        width: 97
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -45.5, y: 50.5}
+        - {x: -48.5, y: 48.5}
+        - {x: -48.5, y: -50.5}
+        - {x: 48.5, y: -50.5}
+        - {x: 48.5, y: 50.5}
+    - name: back_light
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 692
+        width: 96
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -48, y: 50.5}
+        - {x: -48, y: -50.5}
+        - {x: 48, y: -50.5}
+        - {x: 48, y: 50.5}
+    - name: back_pressed
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 550
+        width: 96
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -48, y: 49}
+        - {x: -48, y: -49}
+        - {x: 48, y: -49}
+        - {x: 48, y: 45}
+        - {x: 45, y: 49}
+    - name: forward_active
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 838
+        width: 98
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -49, y: 50.5}
+        - {x: -49, y: -47.5}
+        - {x: -47, y: -50.5}
+        - {x: 49, y: -50.5}
+        - {x: 49, y: 50.5}
+    - name: forward_light
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 692
+        width: 98
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -49, y: 50.5}
+        - {x: -49, y: -47.5}
+        - {x: -47, y: -50.5}
+        - {x: 49, y: -50.5}
+        - {x: 49, y: 50.5}
+    - name: forward_pressed
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 552
+        width: 95
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47.5, y: 47}
+        - {x: -47.5, y: -47}
+        - {x: 47.5, y: -47}
+        - {x: 47.5, y: 47}
+    - name: confirm_active
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 362
+        width: 97
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -48.5, y: 51}
+        - {x: -48.5, y: -51}
+        - {x: 48.5, y: -51}
+        - {x: 48.5, y: 51}
+    - name: confirm_light
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 216
+        width: 95
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -43.5, y: 50.5}
+        - {x: -47.5, y: 46.5}
+        - {x: -47.5, y: -47.5}
+        - {x: -45.5, y: -50.5}
+        - {x: 47.5, y: -50.5}
+        - {x: 47.5, y: 50.5}
+    - name: confirm_pressed
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 74
+        width: 94
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 49}
+        - {x: -47, y: -49}
+        - {x: 47, y: -49}
+        - {x: 47, y: 49}
+    - name: close_active
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 362
+        width: 98
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -49, y: 51}
+        - {x: -49, y: -51}
+        - {x: 45, y: -51}
+        - {x: 49, y: -48}
+        - {x: 49, y: 49}
+        - {x: 46, y: 51}
+    - name: close_light
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 216
+        width: 98
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -49, y: 50.5}
+        - {x: -49, y: -50.5}
+        - {x: 45, y: -50.5}
+        - {x: 49, y: -47.5}
+        - {x: 49, y: 47.5}
+        - {x: 46, y: 50.5}
+    - name: close_pressed
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 72
+        width: 95
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47.5, y: 50}
+        - {x: -47.5, y: -50}
+        - {x: 47.5, y: -50}
+        - {x: 47.5, y: 50}
+    - name: button_active
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 654
+        width: 517
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 254.5, y: 74}
+        - {x: 251.5, y: 75}
+        - {x: -250.5, y: 75}
+        - {x: -253.5, y: 74}
+        - {x: -258.5, y: 69}
+        - {x: -258.5, y: -70}
+        - {x: -254.5, y: -75}
+        - {x: 255.5, y: -75}
+        - {x: 258.5, y: -71}
+        - {x: 258.5, y: 69}
+    - name: button_light
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 462
+        width: 518
+        height: 147
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 254, y: 73.5}
+        - {x: -254, y: 73.5}
+        - {x: -259, y: 69.5}
+        - {x: -259, y: -70.5}
+        - {x: -255, y: -73.5}
+        - {x: 255, y: -73.5}
+        - {x: 259, y: -70.5}
+        - {x: 259, y: 68.5}
+    - name: button_pressed
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 272
+        width: 516
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -253, y: 72}
+        - {x: -257, y: 68}
+        - {x: -258, y: 65}
+        - {x: -258, y: -66}
+        - {x: -257, y: -69}
+        - {x: -253, y: -72}
+        - {x: 255, y: -72}
+        - {x: 258, y: -69}
+        - {x: 258, y: 68}
+        - {x: 254, y: 72}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
