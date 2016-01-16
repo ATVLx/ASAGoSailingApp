@@ -18,7 +18,10 @@ public class RightOfWayManager : MonoBehaviour {
 	Fader failure;
 	[SerializeField]
 	Fader success;
+	[SerializeField]
+	Text you,them,hint;
 
+	bool isFailing;
 	public static RightOfWayManager s_instance;
 
 	void Awake() {
@@ -71,6 +74,7 @@ public class RightOfWayManager : MonoBehaviour {
 		AIboat.GetComponent<Rigidbody> ().isKinematic = !thisBool;
 		Player.GetComponent<Rigidbody> ().isKinematic = !thisBool;
 		MotorBoat.GetComponent<Rigidbody> ().isKinematic = !thisBool;
+
 	}
 
 	//TODO make boats turn after X seconds on each module
@@ -78,6 +82,9 @@ public class RightOfWayManager : MonoBehaviour {
 		switch (scenario) {
 		case 0:
 			{
+				you.text = "You: Windward Same Tack";
+				them.text = "Them: Leeward Same Tack";
+				hint.text = "What to do? Give way to them";
 				sailtrim.value = 40f;
 				AIboat.GetComponent<AIBoat> ().SetTack (false);
 				Player.transform.position = windward.position;
@@ -88,6 +95,10 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 1:
 			{
+				you.text = "You: Leeward on Same Tack";
+				them.text = "Them: Windward on Same Tack";
+				hint.text = "What to do? They give way to you";
+				StartCoroutine ("level2");
 				sailtrim.value = 15f;
 				Player.transform.rotation = leeward.rotation;
 				Player.transform.position = leeward.position;
@@ -97,6 +108,11 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 2:
 			{
+				you.text = "You: Starboard Tack";
+				them.text = "Them: Port Tack";
+				hint.text = "What to do? They give way to you";
+				StartCoroutine ("level3");
+
 				sailtrim.value = 20f;
 				Player.transform.position = starboard.position;
 				AIboat.transform.position = port.position;
@@ -106,6 +122,9 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 3:
 			{
+				you.text = "You: Port Tack";
+				them.text = "Them: Starboard Tack";
+				hint.text = "What to do? Give way to them";
 				sailtrim.value = 14.5f;
 				Player.transform.position = port.position;
 				Player.transform.rotation = port.rotation;
@@ -115,6 +134,9 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 4:
 			{
+				you.text = "You: Sailboat";
+				them.text = "Them: Motorized Behemoth";
+				hint.text = "What to do? Get the heck out of the way!";
 				AIboat.SetActive (false);
 				Player.transform.position = starboard.position;
 				MotorBoat.transform.position = overrun.position;
@@ -127,25 +149,61 @@ public class RightOfWayManager : MonoBehaviour {
 		}
 	}
 
-	IEnumerator PauseBoats () {
-		ToggleBoatMovement (false);
-		yield return new WaitForSeconds (2f);
-		ToggleBoatMovement (true);
+	IEnumerator level2 () {
+		yield return new WaitForSeconds (3f);
+		AIboat.GetComponent<AIBoat> ().SetSteering (true, true);
+		yield return new WaitForSeconds (1.5f);
+		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
+	}
+	IEnumerator level3 () {
+		yield return new WaitForSeconds (5.5f);
+		AIboat.GetComponent<AIBoat> ().SetSteering (true, false);
+		yield return new WaitForSeconds (3f);
+		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
+	}
 
+	IEnumerator PauseBoats () {
+
+		yield return new WaitForSeconds (2f);
+		ToggleBoatMovement (false);
+		yield return new WaitForSeconds (.0001f);
+		ToggleBoatMovement (true);
+		SetPositions ();
+		isFailing = false;
+
+	}
+
+	void WinModule() {
+		you.text = "";
+		them.text = "";
+		hint.text = "";
 	}
 
 	public void WinScenario() {
-		success.StartFadeOut ();
-		scenario++;
-		SetPositions ();
-		switchToReset = true;
+		if (!isFailing) {
+			isFailing = true;
+			success.StartFadeOut ();
+			scenario++;
+			if (scenario < AIboat.GetComponent<AIBoat> ().scenarioTriggers.Count) {
+				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario-1].SetActive (false);
+				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario].SetActive (true);
+				switchToReset = true;
+			}
+			else if (scenario == AIboat.GetComponent<AIBoat> ().scenarioTriggers.Count) {
+				switchToReset = true;
+			}
+			else {
+				WinModule ();
+			}
+
+		}
 	}
 
 	public void Fail () {
-		failure.StartFadeOut ();
-		SetPositions ();
-		switchToReset = true;
+		if (!isFailing) {
+			isFailing = true;
+			failure.StartFadeOut ();
+			switchToReset = true;
+		}
 	}
-
-
 }

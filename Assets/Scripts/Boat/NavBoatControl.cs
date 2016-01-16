@@ -325,6 +325,9 @@ public class NavBoatControl : MonoBehaviour {
 		rudderSlider.interactable = false;
 		boomSlider.interactable = false;
 		controlsAreActive = false;
+		if (MOBManager.s_instance != null) {
+			MOBManager.s_instance.Fail();
+		}
 	}
 
 	protected void ApplySailTrim() {
@@ -388,6 +391,9 @@ public class NavBoatControl : MonoBehaviour {
 	void OnCollisionEnter (Collision thisCollision) {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
 			BoatHasCrashed ();
+		}
+		if (thisCollision.gameObject.tag == "ROWFail") {
+			RightOfWayManager.s_instance.Fail ();
 		}
 	}
 }

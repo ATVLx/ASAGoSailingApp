@@ -37,7 +37,7 @@ public class posAnimState : MonoBehaviour {
 				case "PTCloseHaul":
 					boatAnim.SetTrigger("PTCloseHaul");
 					moduleManager.currAnimState = "Close Hauled Port Tack";
-					displayPOS.text = "Close Hauled on a " + "<color=#FF0000> port tack </color>";
+					displayPOS.text = "Close Hauled on a " + "<color=sFF0000> port tack </color>";
 					displayPOS2.text = "the boat is sailing as close to the wind as possible (~45 degrees)";
 
 					break;
