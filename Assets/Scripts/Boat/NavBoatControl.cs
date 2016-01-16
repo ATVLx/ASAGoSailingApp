@@ -325,6 +325,9 @@ public class NavBoatControl : MonoBehaviour {
 		rudderSlider.interactable = false;
 		boomSlider.interactable = false;
 		controlsAreActive = false;
+		if (MOBManager.s_instance != null) {
+			MOBManager.s_instance.Fail();
+		}
 	}
 
 	protected void ApplySailTrim() {
