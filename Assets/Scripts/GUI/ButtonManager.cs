@@ -5,7 +5,7 @@ public class ButtonManager : MonoBehaviour {
 
 
 	public void ConfirmationButton (string confirmationQuestion) {
-		ConfirmationPopUp.InitializeConfirmationPanel(confirmationQuestion, (bool answer) => {
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel(confirmationQuestion, (bool answer) => {
 
 			if (answer) {
 //				GameManager.s_instance.LoadLevel(levelValue);

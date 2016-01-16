@@ -37,7 +37,7 @@ public class ConfirmationPopUp : MonoBehaviour {
 	
 	}
 
-	public static void InitializeConfirmationPanel (string descriptionOfAction, ConfirmationFunction callBack) {
+	public void InitializeConfirmationPanel (string descriptionOfAction, ConfirmationFunction callBack) {
 		s_instance.confimationPanel.SetActive (true);
 		if( s_instance.descriptionOfActionText != null )
 			s_instance.descriptionOfActionText.text = descriptionOfAction;
