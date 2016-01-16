@@ -1,0 +1,180 @@
+fileFormatVersion: 2
+guid: da58e85a68d440b41af745d7d103d500
+timeCreated: 1452908511
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: knob_active
+    21300002: knob_inactive
+    21300004: deadZone
+    21300006: horSlider_inactive
+    21300008: horSlider_active
+    21300010: verDeadZone
+    21300012: verSlider_inactive
+    21300014: verSlider_active
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: knob_active
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 367
+        width: 73
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 26.5, y: 36.5}
+        - {x: -21.5, y: 36.5}
+        - {x: -36.5, y: 31.5}
+        - {x: -36.5, y: -25.5}
+        - {x: -29.5, y: -36.5}
+        - {x: 23.5, y: -36.5}
+        - {x: 25.5, y: -35.5}
+        - {x: 36.5, y: -20.5}
+        - {x: 36.5, y: 23.5}
+        - {x: 35.5, y: 27.5}
+    - name: knob_inactive
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 368
+        width: 73
+        height: 73
+      alignment: 9
+      pivot: {x: 1.2715291, y: -0.068032905}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -40.821625, y: 60.9664}
+        - {x: -71.821625, y: 60.9664}
+        - {x: -76.821625, y: 51.9664}
+        - {x: -76.821625, y: 33.9664}
+        - {x: -74.821625, y: 27.9664}
+        - {x: -70.821625, y: 19.9664}
+        - {x: -42.821625, y: 19.9664}
+        - {x: -35.821625, y: 29.9664}
+        - {x: -35.821625, y: 52.9664}
+    - name: deadZone
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 83
+        width: 110
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -55, y: 17.5}
+        - {x: -55, y: -17.5}
+        - {x: 55, y: -17.5}
+        - {x: 55, y: 17.5}
+    - name: horSlider_inactive
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 50
+        width: 359
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: horSlider_active
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 13
+        width: 359
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: verDeadZone
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 324
+        width: 34
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -17, y: 55.5}
+        - {x: -17, y: -55.5}
+        - {x: 17, y: -55.5}
+        - {x: 17, y: 55.5}
+    - name: verSlider_inactive
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 83
+        width: 28
+        height: 357
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: verSlider_active
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 81
+        width: 28
+        height: 359
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
