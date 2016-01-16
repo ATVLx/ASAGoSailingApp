@@ -10,9 +10,12 @@ public class MOBManager : MonoBehaviour {
 	[SerializeField]
 	GameObject setup1, setup2;
 	bool switchToGamePlay, switchToReset;
+	[SerializeField]
+	Fader win,lose;
+
 
 	[SerializeField]
-	Transform setup2transform;
+	Transform setup1transform, setup2transform;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -55,15 +58,24 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public void WinScenario() {
+		win.StartFadeOut ();
 		if (setup2.activeSelf == false) {
 			setup2.SetActive (true);
 			setup1.SetActive (false);
+			playerBoat.transform.position = setup2transform.position;
+			playerBoat.transform.rotation = setup2transform.rotation;
 		} else {
 			curState = MOBState.win;
 		}
 	}
 
 	public void Fail(){
-	
+		lose.StartFadeOut ();
+		StopAllCoroutines ();
+	}
+
+	public IEnumerator Land() {
+		yield return new WaitForSeconds (3f);
+		MOBManager.s_instance.WinScenario ();
 	}
 }

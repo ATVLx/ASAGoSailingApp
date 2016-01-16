@@ -5,7 +5,11 @@ public class EnterLandingZone : MonoBehaviour {
 
 	void OnTriggerExit(Collider other) {
 		if (other.tag == "Player") {
-			MOBManager.s_instance.WinScenario ();
+			if (MOBManager.s_instance != null) {
+				StartCoroutine (MOBManager.s_instance.Land());
+			}
 		}
 	}
+
+
 }
