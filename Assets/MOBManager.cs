@@ -12,7 +12,8 @@ public class MOBManager : MonoBehaviour {
 	bool switchToGamePlay, switchToReset;
 	[SerializeField]
 	Fader win,lose;
-
+	[SerializeField]
+	Camera overhead, main;
 
 	[SerializeField]
 	Transform setup1transform, setup2transform;
@@ -55,10 +56,54 @@ public class MOBManager : MonoBehaviour {
 
 	public void StartGame() {
 		switchToGamePlay = true;
+		CameraMain ();
 	}
 
 	public void WinScenario() {
 		win.StartFadeOut ();
+		StartCoroutine ("WinReset");
+	}
+
+	public void Fail(){
+		lose.StartFadeOut ();
+		StopAllCoroutines ();
+		StartCoroutine ("FailReset");
+	}
+
+	public IEnumerator Land() {
+		yield return new WaitForSeconds (3f);
+		WinScenario ();
+	}
+
+	void CameraMain() {
+		
+		overhead.GetComponent<Camera> ().enabled = false;
+		main.GetComponent<Camera> ().enabled = true;
+	}
+
+	void CameraOverhead() {
+		overhead.GetComponent<Camera> ().enabled = true;
+		main.GetComponent<Camera> ().enabled = false;
+	}
+
+	IEnumerator FailReset () {
+		CameraOverhead ();
+		yield return new WaitForSeconds (3f);
+		CameraMain ();
+		if (setup2.gameObject.activeSelf == false) {
+			playerBoat.transform.position = setup1transform.position;
+			playerBoat.transform.rotation = setup1transform.rotation;
+		} else {
+			playerBoat.transform.position = setup2transform.position;
+			playerBoat.transform.rotation = setup2transform.rotation;
+		}
+
+	}
+
+	IEnumerator WinReset () {
+		CameraOverhead ();
+		yield return new WaitForSeconds (3f);
+		CameraMain ();
 		if (setup2.activeSelf == false) {
 			setup2.SetActive (true);
 			setup1.SetActive (false);
@@ -67,15 +112,5 @@ public class MOBManager : MonoBehaviour {
 		} else {
 			curState = MOBState.win;
 		}
-	}
-
-	public void Fail(){
-		lose.StartFadeOut ();
-		StopAllCoroutines ();
-	}
-
-	public IEnumerator Land() {
-		yield return new WaitForSeconds (3f);
-		MOBManager.s_instance.WinScenario ();
 	}
 }
