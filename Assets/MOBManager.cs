@@ -47,8 +47,11 @@ public class MOBManager : MonoBehaviour {
 			}
 		case MOBState.reset:
 			{
-				StartCoroutine ("PauseBoats");
-				curState = MOBState.gameplay;
+//				StartCoroutine ("PauseBoats");
+				if (switchToGamePlay) {
+					switchToGamePlay = false;
+					curState = MOBState.gameplay;
+				}
 				break;
 			}
 		}
@@ -60,19 +63,27 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public void WinScenario() {
-		win.StartFadeOut ();
-		StartCoroutine ("WinReset");
+		if (curState == MOBState.gameplay) {
+			win.StartFadeOut ();
+			switchToReset = true;
+			StartCoroutine ("WinReset");
+		}
 	}
 
 	public void Fail(){
-		lose.StartFadeOut ();
-		StopAllCoroutines ();
-		StartCoroutine ("FailReset");
+		if (curState == MOBState.gameplay) {
+			lose.StartFadeOut ();
+			switchToReset = true;
+			StopAllCoroutines ();
+			StartCoroutine ("FailReset");
+		}
 	}
 
 	public IEnumerator Land() {
-		yield return new WaitForSeconds (3f);
-		WinScenario ();
+		if (curState == MOBState.gameplay) {
+			yield return new WaitForSeconds (3f);
+			WinScenario ();
+		}
 	}
 
 	void CameraMain() {
@@ -97,20 +108,26 @@ public class MOBManager : MonoBehaviour {
 			playerBoat.transform.position = setup2transform.position;
 			playerBoat.transform.rotation = setup2transform.rotation;
 		}
+		switchToGamePlay = true;
 
 	}
 
 	IEnumerator WinReset () {
 		CameraOverhead ();
 		yield return new WaitForSeconds (3f);
-		CameraMain ();
 		if (setup2.activeSelf == false) {
 			setup2.SetActive (true);
 			setup1.SetActive (false);
 			playerBoat.transform.position = setup2transform.position;
 			playerBoat.transform.rotation = setup2transform.rotation;
+			yield return new WaitForSeconds (2f);
+			CameraMain ();
+			switchToGamePlay = true;
+
+
 		} else {
 			curState = MOBState.win;
 		}
+
 	}
 }
