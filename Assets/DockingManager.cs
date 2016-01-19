@@ -4,7 +4,7 @@ using System.Collections;
 public class DockingManager : MonoBehaviour {
 	enum DockingState {intro, gameplay, reset,win};
 	DockingState curState;
-	public static MOBManager s_instance;
+	public static DockingManager s_instance;
 	[SerializeField]
 	GameObject playerBoat;
 	[SerializeField]
