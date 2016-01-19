@@ -28,13 +28,18 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	/// The position where the wind speed arrow will start from.
 	/// </summary>
 	public Transform windLineRendererOrigin;
+	public Camera mainCamera;
+	public Transform lowWindCameraPos;
+	public Transform highWindCameraPos;
 	public GameObject[] instructionPanels;
 
 	private ApparentWindBoatControl apparentWindBoatControl;
 	private int currentInstructionPanel = 0;
+	private float boatVelocityRendererOffsetScalar = 2f;
 	private float lowWindSpeedRendererOffset = 6f;
 	private float highWindSpeedRendererOffset = 10f;
-	public bool highWindSpeed = false;
+	private bool highWindSpeed = false;
+	public bool cameraIsLerping = false;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -49,6 +54,14 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	void Start() {
 		if( gameState == GameState.Intro )
 			instructionPanels[0].SetActive( true );
+
+		if( mainCamera == null )
+			mainCamera = Camera.main;
+
+		if( lowWindCameraPos == null )
+			lowWindCameraPos = GameObject.Find( "LowWindCameraPos" ).transform;
+		if( highWindCameraPos == null )
+			highWindCameraPos = GameObject.Find( "HighWindCameraPos" ).transform;
 
 		apparentWindBoatControl = ApparentWindBoatControl.s_instance;
 	}
@@ -69,23 +82,27 @@ public class ApparentWindModuleManager : MonoBehaviour {
 			}
 			break;
 		case GameState.Playing:
-			Vector3 boatDir = apparentWindBoatControl.myRigidbody.velocity.normalized;
-			float boatVel = apparentWindBoatControl.myRigidbody.velocity.magnitude;
-			boatVelocityRendererOrigin.position = mastRendererPosition.position + ( boatDir * boatVel );
 			break;
 		}
 	}
 
 	void LateUpdate() {
-		Vector3 newOffset = windLineRendererOrigin.position;
+		// Update boat velocity renderer's position
+		boatVelocityRendererOrigin.position = mastRendererPosition.position + apparentWindBoatControl.myRigidbody.velocity*boatVelocityRendererOffsetScalar;
 
+		// Update wind line renderer's position
+		Vector3 newOffset = windLineRendererOrigin.position;
 		if( !highWindSpeed ) {
 			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * lowWindSpeedRendererOffset );
 		} else {
 			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * highWindSpeedRendererOffset );
 		}
-
 		windLineRendererOrigin.position = newOffset;
+
+		// Update line renderers
+		boatVelocityRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
+		windLineRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
+		mastRendererPosition.GetComponent<ConnectLineRenderer>().UpdatePosition();
 	}
 
 	public void ChangeState( GameState newState ) {
@@ -116,6 +133,63 @@ public class ApparentWindModuleManager : MonoBehaviour {
 				Debug.Log( "Declined to go to next level." );
 			}
 		});
+	}
+
+	/// <summary>
+	/// Lerps the camera.
+	/// </summary>
+	/// <param name="lerpToHighWindPos">If set to <c>true</c> lerps to high wind position.</param>
+	private void LerpCamera( bool lerpToHighWindPos ) {
+		StartCoroutine( LerpCameraToPos( lerpToHighWindPos, 0.35f ) );
+	}
+
+	/// <summary>
+	/// Lerps the camera to position.
+	/// </summary>
+	/// <returns>The camera to position.</returns>
+	/// <param name="lerpToHighWindPos">If set to <c>true</c> lerps to high wind position from low wind position.</param>
+	/// <param name="duration">Duration of lerp in seconds.</param>
+	private IEnumerator LerpCameraToPos( bool lerpToHighWindPos, float duration ) {
+		Vector3 startPos, endPos;
+		if( lerpToHighWindPos ) {
+			startPos = lowWindCameraPos.position;
+			endPos = highWindCameraPos.position;
+		} else {
+			startPos = highWindCameraPos.position;
+			endPos = lowWindCameraPos.position;
+		}
+
+		float lerpDuration = duration;
+		float lerpTimer = 0f;
+
+		while( lerpTimer < lerpDuration ) {
+			if( (lerpTimer/lerpDuration) >= 0.99f ) {
+				mainCamera.transform.position = endPos;
+				break;
+			}
+
+			mainCamera.transform.position = Vector3.Slerp( startPos, endPos, lerpTimer/lerpDuration );
+			yield return null;
+			lerpTimer += Time.deltaTime;
+		}
+
+		cameraIsLerping = false;
+	}
+
+	/// <summary>
+	/// Actions taken when the Wind Speed Toggle Button is pressed in the scene.
+	/// </summary>
+	public void WindSpeedToggleButton() {
+		if( !cameraIsLerping ) {
+			cameraIsLerping = true;
+			// If we are currently in high wind speed, lerp to low wind camera position
+			if( highWindSpeed )
+				LerpCamera( false );
+			else
+				LerpCamera( true );
+
+			highWindSpeed = !highWindSpeed;
+		}
 	}
 
 	/// <summary>
