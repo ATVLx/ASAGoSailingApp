@@ -12,13 +12,15 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public delegate void ArrowUpdate();
 	public static event ArrowUpdate UpdateWindLineArrows;
 
+	public GameState gameState = GameState.Intro;
+	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
+
 	[System.NonSerialized]
 	public bool hasClickedRun;
 	[System.NonSerialized]
 	public string currAnimState;
 
-	public GameState gameState = GameState.Intro;
-	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
+	[Header( "Line Renderers:" )]
 	/// <summary>
 	/// The mast position used when computing apparent wind arrows.
 	/// </summary>
@@ -31,18 +33,27 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	/// The position where the wind speed arrow will start from.
 	/// </summary>
 	public Transform windLineRendererOrigin;
+
+	[Header( "Camera Lerp:" )]
 	public Camera mainCamera;
 	public Transform lowWindCameraPos;
 	public Transform highWindCameraPos;
 	public GameObject[] instructionPanels;
 
+	private ApparentWindModuleGuiManager guiManager;
 	private ApparentWindBoatControl apparentWindBoatControl;
 	private int currentInstructionPanel = 0;
 	private float boatVelocityRendererOffsetScalar = 2.2f;
 	private float lowWindSpeedRendererOffset = 8f;
 	private float highWindSpeedRendererOffset = 14f;
-	private bool highWindSpeed = false;
-	public bool cameraIsLerping = false;
+	private bool isWindSpeedSetToHigh = false;
+	private bool cameraIsLerping = false;
+
+	// GUI Text values
+	private float lowWindSpeed = 15f;
+	private float highWindSpeed = 30f;
+	private float lowBoatSpeed = 7f;
+	private float highBoatSpeed = 11f;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -55,16 +66,18 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	}
 
 	void Start() {
-		if( gameState == GameState.Intro )
-			instructionPanels[0].SetActive( true );
-
+		// Set up variables for camera lerp
 		if( mainCamera == null )
 			mainCamera = Camera.main;
-
 		if( lowWindCameraPos == null )
 			lowWindCameraPos = GameObject.Find( "LowWindCameraPos" ).transform;
 		if( highWindCameraPos == null )
 			highWindCameraPos = GameObject.Find( "HighWindCameraPos" ).transform;
+
+		// Get references to singletons
+		guiManager = ApparentWindModuleGuiManager.s_instance;
+		guiManager.UpdateTrueWindSpeed( lowWindSpeed );
+		guiManager.UpdateBoatSpeed( lowBoatSpeed );
 
 		apparentWindBoatControl = ApparentWindBoatControl.s_instance;
 	}
@@ -95,7 +108,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 
 		// Update wind line renderer's position
 		Vector3 newOffset = windLineRendererOrigin.position;
-		if( !highWindSpeed ) {
+		if( !isWindSpeedSetToHigh ) {
 			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * lowWindSpeedRendererOffset );
 		} else {
 			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * highWindSpeedRendererOffset );
@@ -106,6 +119,8 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		boatVelocityRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		windLineRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		mastRendererPosition.GetComponent<ConnectLineRenderer>().UpdatePosition();
+
+		CalculateApparentWind();
 
 		// Update line arrows
 		if( UpdateWindLineArrows != null )
@@ -128,18 +143,21 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		gameState = newState;
 	}
 
-	/// <summary>
-	/// Action taken when the GUI "Done" button is pressed.
-	/// </summary>
-	public void DoneButton() {
-		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "move on to the next level?", (bool confirmed) => {
-			if( confirmed == true ) {
-				Debug.Log( "Accepted to go to next level." );
-				ChangeState( GameState.Complete );
-			} else {
-				Debug.Log( "Declined to go to next level." );
-			}
-		});
+	private void CalculateApparentWind() {
+		Vector3 fakeWindVector = (boatVelocityRendererOrigin.position - windLineRendererOrigin.position).normalized;
+		Vector3 fakeBoatSpeedVector = (mastRendererPosition.position - boatVelocityRendererOrigin.position).normalized;
+
+		if( !isWindSpeedSetToHigh ) {
+			fakeWindVector *= lowWindSpeed;
+			fakeBoatSpeedVector *= lowBoatSpeed;
+		} else {
+			fakeWindVector *= highWindSpeed;
+			fakeBoatSpeedVector *= highBoatSpeed;
+		}
+
+		Vector3 calculatedApparentWind = fakeWindVector + fakeBoatSpeedVector;
+
+		guiManager.UpdateApparentWindSpeed( calculatedApparentWind.magnitude );
 	}
 
 	/// <summary>
@@ -190,12 +208,20 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		if( !cameraIsLerping ) {
 			cameraIsLerping = true;
 			// If we are currently in high wind speed, lerp to low wind camera position
-			if( highWindSpeed )
+			if( isWindSpeedSetToHigh ) {
 				LerpCamera( false );
-			else
+				guiManager.UpdateTrueWindSpeed( lowWindSpeed );
+				guiManager.UpdateBoatSpeed( lowBoatSpeed );
+				apparentWindBoatControl.SetHighSpeed( false );
+ 			}
+			else {
 				LerpCamera( true );
+				guiManager.UpdateTrueWindSpeed( highWindSpeed );
+				guiManager.UpdateBoatSpeed( highBoatSpeed );
+				apparentWindBoatControl.SetHighSpeed( true );
+			}
 
-			highWindSpeed = !highWindSpeed;
+			isWindSpeedSetToHigh = !isWindSpeedSetToHigh;
 		}
 	}
 
@@ -204,5 +230,19 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	/// </summary>
 	public void PauseButton() {
 		//TODO Tell GameManager to show pause menu.
+	}
+
+	/// <summary>
+	/// Action taken when the GUI "Done" button is pressed.
+	/// </summary>
+	public void DoneButton() {
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "move on to the next level?", (bool confirmed) => {
+			if( confirmed == true ) {
+				Debug.Log( "Accepted to go to next level." );
+				ChangeState( GameState.Complete );
+			} else {
+				Debug.Log( "Declined to go to next level." );
+			}
+		});
 	}
 }
