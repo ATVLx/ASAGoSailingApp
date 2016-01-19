@@ -9,7 +9,7 @@ public class ApparentWindBoatControl : MonoBehaviour {
 	[System.NonSerialized]
 	public Rigidbody myRigidbody;
 
-	private Transform myTransform;
+//	private Transform myTransform;
 
 	void Awake() {
 		if( s_instance == null ) {
@@ -20,7 +20,7 @@ public class ApparentWindBoatControl : MonoBehaviour {
 	}
 
 	void Start() {
-		myTransform = transform;
+//		myTransform = transform;
 		myRigidbody = GetComponent<Rigidbody>();
 	}
 
