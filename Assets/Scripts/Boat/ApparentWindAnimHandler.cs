@@ -37,58 +37,48 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 					ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 					if (Physics.Raycast(ray, out hit, 1000.0f)) {
 						ApparentWindModuleManager.s_instance.hasClickedRun = false;
-						//checks which point of sail object was clicked for animation states
-						switch(hit.collider.gameObject.name){
 
+						//checks which point of sail object was clicked for animation states
+						switch(hit.collider.gameObject.name) {
 						case "Irons":
 							boatAnim.SetTrigger("Irons");
-							apparentWindModuleManager.currAnimState = "In Irons";
 							break;
 
 						case "PTCloseHaul":
 							boatAnim.SetTrigger("PTCloseHaul");
-							apparentWindModuleManager.currAnimState = "Close Hauled Port Tack";
 							break;
 
 						case "PTCloseReach":
 							boatAnim.SetTrigger("PTCloseReach");
-							apparentWindModuleManager.currAnimState = "Close Reach Port Tack";
 							break;
 
 						case "PTBeamReach":
 							boatAnim.SetTrigger ("PTBeamReach");
-							apparentWindModuleManager.currAnimState = "Beam Reach Port Tack";
 							break;
 
 						case "PTBroadReach":
 							boatAnim.SetTrigger("PTBroadReach");
-							apparentWindModuleManager.currAnimState = "Broad Reach Port Tack";
 							break;
 
 						case "Run":
 							ApparentWindModuleManager.s_instance.hasClickedRun = true;
 							boatAnim.SetTrigger("Run");
-							apparentWindModuleManager.currAnimState = "Run";
 							break;
 
 						case "STBroadReach":
 							boatAnim.SetTrigger("STBroadReach");
-							apparentWindModuleManager.currAnimState = "Broad Reach Starboard Tack";
 							break;
 						
 						case "STBeamReach":
 							boatAnim.SetTrigger("STBeamReach");
-							apparentWindModuleManager.currAnimState = "Beam Reach Starboard Tack";
 							break;
 
 						case "STCloseReach":
 							boatAnim.SetTrigger("STCloseReach");
-							apparentWindModuleManager.currAnimState = "Close Reach Starboard Tack";
 							break;
 
 						case "STCloseHaul":
 							boatAnim.SetTrigger("STCloseHaul");
-							apparentWindModuleManager.currAnimState = "Close Hauled Starboard Tack";
 							break;
 						}
 					}

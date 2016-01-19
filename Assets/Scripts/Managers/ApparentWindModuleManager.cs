@@ -9,15 +9,32 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public static ApparentWindModuleManager s_instance;
 	public enum GameState { Intro, Playing, Complete };
 
-	public GameState gameState = GameState.Intro;
 	[System.NonSerialized]
 	public bool hasClickedRun;
 	[System.NonSerialized]
 	public string currAnimState;
+
+	public GameState gameState = GameState.Intro;
 	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
+	/// <summary>
+	/// The mast position used when computing apparent wind arrows.
+	/// </summary>
+	public Transform mastRendererPosition;
+	/// <summary>
+	/// The position where the boat velocity arrow will start from.
+	/// </summary>
+	public Transform boatVelocityRendererOrigin;
+	/// <summary>
+	/// The position where the wind speed arrow will start from.
+	/// </summary>
+	public Transform windLineRendererOrigin;
 	public GameObject[] instructionPanels;
 
+	private ApparentWindBoatControl apparentWindBoatControl;
 	private int currentInstructionPanel = 0;
+	private float lowWindSpeedRendererOffset = 6f;
+	private float highWindSpeedRendererOffset = 10f;
+	public bool highWindSpeed = false;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -32,6 +49,8 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	void Start() {
 		if( gameState == GameState.Intro )
 			instructionPanels[0].SetActive( true );
+
+		apparentWindBoatControl = ApparentWindBoatControl.s_instance;
 	}
 
 	void Update() {
@@ -49,7 +68,24 @@ public class ApparentWindModuleManager : MonoBehaviour {
 				instructionPanels[currentInstructionPanel].SetActive( true );
 			}
 			break;
+		case GameState.Playing:
+			Vector3 boatDir = apparentWindBoatControl.myRigidbody.velocity.normalized;
+			float boatVel = apparentWindBoatControl.myRigidbody.velocity.magnitude;
+			boatVelocityRendererOrigin.position = mastRendererPosition.position + ( boatDir * boatVel );
+			break;
 		}
+	}
+
+	void LateUpdate() {
+		Vector3 newOffset = windLineRendererOrigin.position;
+
+		if( !highWindSpeed ) {
+			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * lowWindSpeedRendererOffset );
+		} else {
+			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * highWindSpeedRendererOffset );
+		}
+
+		windLineRendererOrigin.position = newOffset;
 	}
 
 	public void ChangeState( GameState newState ) {
