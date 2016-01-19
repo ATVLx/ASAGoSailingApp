@@ -12,8 +12,9 @@ public class DestroyTrigger : MonoBehaviour {
 	}
 
 	void OnTriggerEnter( Collider col ) {
-		if( col.tag == "Destroyable" )
-		{
+		DestroyableObject temp = col.GetComponent( "DestroyableObject" ) as DestroyableObject;
+
+		if( temp != null && temp.isDestroyable == true ) {
 			Destroy( col.gameObject );
 		}
 	}

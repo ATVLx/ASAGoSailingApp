@@ -9,6 +9,9 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public static ApparentWindModuleManager s_instance;
 	public enum GameState { Intro, Playing, Complete };
 
+	public delegate void ArrowUpdate();
+	public static event ArrowUpdate UpdateWindLineArrows;
+
 	[System.NonSerialized]
 	public bool hasClickedRun;
 	[System.NonSerialized]
@@ -103,6 +106,10 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		boatVelocityRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		windLineRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		mastRendererPosition.GetComponent<ConnectLineRenderer>().UpdatePosition();
+
+		// Update line arrows
+		if( UpdateWindLineArrows != null )
+			UpdateWindLineArrows();
 	}
 
 	public void ChangeState( GameState newState ) {
