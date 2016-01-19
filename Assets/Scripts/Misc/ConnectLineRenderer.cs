@@ -12,7 +12,7 @@ public class ConnectLineRenderer : MonoBehaviour {
 		myLineRenderer = GetComponent<LineRenderer>();
 	}
 
-	void LateUpdate () {
+	public void UpdatePosition () {
 		Vector3[] positions = new Vector3[2] {startPos.position, endPos.position};
 		myLineRenderer.SetPositions( positions );
 	}

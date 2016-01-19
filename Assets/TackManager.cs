@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MOBManager : MonoBehaviour {
-	enum MOBState {intro, gameplay, reset,win};
-	MOBState curState;
-	public static MOBManager s_instance;
+public class TackManager : MonoBehaviour {
+	enum TackState {intro, gameplay, reset,win};
+	TackState curState;
+	public static TackManager s_instance;
 	[SerializeField]
 	GameObject playerBoat;
 	[SerializeField]
@@ -28,29 +28,29 @@ public class MOBManager : MonoBehaviour {
 
 	void Update () {
 		switch (curState) {
-		case MOBState.intro:
+		case TackState.intro:
 			{
 				if (switchToGamePlay) {
 					playerBoat.GetComponent<Rigidbody> ().isKinematic = false;
 					switchToGamePlay = false;
-					curState = MOBState.gameplay;
+					curState = TackState.gameplay;
 				}
 				break;
 			}
-		case MOBState.gameplay:
+		case TackState.gameplay:
 			{
 				if (switchToReset) {
 					switchToReset = false;
-					curState = MOBState.reset;
+					curState = TackState.reset;
 				}
 				break;
 			}
-		case MOBState.reset:
+		case TackState.reset:
 			{
-//				StartCoroutine ("PauseBoats");
+				//				StartCoroutine ("PauseBoats");
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
-					curState = MOBState.gameplay;
+					curState = TackState.gameplay;
 				}
 				break;
 			}
@@ -63,7 +63,7 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public void WinScenario() {
-		if (curState == MOBState.gameplay) {
+		if (curState == TackState.gameplay) {
 			win.StartFadeOut ();
 			switchToReset = true;
 			StartCoroutine ("WinReset");
@@ -71,7 +71,7 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public void Fail(){
-		if (curState == MOBState.gameplay) {
+		if (curState == TackState.gameplay) {
 			lose.StartFadeOut ();
 			switchToReset = true;
 			StopAllCoroutines ();
@@ -80,14 +80,14 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public IEnumerator Land() {
-		if (curState == MOBState.gameplay) {
+		if (curState == TackState.gameplay) {
 			yield return new WaitForSeconds (3f);
 			WinScenario ();
 		}
 	}
 
 	void CameraMain() {
-		
+
 		overhead.GetComponent<Camera> ().enabled = false;
 		main.GetComponent<Camera> ().enabled = true;
 	}
@@ -126,7 +126,7 @@ public class MOBManager : MonoBehaviour {
 
 
 		} else {
-			curState = MOBState.win;
+			curState = TackState.win;
 		}
 
 	}
