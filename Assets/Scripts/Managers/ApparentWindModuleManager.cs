@@ -35,9 +35,9 @@ public class ApparentWindModuleManager : MonoBehaviour {
 
 	private ApparentWindBoatControl apparentWindBoatControl;
 	private int currentInstructionPanel = 0;
-	private float boatVelocityRendererOffsetScalar = 2f;
-	private float lowWindSpeedRendererOffset = 6f;
-	private float highWindSpeedRendererOffset = 10f;
+	private float boatVelocityRendererOffsetScalar = 2.2f;
+	private float lowWindSpeedRendererOffset = 8f;
+	private float highWindSpeedRendererOffset = 14f;
 	private bool highWindSpeed = false;
 	public bool cameraIsLerping = false;
 
