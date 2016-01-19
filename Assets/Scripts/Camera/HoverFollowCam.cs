@@ -32,7 +32,6 @@ public class HoverFollowCam : MonoBehaviour
 	void Update()
 	{
 		if (lookAtPlayer) {
-			print ("looking");
 			transform.LookAt (new Vector3 (player.position.x, player.position.y + verticalLookOffset, player.position.z));
 		}
 	}
