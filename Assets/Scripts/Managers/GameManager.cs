@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 
 	public enum LevelState {MainMenu, POS, SailTrim, ApparentWind, LearnToTack, Docking, Navigation};
-	LevelState thisLevelState;
+	public LevelState thisLevelState;
 
 	public static GameManager s_instance;
 
