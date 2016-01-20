@@ -8,6 +8,9 @@ public class EnterLandingZone : MonoBehaviour {
 			if (MOBManager.s_instance != null) {
 				StartCoroutine (MOBManager.s_instance.Land());
 			}
+			if (DockingManager.s_instance != null) {
+				StartCoroutine (DockingManager.s_instance.Land());
+			}
 		}
 	}
 

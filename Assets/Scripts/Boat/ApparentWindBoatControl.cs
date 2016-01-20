@@ -10,6 +10,8 @@ public class ApparentWindBoatControl : MonoBehaviour {
 	public Rigidbody myRigidbody;
 
 //	private Transform myTransform;
+	private float boatSpeedScalar = 1.5f;
+	private bool highSpeed = false;
 
 	void Awake() {
 		if( s_instance == null ) {
@@ -25,6 +27,14 @@ public class ApparentWindBoatControl : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		myRigidbody.velocity = boatBody.forward * (speedInKnots/NavBoatControl.METERS_PER_SECOND_TO_KNOTS);
+		float speedCoefficient = 1f;
+		if( highSpeed )
+			speedCoefficient = boatSpeedScalar;
+			
+		myRigidbody.velocity = boatBody.forward * (speedInKnots/NavBoatControl.METERS_PER_SECOND_TO_KNOTS) * speedCoefficient;
+	}
+
+	public void SetHighSpeed( bool val ) {
+		highSpeed = val;	
 	}
 }
