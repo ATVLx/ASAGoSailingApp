@@ -109,13 +109,14 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		// Update wind line renderer's position
 		Vector3 newOffset = windLineRendererOrigin.position;
 		if( !isWindSpeedSetToHigh ) {
-			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * lowWindSpeedRendererOffset );
+			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * lowWindSpeedRendererOffset ) + ( Vector3.up * 0.05f );
 		} else {
-			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * highWindSpeedRendererOffset );
+			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * highWindSpeedRendererOffset ) + ( Vector3.up * 0.05f );
 		}
 		windLineRendererOrigin.position = newOffset;
 
 		// Update line renderers
+		// TODO Make this use and event just like the arrows do down bottom
 		boatVelocityRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		windLineRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		mastRendererPosition.GetComponent<ConnectLineRenderer>().UpdatePosition();
