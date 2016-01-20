@@ -353,11 +353,11 @@ public class NavBoatControl : MonoBehaviour {
 		Vector3 newBoomDirection = boom.localRotation * Vector3.forward;    
 		if( angleWRTWind >= 180f ) {
 //			boom.localRotation = Quaternion.Euler (0, clampedBoomAngle, 0);
-			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.05f, 0.05f);
 		} else {
 //			boom.localRotation = Quaternion.Euler (0, -clampedBoomAngle, 0);
 
-			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.05f, 0.05f);
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
 	}
