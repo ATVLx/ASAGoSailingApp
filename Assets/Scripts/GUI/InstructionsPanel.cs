@@ -22,12 +22,9 @@ public class InstructionsPanel : MonoBehaviour {
 			ToggleSlide( slide, false );
 		}
 		ToggleSlide( slides[0], true );
-			
-		UpdateButtons();
-	}
 
-	void Update () {
 		UpdatePageNumber();
+		UpdateButtons();
 	}
 
 	/// <summary>
@@ -55,6 +52,7 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], false );
 		currentSlide++;
 		ToggleSlide( slides[currentSlide], true );
+		UpdatePageNumber();
 		UpdateButtons();
 	}
 
@@ -62,6 +60,7 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], false );
 		currentSlide--;
 		ToggleSlide( slides[currentSlide], true );
+		UpdatePageNumber();
 		UpdateButtons();
 	}
 
