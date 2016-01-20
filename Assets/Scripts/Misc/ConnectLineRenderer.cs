@@ -15,6 +15,7 @@ public class ConnectLineRenderer : MonoBehaviour {
 	public GameObject arrowPrefab;
 	public float arrowSpeed = 1f;
 	public Color arrowColor = Color.white;
+	public int arrowDestroyableLayerIndex = 0;
 
 	private LineRenderer myLineRenderer;
 	private float spawnFrequency = 3f;
@@ -39,6 +40,7 @@ public class ConnectLineRenderer : MonoBehaviour {
 	private void SpawnNewArrow() {
 		ApparentWindLineArrow temp = GameObject.Instantiate( arrowPrefab ).GetComponent<ApparentWindLineArrow>();
 		temp.Initialize( startPos, endPos, arrowSpeed, arrowColor );
+		temp.GetComponent<DestroyableObject>().destroyableLayerIndex = arrowDestroyableLayerIndex;
 	}
 
 	public void UpdatePosition () {
