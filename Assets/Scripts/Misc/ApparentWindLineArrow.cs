@@ -43,16 +43,4 @@ public class ApparentWindLineArrow : MonoBehaviour {
 
 		percentageTraveled = (totalDistance-myDistance)/totalDistance;
 	}
-
-	void Update() {
-		StartCoroutine( ToggleDestroyable() );
-	}
-
-	/// <summary>
-	/// Toggles the destroyable bool in DestroyableObject component.
-	/// </summary>
-	private IEnumerator ToggleDestroyable() {
-		yield return new WaitForSeconds( 0.5f );
-		GetComponent<DestroyableObject>().isDestroyable = true;
-	}
 }

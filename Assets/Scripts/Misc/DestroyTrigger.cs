@@ -7,15 +7,23 @@ using System.Collections;
 /// </summary>
 public class DestroyTrigger : MonoBehaviour {
 
+	/// <summary>
+	/// List of layers that can be destroyed with this trigger.
+	/// </summary>
+	public int[] destroyableLayers = new int[1] {0};
+
 	void Start() {
 		GetComponent<Collider>().isTrigger = true;
 	}
 
 	void OnTriggerEnter( Collider col ) {
-		DestroyableObject temp = col.GetComponent( "DestroyableObject" ) as DestroyableObject;
+		DestroyableObject dO = col.GetComponent( "DestroyableObject" ) as DestroyableObject;
 
-		if( temp != null && temp.isDestroyable == true ) {
-			Destroy( col.gameObject );
+		if( dO != null  ) {
+			foreach( int destroyLayer in destroyableLayers ) {
+				if( destroyLayer == dO.destroyableLayerIndex )
+					Destroy( col.gameObject );					
+			}
 		}
 	}
 }
