@@ -91,16 +91,16 @@ public class InstructionsPanel : MonoBehaviour {
 	public void UpdateButtons() {
 		// Check if we're on the first slide
 		if( currentSlide == 0 )
-			prevButton.interactable = false;
+			prevButton.gameObject.SetActive( false );
 		else
-			prevButton.interactable = true;
+			prevButton.gameObject.SetActive( true );
 
 		// Check if we are on the last slide
 		if( currentSlide == slides.Length-1 ) {
-			nextButton.interactable = false;
+			nextButton.gameObject.SetActive( false );
 			pageNumberText.enabled = false;
 		} else {
-			nextButton.interactable = true;
+			nextButton.gameObject.SetActive( true );
 			pageNumberText.enabled = true;
 		}
 	}
