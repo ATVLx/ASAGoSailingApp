@@ -27,22 +27,12 @@ public class ConfirmationPopUp : MonoBehaviour {
 		}
 	}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	public void InitializeConfirmationPanel (string descriptionOfAction, ConfirmationFunction callBack) {
-		s_instance.confimationPanel.SetActive (true);
-		if( s_instance.descriptionOfActionText != null )
-			s_instance.descriptionOfActionText.text = descriptionOfAction;
+		confimationPanel.SetActive (true);
+		if( descriptionOfActionText != null )
+			descriptionOfActionText.text = descriptionOfAction;
 		else
-			Debug.LogError( s_instance.gameObject.name +"'s ConfirmationPopUp component is missing a reference for DescriptionOfActionText.");
+			Debug.LogError( gameObject.name +"'s ConfirmationPopUp component is missing a reference for DescriptionOfActionText.");
 		myConfirmationDelegate = callBack;
 	}
 

@@ -67,13 +67,21 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void RestartModule() {
-		ToggleSlide( pauseMenu, false );
-		LoadLevel( (int)thisLevelState );
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "Restart Module?", ( bool confirmed ) => {
+			if( confirmed ) {
+				ToggleSlide( pauseMenu, false );
+				LoadLevel( (int)thisLevelState );
+			}
+		});
 	}
 
 	public void ReturnToMainMenu() {
-		ToggleSlide( pauseMenu, false );
-		LoadLevel( (int)LevelState.MainMenu );
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "Return to Main Menu?", ( bool confirmed ) => {
+			if( confirmed ) {
+				ToggleSlide( pauseMenu, false );
+				LoadLevel( (int)LevelState.MainMenu );
+			}
+		});
 	}
 
 	public void PressedOptionsButton() {
