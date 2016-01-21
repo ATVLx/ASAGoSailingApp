@@ -3,20 +3,30 @@ using System.Collections;
 
 public class MainMenuManager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	#region LoadLevel methods
+	public void LoadPOSModule() {
+		GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.POS );
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public void LoadApparentWindModule() {
+		GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.ApparentWind );
 	}
-
-	/// <summary>
-	/// Action taken when the GoToXModule button is pressed in the scene.
-	/// </summary>
-	public void PressedLoadModule( GameManager.LevelState selectedModule ) {
-		GameManager.s_instance.LoadLevel( (int)selectedModule );
+	public void LoadTrimmingModule() {
+		GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.SailTrim );
 	}
+	public void LoadMOBModule() {
+		GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.ManOverboard );
+	}
+	public void LoadDockingModule() {
+		GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.Docking );
+	}
+	public void LoadROWModule() {
+		GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.RightOfWay );
+	}
+	public void LoadTackingModule() {
+		GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.LearnToTack );
+	}
+	public void LoadNavigationModule() {
+		GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.Navigation );
+	}
+	#endregion
 }

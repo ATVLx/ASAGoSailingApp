@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 	public static GameManager s_instance;
 
-	public enum LevelState {OpeningCredits, MainMenu, POS, SailTrim, ApparentWind, LearnToTack, Docking, Navigation};
+	public enum LevelState {OpeningCredits, MainMenu, POS, SailTrim, ApparentWind, LearnToTack, Docking, Navigation, ManOverboard, RightOfWay};
 	public LevelState thisLevelState;
 
 	// Game pausing event
