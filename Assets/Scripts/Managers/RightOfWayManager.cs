@@ -7,7 +7,7 @@ public class RightOfWayManager : MonoBehaviour {
 	enum ROWState {intro, gameplay, reset};
 	ROWState curState = ROWState.intro;
 	[SerializeField]
-	GameObject AIboat, Player, MotorBoat;
+	GameObject AIboat, Player, MotorBoat, meThemPanel;
 	[SerializeField]
 	Slider sailtrim;
 	[SerializeField]
@@ -24,6 +24,8 @@ public class RightOfWayManager : MonoBehaviour {
 	Camera cam1, cam2;
 
 	bool isFailing;
+	bool hasStarted;
+	float resetDelay = 5f;
 	public static RightOfWayManager s_instance;
 
 	void Awake() {
@@ -41,6 +43,7 @@ public class RightOfWayManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		print (scenario);
 		switch (curState) {
 		case ROWState.intro:
 			{
@@ -61,8 +64,6 @@ public class RightOfWayManager : MonoBehaviour {
 		case ROWState.reset:
 			{
 				StartCoroutine ("ShowSituation");
-
-				StartCoroutine ("PauseBoats");
 				curState = ROWState.gameplay;
 				break;
 			}
@@ -70,6 +71,7 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 	public void StartGame() {
 		switchToGamePlay = true;
+		meThemPanel.SetActive (true);
 		StartCoroutine ("ShowSituation");
 	}
 
@@ -80,13 +82,20 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 
 	IEnumerator ShowSituation () {
+		if (!hasStarted) {
+			hasStarted = true;
+		}
+		else {
+			yield return new WaitForSeconds (2f);
+		}
 		ToggleCameras ();
+		isFailing = false;
+
 		ToggleBoatMovement (false);
 		SetPositions ();
-		yield return new WaitForSeconds (5f);
+		yield return new WaitForSeconds (resetDelay);
 		ToggleCameras ();
 		ToggleBoatMovement (true);
-		isFailing = false;
 
 
 	}
@@ -100,6 +109,7 @@ public class RightOfWayManager : MonoBehaviour {
 
 	//TODO make boats turn after X seconds on each module
 	void SetPositions() {
+		print ("SET POS" + scenario);
 		switch (scenario) {
 		case 0:
 			{
@@ -171,13 +181,13 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 
 	IEnumerator level2 () {
-		yield return new WaitForSeconds (3f);
+		yield return new WaitForSeconds (resetDelay+3f);
 		AIboat.GetComponent<AIBoat> ().SetSteering (true, true);
 		yield return new WaitForSeconds (1.5f);
 		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
 	}
 	IEnumerator level3 () {
-		yield return new WaitForSeconds (5.5f);
+		yield return new WaitForSeconds (resetDelay+ 5.5f);
 		AIboat.GetComponent<AIBoat> ().SetSteering (true, false);
 		yield return new WaitForSeconds (3f);
 		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
