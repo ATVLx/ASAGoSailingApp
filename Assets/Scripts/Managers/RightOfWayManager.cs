@@ -20,6 +20,8 @@ public class RightOfWayManager : MonoBehaviour {
 	Fader success;
 	[SerializeField]
 	Text you,them,hint;
+	[SerializeField]
+	Camera cam1, cam2;
 
 	bool isFailing;
 	public static RightOfWayManager s_instance;
@@ -58,6 +60,8 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case ROWState.reset:
 			{
+				StartCoroutine ("ShowSituation");
+
 				StartCoroutine ("PauseBoats");
 				curState = ROWState.gameplay;
 				break;
@@ -66,8 +70,25 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 	public void StartGame() {
 		switchToGamePlay = true;
-		ToggleBoatMovement (true);
+		StartCoroutine ("ShowSituation");
+	}
+
+	void ToggleCameras (){
+		cam1.enabled = !cam1.isActiveAndEnabled;
+		cam2.enabled = !cam2.isActiveAndEnabled;
+
+	}
+
+	IEnumerator ShowSituation () {
+		ToggleCameras ();
+		ToggleBoatMovement (false);
 		SetPositions ();
+		yield return new WaitForSeconds (5f);
+		ToggleCameras ();
+		ToggleBoatMovement (true);
+		isFailing = false;
+
+
 	}
 
 	void ToggleBoatMovement (bool thisBool) {
@@ -162,16 +183,6 @@ public class RightOfWayManager : MonoBehaviour {
 		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
 	}
 
-	IEnumerator PauseBoats () {
-
-		yield return new WaitForSeconds (2f);
-		ToggleBoatMovement (false);
-		yield return new WaitForSeconds (.0001f);
-		ToggleBoatMovement (true);
-		SetPositions ();
-		isFailing = false;
-
-	}
 
 	void WinModule() {
 		you.text = "";
