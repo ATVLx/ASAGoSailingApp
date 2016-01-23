@@ -227,13 +227,6 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Action taken when the GUI pause button is pressed.
-	/// </summary>
-	public void PauseButton() {
-		//TODO Tell GameManager to show pause menu.
-	}
-
-	/// <summary>
 	/// Action taken when the GUI "Done" button is pressed.
 	/// </summary>
 	public void DoneButton() {

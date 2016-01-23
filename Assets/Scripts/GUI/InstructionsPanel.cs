@@ -65,24 +65,43 @@ public class InstructionsPanel : MonoBehaviour {
 	}
 
 	public void ClickedDoneButton() {
-		// TODO Create a generic way for this to get back to the game. Perhaps a ModuleManager base class?
+		// ~NOTE~ We should create a generic way for this to get back to the game. Perhaps a ModuleManager base class?
 		if( GameManager.s_instance != null ) {
 			switch( GameManager.s_instance.thisLevelState ) {
 			case GameManager.LevelState.ApparentWind:
 				ApparentWindModuleManager.s_instance.ChangeState( ApparentWindModuleManager.GameState.Playing );
 				break;
+
 			case GameManager.LevelState.Docking:
+				DockingManager.s_instance.StartGame();
 				break;
+
 			case GameManager.LevelState.LearnToTack:
+				TackManager.s_instance.StartGame();
 				break;
+
+			case GameManager.LevelState.ManOverboard:
+				MOBManager.s_instance.StartGame();
+				break;
+
 			case GameManager.LevelState.Navigation:
+				NavManager.s_instance.ChangeState( NavManager.GameState.Gameplay );
 				break;
+
 			case GameManager.LevelState.POS:
+				POSModuleManager.s_instance.ClickStart();
 				break;
+
+			case GameManager.LevelState.RightOfWay:
+				RightOfWayManager.s_instance.StartGame();
+				break;
+
 			case GameManager.LevelState.SailTrim:
+				TrimManager.s_instance.BeginTutorial();
 				break;
 			}
 		}
+		gameObject.SetActive( false );
 	}
 
 	/// <summary>
