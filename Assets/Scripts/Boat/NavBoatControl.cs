@@ -62,6 +62,13 @@ public class NavBoatControl : MonoBehaviour {
 
 	private float boatThrust = 0f;
 
+	// Boat rudders reset
+	private float rudderResetTimeBuffer = 1f;
+	private float rudderResetTimer = 0f;
+	private float rudderLerpSpeed = 50f;
+	private float rudderStartVal = 0f;
+	private bool rudderIsLerping = false;
+	private bool rudderSliderSelected = false;
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
@@ -93,7 +100,6 @@ public class NavBoatControl : MonoBehaviour {
 
 		HandleRudderRotation();
 		IdentifyPointOfSail();
-
 	}
 
 	void FixedUpdate () {	
@@ -123,20 +129,45 @@ public class NavBoatControl : MonoBehaviour {
 		}
 	}
 
+	public void RudderSliderValueWasChanged( bool selectionState ) {
+		rudderSliderSelected = selectionState;
+	}
+
 	private void HandleRudderRotation() {
 		float horizontalInput = Input.GetAxis( "Horizontal" );
-		float rudderDirectionScalar = 0f;
-
-		if( controlsAreActive ) {
-			if( horizontalInput < 0f ) {
-				// If player is pressing left
-				rudderDirectionScalar = 1f;
-			} else if( horizontalInput > 0f ) {
-				// If player is pressing right
-				rudderDirectionScalar = -1f;
+		if( rudderSliderSelected == false && horizontalInput == 0f) {
+			if( rudderResetTimer >= rudderResetTimeBuffer && !rudderIsLerping ) {
+				rudderIsLerping = true;
+				rudderStartVal = rudderSlider.value;
+			} else {
+				rudderResetTimer += Time.deltaTime;
 			}
+
+			if( rudderIsLerping ) {
+				float t =  1f -(( Mathf.Abs(rudderSlider.value) - ( rudderLerpSpeed*Time.deltaTime ) ) / Mathf.Abs(rudderStartVal));
+				if( t >= 0.99f ) {
+					rudderIsLerping = false;
+					rudderSlider.value = Mathf.Lerp( rudderStartVal, 0f, 1f );
+					return;
+				}
+				rudderSlider.value = Mathf.Lerp( rudderStartVal, 0f, t );
+			}				
+		} else {
+			rudderIsLerping = false;
+			rudderResetTimer = 0f;
+			float rudderDirectionScalar = 0f;
+
+			if( controlsAreActive ) {
+				if( horizontalInput < 0f ) {
+					// If player is pressing left
+					rudderDirectionScalar = 1f;
+				} else if( horizontalInput > 0f ) {
+					// If player is pressing right
+					rudderDirectionScalar = -1f;
+				}
+			}
+			rudderSlider.value += rudderRotationSpeed*rudderDirectionScalar*Time.deltaTime;
 		}
-		rudderSlider.value += rudderRotationSpeed*rudderDirectionScalar*Time.deltaTime;
 		rudderL.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
