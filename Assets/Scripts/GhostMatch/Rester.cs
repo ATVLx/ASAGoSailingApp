@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using SimpleJson;
 using UnityEngine;
 
+//Imported from naked sky enterainment
 public class Rester : MonoBehaviour
 {
 

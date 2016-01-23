@@ -2,6 +2,11 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/*
+	This class handles animation states and text that are used to teach points of sail
+	in the points of sail module
+*/
+
 public class posAnimState : MonoBehaviour {
 
 	public Animator boatAnim;
@@ -32,7 +37,7 @@ public class posAnimState : MonoBehaviour {
 				case "PTCloseHaul":
 					boatAnim.SetTrigger("PTCloseHaul");
 					moduleManager.currAnimState = "Close Hauled Port Tack";
-					displayPOS.text = "Close Hauled on a " + "<color=#FF0000> port tack </color>";
+					displayPOS.text = "Close Hauled on a " + "<color=sFF0000> port tack </color>";
 					displayPOS2.text = "the boat is sailing as close to the wind as possible (~45 degrees)";
 
 					break;

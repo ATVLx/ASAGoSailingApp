@@ -2,7 +2,13 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
+/*
+	This class controls the movement input and physics of the boat in the navigation module
+*/
+
+
 public class NavBoatControl : MonoBehaviour {
+	public const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 
 	//test
 	public Text thrustVal, velocity;
@@ -14,7 +20,6 @@ public class NavBoatControl : MonoBehaviour {
 
 	public Animator sail;
 	protected Rigidbody myRigidbody;
-	private const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 	private float currThrust = 0f;
 	private float sinkMultiplier;
 	private float angleToAdjustTo;
@@ -23,10 +28,6 @@ public class NavBoatControl : MonoBehaviour {
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
 	private float rudderRotationSpeed = 50f;
-	/// <summary>
-	/// The boom trim speed in degrees/sec.
-	/// </summary>
-	private float boomTrimSpeed = 30f;
 	private float maxRudderRotation = 60f;
 	protected float sailEffectiveness, optimalAngle;
 	private float rudderNullZone = 0.2f;
@@ -58,6 +59,8 @@ public class NavBoatControl : MonoBehaviour {
 	protected bool isJibing = false;
 	protected float lerpStart, lerpEnd;
 	protected Vector3 boatDirection;
+
+	private float boatThrust = 0f;
 
 
 	void Start () {
@@ -94,7 +97,8 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void FixedUpdate () {	
-		MastRotation();		
+		MastRotation();
+		CalculateForwardThrust();
 		ApplyForwardThrust ();
 		ApplyBoatRotation ();
 		SetSailAnimator ();
@@ -137,18 +141,18 @@ public class NavBoatControl : MonoBehaviour {
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
 
-	protected void ApplyForwardThrust () {
+	protected void CalculateForwardThrust() {
 		float inIronsBufferZone = 15f;
 		float inIronsNullZone = 30f;
 		float effectiveAngle;
-
+		
 		// If we are within the in irons range check to see if we are in the buffer zone
 		if (angleWRTWind < (inIronsNullZone + inIronsBufferZone))
 			effectiveAngle = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? angleWRTWind - inIronsNullZone : 0f;
 		else {
 			effectiveAngle = 15f;
 		}
-
+		
 		optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
 		if (boomSlider != null) {
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (boomSlider.value - optimalAngle) + optimalAngle) : 0f;
@@ -156,8 +160,10 @@ public class NavBoatControl : MonoBehaviour {
 			sailEffectiveness = Vector3.Angle (Vector3.forward, transform.forward) > inIronsNullZone ? optimalAngle / (Mathf.Abs (angleWRTWind - optimalAngle) + optimalAngle) : 0f;
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
-		float boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
+		boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
+	}
 
+	protected void ApplyForwardThrust () {
 		myRigidbody.AddForce( transform.forward * boatThrust);
 	}
 
@@ -179,7 +185,6 @@ public class NavBoatControl : MonoBehaviour {
 
 		if (boomSlider.value < optimalAngle && angle > 5f && angle <= 165f) {
 			blendFloatValue = isNegative *angle/5f;
-			print ("is Negative set to " + isNegative);
 			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
 		}
 		else if (boomSlider.value < optimalAngle && angle < 5f) {
@@ -320,6 +325,9 @@ public class NavBoatControl : MonoBehaviour {
 		rudderSlider.interactable = false;
 		boomSlider.interactable = false;
 		controlsAreActive = false;
+		if (MOBManager.s_instance != null) {
+			MOBManager.s_instance.Fail();
+		}
 	}
 
 	protected void ApplySailTrim() {
@@ -345,11 +353,11 @@ public class NavBoatControl : MonoBehaviour {
 		Vector3 newBoomDirection = boom.localRotation * Vector3.forward;    
 		if( angleWRTWind >= 180f ) {
 //			boom.localRotation = Quaternion.Euler (0, clampedBoomAngle, 0);
-			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, clampedBoomAngle, 0f )*Vector3.forward,0.05f, 0.05f);
 		} else {
 //			boom.localRotation = Quaternion.Euler (0, -clampedBoomAngle, 0);
 
-			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.01f, 0.01f);
+			newBoomDirection = Vector3.RotateTowards(newBoomDirection, Quaternion.Euler( 0f, -clampedBoomAngle, 0f )*Vector3.forward,0.05f, 0.05f);
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
 	}
@@ -383,6 +391,9 @@ public class NavBoatControl : MonoBehaviour {
 	void OnCollisionEnter (Collision thisCollision) {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
 			BoatHasCrashed ();
+		}
+		if (thisCollision.gameObject.tag == "ROWFail") {
+			RightOfWayManager.s_instance.Fail ();
 		}
 	}
 }

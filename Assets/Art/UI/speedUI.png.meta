@@ -1,0 +1,193 @@
+fileFormatVersion: 2
+guid: 1c83d4531a2ba0c45935492f13c029d4
+timeCreated: 1453163655
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: speedo_rim
+    21300002: speedo_knob
+    21300004: speedo_bg
+    21300006: speedo_digitalreadout
+    21300008: speedo_bluetick
+    21300010: speedo_dialshadow
+    21300012: speedo_dial
+    21300014: speedo_blacktick
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: speedo_rim
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 197
+        width: 251
+        height: 246
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 98.5, y: 115}
+        - {x: 66.5, y: 123}
+        - {x: -67.5, y: 123}
+        - {x: -125.5, y: 60}
+        - {x: -125.5, y: -55}
+        - {x: -86.5, y: -123}
+        - {x: 60.5, y: -123}
+        - {x: 112.5, y: -88}
+        - {x: 125.5, y: -42}
+        - {x: 125.5, y: 63}
+      - - {x: -32.5, y: -88}
+        - {x: -90.5, y: -12}
+        - {x: -48.5, y: 74}
+        - {x: 9.5, y: 88}
+        - {x: 67.5, y: 59}
+        - {x: 88.5, y: 21}
+        - {x: 59.5, y: -72}
+    - name: speedo_knob
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 136
+        width: 46
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -18, y: 22.5}
+        - {x: -23, y: 15.5}
+        - {x: -23, y: -16.5}
+        - {x: -18, y: -22.5}
+        - {x: 19, y: -22.5}
+        - {x: 23, y: -18.5}
+        - {x: 23, y: 21.5}
+        - {x: 19, y: 22.5}
+    - name: speedo_bg
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 7
+        width: 206
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 103, y: 41}
+        - {x: 97, y: 54}
+        - {x: 62, y: 91}
+        - {x: 29, y: 103}
+        - {x: -32, y: 103}
+        - {x: -61, y: 90}
+        - {x: -98, y: 67}
+        - {x: -103, y: 41}
+        - {x: -103, y: -44}
+        - {x: -72, y: -87}
+        - {x: -34, y: -103}
+        - {x: 34, y: -103}
+        - {x: 70, y: -85}
+        - {x: 99, y: -55}
+        - {x: 103, y: -32}
+    - name: speedo_digitalreadout
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 379
+        width: 44
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: speedo_bluetick
+      rect:
+        serializedVersion: 2
+        x: 318
+        y: 418
+        width: 4
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: speedo_dialshadow
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 411
+        width: 84
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: speedo_dial
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 431
+        width: 89
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: speedo_blacktick
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 415
+        width: 5
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

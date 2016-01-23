@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+	This class handles the functionality of the flying wind arrows 
+*/
+
 public class WindArrow : MonoBehaviour {
 //	float spawnTimer;
 	Transform player;

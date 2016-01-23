@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+/*
+	This class moves the ghost boat across the map during ghostmatch play back
+*/
 public class TestLerp : MonoBehaviour {
 
-	public bool findAttributes = false;
+	public bool getRecordedData = false;
 
 	private List<Vector3> positions;
-	private List<Quaternion> rotations;
+	private List<float> yRotations;
 	private Vector3 currentStartPos, currentEndPos;
 	private Quaternion currentStartRot, currentEndRot;
 	private int currentIndex = 0;
@@ -22,7 +24,7 @@ public class TestLerp : MonoBehaviour {
 	}
 
 	void Update () {
-		if( findAttributes ) {
+		if( getRecordedData ) {
 			FindAttributes();
 		}
 		if( isMoving ) {
@@ -43,37 +45,39 @@ public class TestLerp : MonoBehaviour {
 	}
 
 	void FindAttributes() {
+		getRecordedData = false;
 		GhostPathRecorder temp = GameObject.FindObjectOfType<GhostPathRecorder>();
 		if( temp == null ) {
 			Debug.LogError( "TestLerp coulnd't find a GhostPathRecorder in he scene." );
 			return;
 		}
-		if( temp.recordedPositions.Count < 1 || temp.recordedRotations.Count < 1 ) {
+		if( temp.recordedPositions.Count < 1 || temp.recordedYRotations.Count < 1 ) {
 			Debug.LogError( "The GhostPathRecorder that TestLerp found has too little sampled positions/rotations to work." );
 			return;
 		}
 
 		positions = temp.recordedPositions;
-		rotations = temp.recordedRotations;
+		yRotations = temp.recordedYRotations;
 		sampleRate = temp.sampleRate;
 
 		thisTransform.position = positions[0];
-		thisTransform.rotation = rotations[0];
+		thisTransform.rotation = Quaternion.Euler( new Vector3( 0f, yRotations[0], 0f ) );
+
 		currentStartPos = positions[0];
 		currentEndPos = positions[1];
-		currentStartRot = rotations[0];
-		currentEndRot = rotations[1];
+		currentStartRot = Quaternion.Euler( new Vector3( 0f, yRotations[0], 0f ) );
+		currentEndRot = Quaternion.Euler( new Vector3( 0f, yRotations[1], 0f ) );
 
 		isMoving = true;
-		findAttributes = false;
+		getRecordedData = false;
 	}
 
 	void IterateToNextSegment() {
 		currentIndex++;
 		currentStartPos = positions[currentIndex];
 		currentEndPos = positions[currentIndex+1];
-		currentStartRot = rotations[currentIndex];
-		currentEndRot = rotations[currentIndex+1];
+		currentStartRot = Quaternion.Euler( new Vector3( 0f, yRotations[currentIndex], 0f ) );
+		currentEndRot = Quaternion.Euler( new Vector3( 0f, yRotations[currentIndex+1], 0f ) );
 
 		timer = timer%sampleRate;
 	}

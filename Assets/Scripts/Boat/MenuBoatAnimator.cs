@@ -3,13 +3,8 @@ using System.Collections;
 
 public class MenuBoatAnimator : MonoBehaviour {
 
-	// Use this for initialization
+	//This class just sets the sail animator so that it looks good in the main menu
 	void Start () {
 		GetComponent<Animator> ().SetFloat ("sailtrim", .84f);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

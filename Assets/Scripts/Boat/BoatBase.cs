@@ -4,7 +4,7 @@ using System.Collections;
 public class BoatBase : MonoBehaviour {
 
 
-	public SkinnedMeshRenderer blendShape;
+	public Animator blendShape;
 	protected float lerpTimer, lerpDuration=1f, blendFloatValue, angleWRTWind, lastAngleWRTWind;
 	public bool rotateMast = false;
 	protected bool isJibing = false;
@@ -21,13 +21,16 @@ public class BoatBase : MonoBehaviour {
 		
 		boatDirection = transform.forward;
 		angleWRTWind = Vector3.Angle(boatDirection,directionWindComingFrom);
-		blendFloatValue = 100;
+		blendFloatValue = 0f;
 		if (transform.rotation.eulerAngles.y > 180f ) {
 			angleWRTWind = 360-angleWRTWind;
-			blendFloatValue = 0;
+			blendFloatValue = -.8f;
+		}
+		else if (transform.rotation.eulerAngles.y < 180f ) {
+			blendFloatValue = .8f;
 		}
 		
-		blendShape.SetBlendShapeWeight(0,blendFloatValue);
+		blendShape.SetFloat("sailtrim",blendFloatValue);
 
 		if (float.IsNaN(angleWRTWind)) {
 			angleWRTWind=0;
@@ -62,16 +65,16 @@ public class BoatBase : MonoBehaviour {
 			
 		}
 
-		//TODO replace euler angle conditions with WRT to wind conditions in the case of variable wind
-		if (transform.rotation.eulerAngles.y  > 355f) {
-			blendFloatValue = 50 - (360f-transform.rotation.eulerAngles.y ) * 10f;
-			blendShape.SetBlendShapeWeight(0,blendFloatValue);
-		}
-		else if (transform.rotation.eulerAngles.y  < 5f) {
-			blendFloatValue = (transform.rotation.eulerAngles.y) * 10f + 50f;
-			blendShape.SetBlendShapeWeight(0,blendFloatValue);
-			
-		}
+//		//TODO replace euler angle conditions with WRT to wind conditions in the case of variable wind
+//		if (transform.rotation.eulerAngles.y  > 355f) {
+//			blendFloatValue = 50 - (360f-transform.rotation.eulerAngles.y ) * 10f;
+//			blendShape.SetFloat("sailtrim", blendFloatValue);
+//		}
+//		else if (transform.rotation.eulerAngles.y  < 5f) {
+//			blendFloatValue = (transform.rotation.eulerAngles.y) * 10f + 50f;
+//			blendShape.SetFloat("sailtrim", blendFloatValue);
+//			
+//		}
 		
 
 	}
@@ -79,7 +82,6 @@ public class BoatBase : MonoBehaviour {
 	void POSMastRotation() {
 
 		//handles sail blend shape, jibes, and mast rotation
-		print (angleWRTWind + " ANGLE WRT WIND");
 		if (angleWRTWind > 182) {
 			lastAngleWRTWind = angleWRTWind;
 		} else if (angleWRTWind < 178) {
@@ -89,15 +91,20 @@ public class BoatBase : MonoBehaviour {
 		
 		boatDirection = transform.forward;
 		angleWRTWind = Vector3.Angle(boatDirection,directionWindComingFrom);
-		blendFloatValue = 100;
+		blendFloatValue = 0f;
 		if (transform.rotation.eulerAngles.y > 180f ) {
 			angleWRTWind = 360-angleWRTWind;
-			blendFloatValue = 0;
+			blendFloatValue = -.8f;
+		}
+		else if (transform.rotation.eulerAngles.y < 180f && transform.rotation.eulerAngles.y > 10 ) {
+			blendFloatValue = .8f;
 		}
 		
 		if (float.IsNaN(angleWRTWind)) {
 			angleWRTWind=0;
 		}
+		blendShape.SetFloat("sailtrim",blendFloatValue);
+
 	
 		
 	
@@ -111,18 +118,17 @@ public class BoatBase : MonoBehaviour {
 			mast.transform.localRotation = Quaternion.Lerp (Quaternion.identity, Quaternion.Inverse(transform.localRotation), 0.5f);
 		}
 
-//		if (angleWRTWind ==180 && GameManager.s_instance.hasClickedRun) {
-//			GetComponent<Animator>().enabled = false;
-//			print(lastAngleWRTWind);
-//
-//			if (lastAngleWRTWind > 180) {
-//				blendShape.SetBlendShapeWeight(0,0f);
-//			}
-//			else if (lastAngleWRTWind < 180) {
-//				blendShape.SetBlendShapeWeight(0,100f);
-//
-//			}
-//		}
+		if (angleWRTWind ==180) {
+			if (lastAngleWRTWind > 180) {
+				blendShape.SetFloat("sailtrim",-.8f);
+
+			}
+			else if (lastAngleWRTWind < 180) {
+				blendShape.SetFloat("sailtrim",.8f);
+
+
+			}
+		}
 			
 			
 	}
