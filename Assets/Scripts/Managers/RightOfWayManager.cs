@@ -23,6 +23,7 @@ public class RightOfWayManager : MonoBehaviour {
 	[SerializeField]
 	Camera cam1, cam2;
 
+	[SerializeField] GameObject congratsText;
 	bool isFailing;
 	bool hasStarted;
 	float resetDelay = 5f;
@@ -198,6 +199,8 @@ public class RightOfWayManager : MonoBehaviour {
 		you.text = "";
 		them.text = "";
 		hint.text = "";
+		meThemPanel.SetActive (false);
+		congratsText.SetActive (true);
 	}
 
 	public void WinScenario() {

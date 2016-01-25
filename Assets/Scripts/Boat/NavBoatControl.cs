@@ -63,12 +63,14 @@ public class NavBoatControl : MonoBehaviour {
 	private float boatThrust = 0f;
 
 	// Boat rudders reset
-	private float rudderResetTimeBuffer = 1f;
+	private float rudderResetTimeBuffer = .2f;
 	private float rudderResetTimer = 0f;
 	private float rudderLerpSpeed = 50f;
 	private float rudderStartVal = 0f;
 	private bool rudderIsLerping = false;
 	private bool rudderSliderSelected = true;
+
+	[SerializeField] Transform respawnTransform;
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
@@ -201,7 +203,7 @@ public class NavBoatControl : MonoBehaviour {
 	protected void ApplyForwardThrust () {
 		myRigidbody.AddForce( transform.forward * boatThrust);
 	}
-
+	#region SailAnimPlusKeel
 	protected void SetSailAnimator () {
 		//sail animator handles luffing etc...
 		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360
@@ -246,7 +248,8 @@ public class NavBoatControl : MonoBehaviour {
 		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative*myRigidbody.velocity.magnitude/velocityKeelCoefficient);
 		boatModel.transform.rotation = Quaternion.Euler (newRotation); 
 	}
-	
+	#endregion
+	#region ApplyBoatRotation
 	private void ApplyBoatRotation() {
 		// Depending on forward velocity of the boat, it will rotate faster or slower.
 		// We will have a base level rotation speed for when the boat is still.
@@ -259,13 +262,12 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		if (Mathf.Abs (rudderSlider.value) > rudderNullZone * maxRudderRotation) {
 			myRigidbody.AddTorque (-Vector3.up * rudderSlider.value * turnStrength * velocityScalar);
-		} else {
-//			myRigidbody.angularVelocity = Vector3.zero;
 		}
 	}
-
+	#endregion
+	#region SetPointOfSailText
 	protected void IdentifyPointOfSail() {
-		if ((angleWRTWind < 360f && angleWRTWind > 315f) ||
+		if ((angleWRTWind < 360f && angleWRTWind > 330f) ||
 		    (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "In Irons";
 		}
@@ -301,7 +303,8 @@ public class NavBoatControl : MonoBehaviour {
 			pointOfSail.text = "Close-Hauled Port Tack";
 		}
 	}
-
+	#endregion
+	#region MastRotation
 	protected void MastRotation() {
 
 		//handles jibes, and mast rotation
@@ -351,7 +354,8 @@ public class NavBoatControl : MonoBehaviour {
 		}
 
 	}
-	
+	#endregion
+	#region Jibe
 	protected virtual void Jibe(float negative) {
 		isJibing = true;
 		lerpTimer = Time.time;
@@ -364,7 +368,8 @@ public class NavBoatControl : MonoBehaviour {
 			MOBManager.s_instance.Fail();
 		}
 	}
-
+	#endregion
+	#region ApplySailTrim
 	protected void ApplySailTrim() {
 //		if( controlsAreActive ) {
 //			float input = Input.GetAxis( "Vertical" );
@@ -396,7 +401,8 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
 	}
-
+	#endregion
+	#region SinkMechanics
 	private void BoatHasCrashed() {
 		isCrashing = true;
 		StartCoroutine ("Sink");
@@ -409,7 +415,12 @@ public class NavBoatControl : MonoBehaviour {
 		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.stationary;
 
 		yield return new WaitForSeconds (4f);
-		transform.position = Vector3.zero;
+		if (respawnTransform == null) {
+			transform.position = Vector3.zero;
+			Debug.LogWarning ("No Respawn Transformed Assigned to NavBoatControl");
+		} else {
+			transform.position = respawnTransform.position;
+		}
 		transform.rotation = Quaternion.identity;
 		myRigidbody.mass /= 10f;
 		myRigidbody.isKinematic = true;
@@ -419,10 +430,8 @@ public class NavBoatControl : MonoBehaviour {
 		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = false;
 		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.follow;
 		isCrashing = false;
-
-
 	}
-
+	#endregion
 	void OnCollisionEnter (Collision thisCollision) {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
 			BoatHasCrashed ();
