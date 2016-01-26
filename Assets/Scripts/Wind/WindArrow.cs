@@ -19,7 +19,7 @@ public class WindArrow : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Translate(transform.forward*-.2f);
+		transform.Translate(transform.forward*-.6f);
 		if (Vector3.Distance(transform.position, player.transform.position) > deathDistance) {
 			Destroy(gameObject);
 		}
