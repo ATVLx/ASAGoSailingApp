@@ -75,7 +75,7 @@ public class TrimManager : MonoBehaviour {
 		trimSlider.value = 80;
 		posIndex++;
 		if (posIndex > 2 && posIndex < 6) {
-			trimSlider.value = 0;
+			trimSlider.value = 5;
 
 		}
 		goodJob.GetComponent<Fader> ().StartFade ();
