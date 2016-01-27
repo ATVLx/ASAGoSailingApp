@@ -43,15 +43,15 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	private ApparentWindModuleGuiManager guiManager;
 	private ApparentWindBoatControl apparentWindBoatControl;
 	private int currentInstructionPanel = 0;
-	private float boatVelocityRendererOffsetScalar = 2.2f;
+	private float boatVelocityRendererOffsetScalar = 1.75f;
 	private float lowWindSpeedRendererOffset = 8f;
 	private float highWindSpeedRendererOffset = 14f;
 	private bool isWindSpeedSetToHigh = false;
 	private bool cameraIsLerping = false;
 
 	// GUI Text values
-	private float lowWindSpeed = 15f;
-	private float highWindSpeed = 30f;
+	private float lowWindSpeed = 12f;
+	private float highWindSpeed = 24f;
 	private float lowBoatSpeed = 7f;
 	private float highBoatSpeed = 11f;
 
