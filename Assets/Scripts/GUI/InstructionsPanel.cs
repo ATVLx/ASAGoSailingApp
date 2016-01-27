@@ -33,15 +33,16 @@ public class InstructionsPanel : MonoBehaviour {
 	/// <param name="cG">Reference to CanvasGroup instance.</param>
 	/// <param name="turnOn">If set to <c>true</c> toggles CanvasGroup on.</param>
 	private void ToggleSlide( CanvasGroup cG, bool turnOn ) {
-		if( turnOn ) {
-			cG.alpha = 1f;
-			cG.interactable = true;
-			cG.blocksRaycasts = true;
-		} else {
-			cG.alpha = 0f;
-			cG.interactable = false;
-			cG.blocksRaycasts = false;
-		}
+		cG.gameObject.SetActive( turnOn );
+//		if( turnOn ) {
+//			cG.alpha = 1f;
+//			cG.interactable = true;
+//			cG.blocksRaycasts = true;
+//		} else {
+//			cG.alpha = 0f;
+//			cG.interactable = false;
+//			cG.blocksRaycasts = false;
+//		}
 	}
 
 	private void UpdatePageNumber() {
