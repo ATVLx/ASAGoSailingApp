@@ -43,15 +43,15 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	private ApparentWindModuleGuiManager guiManager;
 	private ApparentWindBoatControl apparentWindBoatControl;
 	private int currentInstructionPanel = 0;
-	private float boatVelocityRendererOffsetScalar = 2.2f;
+	private float boatVelocityRendererOffsetScalar = 1.75f;
 	private float lowWindSpeedRendererOffset = 8f;
 	private float highWindSpeedRendererOffset = 14f;
 	private bool isWindSpeedSetToHigh = false;
 	private bool cameraIsLerping = false;
 
 	// GUI Text values
-	private float lowWindSpeed = 15f;
-	private float highWindSpeed = 30f;
+	private float lowWindSpeed = 12f;
+	private float highWindSpeed = 24f;
 	private float lowBoatSpeed = 7f;
 	private float highBoatSpeed = 11f;
 
@@ -63,6 +63,14 @@ public class ApparentWindModuleManager : MonoBehaviour {
 			Destroy(gameObject);
 			Debug.LogWarning( "Deleting "+ gameObject.name +" because it is a duplicate ApparentWindModuleManager." );
 		}
+	}
+
+	void OnEnable() {
+		GameManager.TogglePause += TogglePause;
+	}
+
+	void OnDisable() {
+		GameManager.TogglePause -= TogglePause;
 	}
 
 	void Start() {
@@ -85,17 +93,6 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	void Update() {
 		switch( gameState ) {
 		case GameState.Intro:
-			if( (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) || Input.GetMouseButtonDown( 0 ) ) {
-				instructionPanels[currentInstructionPanel].SetActive( false );
-
-				if( currentInstructionPanel == instructionPanels.Length-1 ) {
-					ChangeState( GameState.Playing );
-					return;
-				}
-
-				currentInstructionPanel++;
-				instructionPanels[currentInstructionPanel].SetActive( true );
-			}
 			break;
 		case GameState.Playing:
 			break;
@@ -109,13 +106,14 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		// Update wind line renderer's position
 		Vector3 newOffset = windLineRendererOrigin.position;
 		if( !isWindSpeedSetToHigh ) {
-			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * lowWindSpeedRendererOffset );
+			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * lowWindSpeedRendererOffset ) + ( Vector3.up * 0.05f );
 		} else {
-			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * highWindSpeedRendererOffset );
+			newOffset = boatVelocityRendererOrigin.position + ( Vector3.forward * highWindSpeedRendererOffset ) + ( Vector3.up * 0.05f );
 		}
 		windLineRendererOrigin.position = newOffset;
 
 		// Update line renderers
+		// TODO Make this use and event just like the arrows do down bottom
 		boatVelocityRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		windLineRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		mastRendererPosition.GetComponent<ConnectLineRenderer>().UpdatePosition();
@@ -130,14 +128,15 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public void ChangeState( GameState newState ) {
 		switch( newState ) {
 		case GameState.Intro:
+			guiManager.ToggleGameplayUI( true );
 			break;
 		case GameState.Playing:
-			foreach( GameObject panel in instructionPanels )
-				panel.SetActive( false );
+			guiManager.ToggleInstructionsUI( false );
+			guiManager.ToggleGameplayUI( true );
 			break;
 		case GameState.Complete:
-			// Do completion animation
-			// After tell GM to change level
+			// TODO Do completion animation
+			GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.MainMenu );
 			break;
 		}
 		gameState = newState;
@@ -226,17 +225,10 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Action taken when the GUI pause button is pressed.
-	/// </summary>
-	public void PauseButton() {
-		//TODO Tell GameManager to show pause menu.
-	}
-
-	/// <summary>
 	/// Action taken when the GUI "Done" button is pressed.
 	/// </summary>
 	public void DoneButton() {
-		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "move on to the next level?", (bool confirmed) => {
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "Exit apparent wind module?", (bool confirmed) => {
 			if( confirmed == true ) {
 				Debug.Log( "Accepted to go to next level." );
 				ChangeState( GameState.Complete );
@@ -244,5 +236,9 @@ public class ApparentWindModuleManager : MonoBehaviour {
 				Debug.Log( "Declined to go to next level." );
 			}
 		});
+	}
+
+	public void TogglePause( bool toggleOn ) {
+		guiManager.ToggleGameplayUI( !toggleOn );
 	}
 }

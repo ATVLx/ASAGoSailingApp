@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class OpeningCredits : MonoBehaviour {
 
@@ -15,6 +16,7 @@ public class OpeningCredits : MonoBehaviour {
 
 	void Update () {
 		if( currentPanel >= panels.Length ){
+			SceneManager.LoadScene( (int)GameManager.LevelState.MainMenu );
 			return;
 		} else {
 			if( !isLerping ) {
