@@ -6,10 +6,11 @@ namespace UnityEditor
 	public class CalmWaterInspector: ShaderGUI
 	{
 		//Color
-		MaterialProperty shallowColor = null;
-		MaterialProperty depthColor = null;
-		MaterialProperty depth = null;
-				
+		MaterialProperty shallowColor 	= null;
+		MaterialProperty depthColor 	= null;
+		MaterialProperty depth 			= null;
+		MaterialProperty edgeFade 		= null;
+
 		//Spec
 		MaterialProperty specColor = null;
 		MaterialProperty smoothness = null;
@@ -43,10 +44,15 @@ namespace UnityEditor
 
 		//Displacement
 		MaterialProperty displacementToggle = null;
-		MaterialProperty displacementSpeed = null;
-		MaterialProperty displacementFrequency = null;
-		MaterialProperty displacementStrength = null;
-
+		MaterialProperty amplitude = null;
+		MaterialProperty frequency = null;
+		MaterialProperty steepness = null;
+		MaterialProperty waveSpeed = null;
+		MaterialProperty waveDirectionXY = null;
+		MaterialProperty waveDirectionZW = null;
+		MaterialProperty smoothing = null;
+		MaterialProperty tess = null;
+		private bool _hasTess = false;
 
 		MaterialEditor m_MaterialEditor;
 
@@ -58,7 +64,7 @@ namespace UnityEditor
 			shallowColor 	= FindProperty ("_Color", props);
 			depthColor 		= FindProperty ("_DepthColor", props);
 			depth 			= FindProperty ("_Depth", props);
-			
+			edgeFade		= FindProperty ("_EdgeFade",props);
 			//Spec
 			specColor 		= FindProperty ("_SpecColor", props);
 			smoothness 		= FindProperty ("_Smoothness", props);
@@ -89,18 +95,32 @@ namespace UnityEditor
 			foamSize 		= FindProperty ("_FoamSize", props);
 
 			//Displacement
-			displacementToggle = FindProperty ("_DISPLACEMENT", props);
-			displacementSpeed = FindProperty ("_NoiseSpeed", props);
-			displacementFrequency = FindProperty ("_NoiseFrequency", props);
-			displacementStrength = FindProperty ("_NoisePower", props);
+			displacementToggle 	= FindProperty ("_DISPLACEMENT", props);
+			amplitude 			= FindProperty ("_Amplitude", props);
+			frequency 			= FindProperty ("_Frequency", props);
+			steepness 			= FindProperty ("_Steepness", props);
+			waveSpeed 			= FindProperty ("_WSpeed", props);
+			waveDirectionXY 	= FindProperty ("_WDirectionAB", props);
+			waveDirectionZW 	= FindProperty ("_WDirectionCD", props);
 
+			smoothing 			= FindProperty ("_Smoothing", props);
+
+			if(_hasTess){
+				tess 				= FindProperty ("_Tess", props);
+			}
 		}
 		
 		public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
 		{
-			FindProperties(props); // MaterialProperties can be animated so we do not cache them but fetch them every event to ensure animated values are updated correctly
 			m_MaterialEditor = materialEditor;
 			Material material = materialEditor.target as Material;
+
+			if(material.HasProperty("_Tess")){
+				_hasTess = true;
+			}
+
+			FindProperties(props); // MaterialProperties can be animated so we do not cache them but fetch them every event to ensure animated values are updated correctly
+
 
 			ShaderPropertiesGUI(material);
 		}
@@ -120,6 +140,7 @@ namespace UnityEditor
 			GUILayout.EndHorizontal();
 
 
+
 			// Detect any changes to the material
 			EditorGUI.BeginChangeCheck();
 			{
@@ -129,6 +150,7 @@ namespace UnityEditor
 				m_MaterialEditor.ShaderProperty(shallowColor,"Shallow Color");
 				m_MaterialEditor.ShaderProperty(depthColor,"Depth Color");
 				m_MaterialEditor.ShaderProperty(depth,"Depth");
+				m_MaterialEditor.ShaderProperty(edgeFade,"Edge Fade");
 				GUILayout.EndVertical();
 
 				// Spec
@@ -204,12 +226,26 @@ namespace UnityEditor
 				if(displacementToggle.floatValue == 1)
 				{
 					EditorGUILayout.HelpBox("You need enough subdivisions in your Geometry.",MessageType.Info);
-					m_MaterialEditor.ShaderProperty(displacementSpeed,"Displacement Speed");
-					m_MaterialEditor.ShaderProperty(displacementStrength,"Displacement Strength");
-					m_MaterialEditor.ShaderProperty(displacementFrequency,"Displacement Frequency");
-				}
+					EditorGUILayout.HelpBox("To get correct displaced normals, your model needs to be scaled [1,1,1].",MessageType.Info);
+					//m_MaterialEditor.ShaderProperty(displacementSpeed,"Displacement Speed");
+					m_MaterialEditor.ShaderProperty(amplitude,"Amplitude");
+					m_MaterialEditor.ShaderProperty(frequency,"Frequency");
+					m_MaterialEditor.ShaderProperty(steepness,"Steepness");
+					m_MaterialEditor.ShaderProperty(waveSpeed,"Waves Speed");
+					m_MaterialEditor.ShaderProperty(waveDirectionXY,"Waves Directions 1");
+					m_MaterialEditor.ShaderProperty(waveDirectionZW,"Waves Directions 2");
 
+					m_MaterialEditor.ShaderProperty(smoothing,"Smoothing");
+				}
 				GUILayout.EndVertical();
+
+
+				if(_hasTess){
+					GUILayout.BeginVertical("", GUI.skin.box);
+					GUILayout.Label ("Tessellation", EditorStyles.boldLabel);
+					m_MaterialEditor.ShaderProperty(tess,"Tessellation Level");
+					GUILayout.EndVertical();
+				}
 
 			}
 			

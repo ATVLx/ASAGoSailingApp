@@ -19,10 +19,17 @@ public class MirrorReflection : MonoBehaviour
 	private int m_OldReflectionTextureSize = 0;
 	private Material mat;
 	private static bool s_InsideRendering = false;
-	
-	
-	private void Awake(){
-		
+
+
+	void OnEnable(){
+		setMaterial ();
+	}
+
+	void Awake(){
+		setMaterial ();
+	}
+
+	public void setMaterial(){
 		mat = GetComponent<Renderer>().sharedMaterial;
 	}
 	

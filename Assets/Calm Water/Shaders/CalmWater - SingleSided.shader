@@ -3,7 +3,7 @@
 // Date: 12/01/15
 // ===================================================
 
-Shader "CalmWater/CalmWater - SingleSided"
+Shader "CalmWater/CalmWater [SingleSided]"
 {
 	Properties 
 	{	
@@ -11,6 +11,7 @@ Shader "CalmWater/CalmWater - SingleSided"
 		_Color("Shallow Color",Color) = (1,1,1,1)
 		_DepthColor("Depth Color",Color) = (0,0,0,0)
 		_Depth("Depth",float) = 0.5
+		_EdgeFade("Edge Fade",float) = 1
 		
 		//Spec
 		_SpecColor ("SpecularColor",Color) = (1,1,1,1)
@@ -50,162 +51,16 @@ Shader "CalmWater/CalmWater - SingleSided"
 		
 		//Displacement
 		[Toggle(_DISPLACEMENT_ON)] _DISPLACEMENT ("Enable Displacement", Float) = 0
-		_NoiseSpeed("Displacement Speed",float) = 1
-		_NoisePower("Displacement Strength",float) = 0.5
-		_NoiseFrequency("Displacement Frequency",float) = 1
+		_Amplitude ("Amplitude", float) = 0.05
+		_Frequency("Frequency",float) = 1
+		_Steepness ("Wave Steepness", float) = 1
+		_WSpeed ("Wave Speed", Vector) = (1.2, 1.375, 1.1, 1.5)
+		_WDirectionAB ("Wave1 Direction", Vector) = (0.3 ,0.85, 0.85, 0.25)
+		_WDirectionCD ("Wave2 Direction", Vector) = (0.1 ,0.9, 0.5, 0.5)
+
+		_Smoothing("Smoothing",range(0,1)) = 0
 		
 	}
-	
-	CGINCLUDE
-	
-	
-	//==========================================================================================================
-	// Wave
-	//==========================================================================================================
-	inline float sineWaveXY(appdata_full v, float speed, float amplitude, float frequency){
-		float time = _Time.y * speed;
-		float f = sin(time + v.vertex.x * frequency);
-		f += cos(time + v.vertex.z * frequency);
-		return (f * amplitude);
-	}
-
-	//==========================================================================================================
-	// Rim
-	//==========================================================================================================
-	inline fixed RimLight (half3 vDir,fixed3 n,fixed rimPower){
-		return pow(1.0 - saturate(dot(Unity_SafeNormalize(vDir),n)),rimPower);
-	}
-	//==========================================================================================================
-	// UnpackNormals blend and scale
-	//==========================================================================================================
-	half3 UnpackNormalBlend ( half4 n1, half4 n2, half scale){
-	#if defined(UNITY_NO_DXT5nm)
-		return n1.xyz * 2 - 1;
-	#else
-		half3 normal;
-		normal.xy = (n1.wy * 2 - 1) + (n2.wy * 2 - 1);
-		#if (SHADER_TARGET >= 30)
-			normal.xy *= scale;
-		#endif
-		normal.z = sqrt(1.0 - saturate(dot(normal.xy, normal.xy)));
-		
-		return normalize(normal);
-	#endif
-	}
-	inline fixed4 UnityPhongLight (SurfaceOutput s, half3 viewDir, UnityLight light)
-	{
-		
-			half NdotL = max(0.0, dot(s.Normal, normalize(light.dir)));
-			half NdotV = max(0.0, dot(s.Normal, normalize(viewDir) ));
-			
-			half3 h = normalize (light.dir + viewDir);
-			half reflectiveFactor = max (0, dot (s.Normal, h));
-			half spec 	= pow(reflectiveFactor,  s.Gloss * 128.0 + 5.0 ) * s.Specular;
-		
-			half4 c;
-			
-			c.rgb = (s.Albedo * NdotL * light.color + light.color * _SpecColor.rgb * spec);
-			c.a = s.Alpha;
-			return c;
-	}
-
-	inline fixed4 LightingPhong (SurfaceOutput s, half3 viewDir, UnityGI gi)
-	{
-		fixed4 c;
-		c = UnityPhongLight (s, viewDir, gi.light);
-
-		#if defined(DIRLIGHTMAP_SEPARATE)
-			#ifdef LIGHTMAP_ON
-				c += UnityPhongLight (s, viewDir, gi.light2);
-			#endif
-			#ifdef DYNAMICLIGHTMAP_ON
-				c += UnityPhongLight (s, viewDir, gi.light3);
-			#endif
-		#endif
-
-		#ifdef UNITY_LIGHT_FUNCTION_APPLY_INDIRECT
-			c.rgb += s.Albedo * gi.indirect.diffuse;
-		#endif
-
-		return c;
-	}
-
-	inline void LightingPhong_GI (
-		SurfaceOutput s,
-		UnityGIInput data,
-		inout UnityGI gi)
-	{
-		gi = UnityGlobalIllumination (data, 1.0, s.Gloss, s.Normal, false);
-	}
-	
-	
-	sampler2D _GrabTexture;
-	sampler2D _CameraDepthTexture;
-	sampler2D _ReflectionTex;
-	
-	sampler2D _MainTex;
-	sampler2D _BumpMap;
-	half4 _BumpMap_ST;
-	
-	sampler2D _FoamTex;
-	samplerCUBE _Cube;
-
-	fixed4 _Color;
-	fixed4 _DepthColor;
-	fixed4 _CubeColor;
-	fixed3 _FoamColor;
-
-	half4 _GrabTexture_TexelSize;
-	
-	float _BumpStrength;
-	float _SpeedX;
-	float _SpeedY;
-	float _Depth;
-	float _Distortion;
-	float _Reflection;
-	float _RimPower;
-	float _FoamSize;
-	float _NoiseSpeed;
-	float _NoisePower;
-	float _NoiseFrequency;
-	
-	half _Smoothness;
-
-	struct Input
-	{
-		float2 uv_BumpMap;
-		float2 uv_FoamTex;
-		float4 GrabUV;
-		float4 AnimUV;
-		float3 worldPos;
-		float3 vNormal;
-	};
-
-	void vert (inout appdata_full v, out Input o)
-	{
-		UNITY_INITIALIZE_OUTPUT(Input, o);
-		
-		#if _DISPLACEMENT_ON
-		v.vertex.y = sineWaveXY(v, _NoiseSpeed, _NoisePower, _NoiseFrequency);
-		#endif
-		
-		//Depth Texture
-		o.GrabUV = ComputeGrabScreenPos(mul(UNITY_MATRIX_MVP, v.vertex));
-		COMPUTE_EYEDEPTH(o.GrabUV.z);
-		
-		//UV Animation
-		o.AnimUV.xy = TRANSFORM_TEX(v.texcoord,_BumpMap);
-		o.AnimUV.zw = TRANSFORM_TEX(v.texcoord,_BumpMap) * 0.5;
-		
-		o.AnimUV.x += frac(_SpeedX * _Time.x);
-		o.AnimUV.y += frac(_SpeedY * _Time.x);
-		o.AnimUV.z -= frac(_SpeedX * 0.5 * _Time.x);
-		o.AnimUV.w -= frac(_SpeedY * 0.5 * _Time.x);
-		
-		o.vNormal = abs(v.normal);
-	}
-	
-	ENDCG
 
 	SubShader
 		{
@@ -223,13 +78,16 @@ Shader "CalmWater/CalmWater - SingleSided"
 			ZTest LEqual
 
 			CGPROGRAM
-			#pragma surface surf Phong vertex:vert alpha:fade nolightmap nodirlightmap noforwardadd
+			#pragma surface surf Phong vertex:vert alpha:fade nolightmap nodirlightmap
 			#pragma target 3.0
 
 			#pragma shader_feature _REFLECTIONTYPE_MIXED _REFLECTIONTYPE_CUBEMAP _REFLECTIONTYPE_REALTIME 
 			#pragma shader_feature _DISTORTIONQUALITY_HIGH _DISTORTIONQUALITY_LOW
 			#pragma shader_feature _FOAM_OFF _FOAM_ON
 			#pragma shader_feature _DISPLACEMENT_OFF _DISPLACEMENT_ON
+
+			#include "CalmWater_Helper.cginc"
+			#include "CalmWater.cginc"
 
 
 			void surf (Input IN, inout SurfaceOutput o)
@@ -244,23 +102,27 @@ Shader "CalmWater/CalmWater - SingleSided"
 				fixed4 n1			= tex2D(_BumpMap, IN.AnimUV.xy);
 				fixed4 n2 			= tex2D(_BumpMap, IN.AnimUV.zw);
 				fixed3 finalBump 	= UnpackNormalBlend(n1,n2,(1.0 - fresnel) * _BumpStrength);
-				
-				// Distortion =================================================================
-				float4 DistUV = IN.GrabUV;
-				float2 offset = finalBump.xy * _GrabTexture_TexelSize.xy * _Distortion;
-				DistUV.xy = offset * DistUV.z + DistUV.xy;
-				
+				//fixed3 finalBump 	= UnpackNormalBlend(n1,n2,(1.0 - fresnel) * _BumpStrength);
+				float2 offset 		= finalBump.xy * _GrabTexture_TexelSize.xy * _Distortion;
+
+				// Depth Distortion ===================================================
+				float4 DepthUV = IN.DepthUV;
+				DepthUV.xy = offset * DepthUV.z + DepthUV.xy;
+				// GrabPass Distortion ================================================
+				float4 GrabUV = IN.GrabUV;
+				GrabUV.xy = offset * GrabUV.z + GrabUV.xy;
+
 				//Depth Texture Clean
-				half sceneZ = LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(IN.GrabUV)).r);
+				half sceneZ = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(IN.DepthUV)).r);
 				//Depth Texture Distorted
-				half DistZ 	= LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(DistUV)).r);
+				half DistZ 	= LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(DepthUV)).r);
 				//Depth
-				fixed depth = abs(DistZ - IN.GrabUV.z);
+				fixed depth = abs(DistZ - DepthUV.z);
 				//Clean Depth
-				fixed cleanDepth = abs(sceneZ - IN.GrabUV.z);
+				fixed cleanDepth = abs(sceneZ - IN.DepthUV.z);
 				
 				// Refraction ============================================================
-				fixed4 refraction = tex2Dproj( _GrabTexture, UNITY_PROJ_COORD(DistUV));
+				fixed4 refraction = tex2Dproj( _GrabTexture, UNITY_PROJ_COORD(GrabUV));
 				
 				#if _DISTORTIONQUALITY_HIGH 
 				//Hide refraction from objects over the surface		     
@@ -283,7 +145,9 @@ Shader "CalmWater/CalmWater - SingleSided"
 				
 				#if _REFLECTIONTYPE_MIXED || _REFLECTIONTYPE_REALTIME
 				//Real Time reflections
-				fixed3 rtReflections = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(DistUV)) * _Reflection;
+
+				//TODO: Upgrade to GrabUV
+				fixed3 rtReflections = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(DepthUV)) * _Reflection;
 				#endif
 				
 				#if _REFLECTIONTYPE_MIXED
@@ -298,7 +162,7 @@ Shader "CalmWater/CalmWater - SingleSided"
 				fixed3 finalReflection = cubeMap;
 				#endif
 				
-				finalColor = lerp(finalColor,finalReflection,fresnel);
+				finalColor = lerp(finalColor,finalReflection,fresnel * _Reflection);
 				
 				//FOAM ======================================================================
 				#if _FOAM_ON
@@ -310,12 +174,13 @@ Shader "CalmWater/CalmWater - SingleSided"
 				
 				o.Emission		= 2.0 * min(1.0,foam);
 				#endif
-				
+
 				o.Albedo 		= finalColor;
 				o.Normal 		= finalBump;
 				o.Specular 		= _SpecColor.a * 2.0;
 				o.Gloss 		= _Smoothness;
-				o.Alpha 		= saturate(_FoamSize * cleanDepth) * _Color.a;
+				o.Alpha 		= saturate(_EdgeFade * cleanDepth) * _Color.a;
+
 			}
 			ENDCG
 			
