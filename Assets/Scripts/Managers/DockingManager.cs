@@ -73,6 +73,7 @@ public class DockingManager : MonoBehaviour {
 	public void Fail(){
 		if (curState == DockingState.gameplay) {
 			lose.StartFadeOut ();
+			curState = DockingState.reset;
 			switchToReset = true;
 			StopAllCoroutines ();
 			StartCoroutine ("FailReset");
