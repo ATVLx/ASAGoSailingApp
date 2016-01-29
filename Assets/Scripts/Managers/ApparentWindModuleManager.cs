@@ -88,6 +88,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		guiManager.UpdateBoatSpeed( lowBoatSpeed );
 
 		apparentWindBoatControl = ApparentWindBoatControl.s_instance;
+		ChangeState( GameState.Intro );
 	}
 
 	void Update() {
@@ -129,6 +130,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		switch( newState ) {
 		case GameState.Intro:
 			guiManager.ToggleGameplayUI( true );
+			guiManager.ToggleGameplayUI( false );
 			break;
 		case GameState.Playing:
 			guiManager.ToggleInstructionsUI( false );
