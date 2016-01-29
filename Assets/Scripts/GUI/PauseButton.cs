@@ -7,7 +7,7 @@ public class PauseButton : MonoBehaviour {
 		if( GameManager.s_instance != null ) {
 			GameManager.s_instance.PressedPause();
 		} else {
-			Debug.LogError( "Pressing Pause requirees am instance of GameManager in the scene. No GameManager exists in this scene." );
+			Debug.LogError( "Pressing Pause requirees an instance of GameManager in the scene. No GameManager exists in this scene." );
 		}
 	}
 }
