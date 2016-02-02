@@ -5,9 +5,14 @@ public class SoundtrackManager : MonoBehaviour {
 	
 	public AudioSource oceanBreeze; //soundtrack files
 	public static SoundtrackManager s_instance;
-	
+
+	public AudioSource correct, wrong, gybe, bell, crash, beep, laser, waterWoosh;
 	void Awake () {
-		s_instance = this; 
+		if (s_instance == null) {
+			s_instance = this;
+		} else {
+			Destroy(gameObject);
+		}		
 		DontDestroyOnLoad (gameObject); //persist through scenes
 	}
 	
@@ -19,8 +24,8 @@ public class SoundtrackManager : MonoBehaviour {
 		x.Stop ();
 	}
 	
-	public void PlayAudioSource(AudioSource x) { //call from elsewhere
-		x.volume = 1;
+	public void PlayAudioSource(AudioSource x, float volume = 1) { //call from elsewhere
+		x.volume = volume;
 		x.Play ();
 	}
 }
