@@ -6,7 +6,7 @@ public class SoundtrackManager : MonoBehaviour {
 	public AudioSource oceanBreeze; //soundtrack files
 	public static SoundtrackManager s_instance;
 
-	public AudioSource correct, wrong, gybe, bell, crash, beep, laser;
+	public AudioSource correct, wrong, gybe, bell, crash, beep, laser, waterWoosh;
 	void Awake () {
 		if (s_instance == null) {
 			s_instance = this;
