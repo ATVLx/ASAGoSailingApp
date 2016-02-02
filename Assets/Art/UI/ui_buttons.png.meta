@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a139f78cd95bc76488c3891d33cc9b81
-timeCreated: 1454375207
+timeCreated: 1454376603
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -50,10 +50,10 @@ TextureImporter:
     21300086: ui_skip_pressed
     21300088: ui_skip_disabled
     21300090: ui_orange_active
-    21300092: ui_orange_disabled
+    21300092: ui_orange_pressed
     21300094: ui_blank_disabled
     21300096: ui_blank_active
-    21300098: ui_blank_pressedz
+    21300098: ui_blank_pressed
     21300100: ui_BG_transparent
   serializedVersion: 2
   mipmaps:
@@ -791,7 +791,7 @@ TextureImporter:
         - {x: -80, y: -30}
         - {x: 80, y: -30}
         - {x: 80, y: 30}
-    - name: ui_orange_disabled
+    - name: ui_orange_pressed
       rect:
         serializedVersion: 2
         x: 674
@@ -836,7 +836,7 @@ TextureImporter:
         - {x: -80, y: -30}
         - {x: 80, y: -30}
         - {x: 80, y: 30}
-    - name: ui_blank_pressedz
+    - name: ui_blank_pressed
       rect:
         serializedVersion: 2
         x: 172
