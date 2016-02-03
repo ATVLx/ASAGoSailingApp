@@ -45,6 +45,9 @@ public class GameManager : MonoBehaviour {
 	public void LoadLevel(int levelIndex) {
 		thisLevelState = (LevelState)levelIndex;
 		SceneManager.LoadScene (levelIndex);
+		if (levelIndex == 0) {
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.music);
+		}
 	}
 
 	#region UI Logic

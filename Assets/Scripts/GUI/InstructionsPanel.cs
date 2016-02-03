@@ -55,6 +55,7 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], true );
 		UpdatePageNumber();
 		UpdateButtons();
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
 	}
 
 	public void ClickedPreviousPage() {
@@ -63,9 +64,13 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], true );
 		UpdatePageNumber();
 		UpdateButtons();
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
 	}
 
 	public void ClickedDoneButton() {
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
 		// ~NOTE~ We should create a generic way for this to get back to the game. Perhaps a ModuleManager base class?
 		if( GameManager.s_instance != null ) {
 			switch( GameManager.s_instance.thisLevelState ) {

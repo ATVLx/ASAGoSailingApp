@@ -20,7 +20,6 @@ public class SoundtrackManager : MonoBehaviour {
 		while (x.volume > 0.0f) {					//where x is sound track file
 			x.volume -= 0.01f;
 			yield return new WaitForSeconds (.002f);
-			print ("YAHHHH");
 
 		}
 		x.Stop ();
