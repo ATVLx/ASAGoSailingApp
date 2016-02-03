@@ -214,12 +214,16 @@ public class ApparentWindModuleManager : MonoBehaviour {
 				guiManager.UpdateTrueWindSpeed( lowWindSpeed );
 				guiManager.UpdateBoatSpeed( lowBoatSpeed );
 				apparentWindBoatControl.SetHighSpeed( false );
+				guiManager.lowWindButton.gameObject.SetActive( true );
+				guiManager.highWindButton.gameObject.SetActive( false );
  			}
 			else {
 				LerpCamera( true );
 				guiManager.UpdateTrueWindSpeed( highWindSpeed );
 				guiManager.UpdateBoatSpeed( highBoatSpeed );
 				apparentWindBoatControl.SetHighSpeed( true );
+				guiManager.lowWindButton.gameObject.SetActive( false );
+				guiManager.highWindButton.gameObject.SetActive( true );
 			}
 
 			isWindSpeedSetToHigh = !isWindSpeedSetToHigh;
@@ -230,7 +234,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	/// Action taken when the GUI "Done" button is pressed.
 	/// </summary>
 	public void DoneButton() {
-		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "Exit apparent wind module?", (bool confirmed) => {
+		ConfirmationPopUp.s_instance.InitializeConfirmationPanel( "Exit Apparent Wind module?", (bool confirmed) => {
 			if( confirmed == true ) {
 				Debug.Log( "Accepted to go to next level." );
 				ChangeState( GameState.Complete );
