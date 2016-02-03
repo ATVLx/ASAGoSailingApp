@@ -230,7 +230,6 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		else if (boomSlider.value < optimalAngle && angle > 165f){
 			isNegative = isNegative *((180-angle)/15f);
-			print ("angle " + angle);
 			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
 		}
 		else {
