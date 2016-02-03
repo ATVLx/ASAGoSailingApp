@@ -6,7 +6,7 @@ public class SoundtrackManager : MonoBehaviour {
 	public AudioSource oceanBreeze; //soundtrack files
 	public static SoundtrackManager s_instance;
 
-	public AudioSource correct, wrong, gybe, bell, crash, beep, laser, waterWoosh;
+	public AudioSource correct, wrong, gybe, bell, crash, beep, laser, waterWoosh, music;
 	void Awake () {
 		if (s_instance == null) {
 			s_instance = this;
@@ -16,7 +16,7 @@ public class SoundtrackManager : MonoBehaviour {
 		DontDestroyOnLoad (gameObject); //persist through scenes
 	}
 	
-	IEnumerator FadeOutAudioSource(AudioSource x) { //call from elsewhere
+	public IEnumerator FadeOutAudioSource(AudioSource x) { //call from elsewhere
 		while (x.volume > 0.0f) {					//where x is sound track file
 			x.volume -= 0.01f;
 			yield return new WaitForSeconds(0.03f);
