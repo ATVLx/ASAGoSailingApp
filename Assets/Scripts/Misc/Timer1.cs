@@ -17,27 +17,20 @@ public class Timer1 : MonoBehaviour {
   private float totalTime;
   private float amtOfSeconds;
 
-  private Material timerMat;
-
   private Text thisText;
 
 	void Awake () {
 		s_instance = this;
-    if(useMat){
-      timerMat = transform.parent.GetComponent<Image>().material;
-    }
+    
     thisText = GetComponent<Text>();
 	}
 
 	void Update () {
-    if(pause || timesUp){    
+    if(pause || timesUp){ 
+			thisText.text = "Time Left:\n" + ((int)(timeLeft)).ToString();
     }else{
       timeLeft = totalTime-Time.time;
       normTime = Mathf.Abs((float)(timeLeft/amtOfSeconds)-1);
-      if(useMat){
-        timerMat.SetFloat("_Angle", Mathf.Lerp(-3.14f, 3.14f, normTime));
-        //timerMat.SetColor("_Color", Color.Lerp(colorsToLerp[1], colorsToLerp[0], (float)(timeLeft/amtOfSeconds)));
-      }
       thisText.text = "Time Left:\n" + ((int)(timeLeft+1)).ToString();
       if(timeLeft < 0f){
         timesUp = true;

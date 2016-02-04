@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class POSModuleManager : MonoBehaviour {
 
 	//Manages the Points of Sail Module
-	public enum GameState {Idle, Instructions, TestPage, Config, ImageLoad, Intro, SetRound, Playing, CheckAnswer, WrongAnswer, CorrectAnswer, WinScreen, Challenge};
+	public enum GameState {Idle, Instructions, TestPage, Config, ImageLoad, Intro, SetRound, Playing, CheckAnswer, WrongAnswer, CorrectAnswer, WinScreen};
 	public GameState gameState;
 	public List<Term> listOfPOSTerms,tempListPointTerms,randomListPoints;
 	List<pointOfSail> allPoints;
@@ -27,7 +27,7 @@ public class POSModuleManager : MonoBehaviour {
 	float currMastery;
 	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
 	//public AudioSource wrong, correct, beep, waterPaddle;
-	public GameObject circle1, circle2;
+	public GameObject circle1;
 	bool clickedStart;
 
 	[SerializeField] GameObject learningPanel, gameplayPanel, challengeInstruction;
@@ -84,7 +84,6 @@ public class POSModuleManager : MonoBehaviour {
 		case GameState.Instructions :
 
 			gameState = GameState.Config;
-			//beep.Play();
 			Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
 			break;
 		case GameState.Config :
@@ -125,18 +124,9 @@ public class POSModuleManager : MonoBehaviour {
 			CheckForSequenceMastery(); //eliminate mastered sequences
 			InitiateTerm();
 			gameState = GameState.Playing;
-			circle2.SetActive(true);
 			circle1.SetActive(false);
 			break;
 		case GameState.Playing :
-			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
-				gameState = GameState.CheckAnswer;
-			}
-			break;
-		case GameState.Challenge :
-			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
-				gameState = GameState.Config;
-			}
 			break;
 		case GameState.CheckAnswer :
 			if (Checker()) {
@@ -194,7 +184,6 @@ public class POSModuleManager : MonoBehaviour {
 	}
 	bool AnswerCorrect(){
 		circle1.SetActive(false);
-		circle2.SetActive(true);
 		//correct.Play ();
 		wrongAnswerText.enabled = false;
 		correctText.enabled = true;
@@ -210,12 +199,11 @@ public class POSModuleManager : MonoBehaviour {
 	}
 	void AnswerWrong(){
 		numberWrong++;
-		circle2.SetActive(false);
 		circle1.SetActive(true);
-		//wrong.Play ();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
 		AdjustMasteryMeter(false);
 		timer.timesUp = true;
-		timer.pause = true;
+		timer.timeLeft = 0f;
 		DisplayFeedbackText();
 	}
 
@@ -227,6 +215,8 @@ public class POSModuleManager : MonoBehaviour {
 		//Nope, you selected this position, try again
 		wrongAnswerText.enabled = true;
 		wrongAnswerText.text = "Incorrect, you selected: " + currAnimState;
+		wrongAnswerText.gameObject.GetComponent<Fader>().StartFadeOut(5f);
+
 
 	}
 	void GotoNextModule(){
@@ -275,23 +265,26 @@ public class POSModuleManager : MonoBehaviour {
 	}
 
 	public void SubmitAnswer () {
-
-
+		gameState = GameState.CheckAnswer;
 	}
 
 	public void SwitchToLearningMode () {
 		learningPanel.SetActive (true);
 		gameState = GameState.TestPage;
+		circle1.SetActive (true);
+
 	}
 
 	public void SwitchToTestMode () {
-		gameState = GameState.Playing;
+		gameState = GameState.Config;
+
 		gameplayPanel.SetActive (true);
+		circle1.SetActive (false);
 
 	}
 
 	public void SwitchToChallenge () {
-		gameState = GameState.Challenge;
+		circle1.SetActive (false);
 
 
 		currentLevel = 1;
@@ -304,7 +297,7 @@ public class POSModuleManager : MonoBehaviour {
 				x.mastery = 0;
 			}
 		}
-		gameState = GameState.Challenge;
+		gameState = GameState.Config;
 	}
 
 	public void CheckForSequenceMastery() {
