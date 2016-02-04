@@ -87,7 +87,7 @@ public class InstructionsPanel : MonoBehaviour {
 				break;
 
 			case GameManager.LevelState.ManOverboard:
-				MOBManager.s_instance.StartGame();
+				MOBManager.s_instance.ClosedInstructionsPanel();
 				break;
 
 			case GameManager.LevelState.Navigation:

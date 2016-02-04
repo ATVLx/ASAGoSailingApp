@@ -68,6 +68,9 @@ public class NavBoatControl : MonoBehaviour {
 	private float rudderLerpSpeed = 50f;
 	private float rudderStartVal = 0f;
 	private bool rudderIsLerping = false;
+	/// <summary>
+	/// The rudder slider selected. This requires the UI slider to have an OnPointerDown and OnPointerUp event to set this.
+	/// </summary>
 	private bool rudderSliderSelected = true;
 
 	[SerializeField] Transform respawnTransform;

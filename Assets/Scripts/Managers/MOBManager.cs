@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MOBManager : MonoBehaviour {
-	enum MOBState {intro, gameplay, reset,win};
+	enum MOBState {briefing, setup1Instructions, setup2Instructions, gameplay, reset,win};
 	MOBState curState;
 	public static MOBManager s_instance;
 	[SerializeField]
@@ -18,6 +18,12 @@ public class MOBManager : MonoBehaviour {
 	[SerializeField]
 	Transform setup1transform, setup2transform;
 
+	[Header("UI")]
+	public GameObject briefingUI;
+	public GameObject setup1InstructionsUI;
+	public GameObject setup2InstructionsUI;
+	public GameObject gameplayUI;
+
 	void Awake() {
 		if (s_instance == null) {
 			s_instance = this;
@@ -28,7 +34,8 @@ public class MOBManager : MonoBehaviour {
 
 	void Update () {
 		switch (curState) {
-		case MOBState.intro:
+		case MOBState.setup1Instructions:
+		case MOBState.setup2Instructions:
 			{
 				if (switchToGamePlay) {
 					playerBoat.GetComponent<Rigidbody> ().isKinematic = false;
@@ -66,7 +73,7 @@ public class MOBManager : MonoBehaviour {
 		if (curState == MOBState.gameplay) {
 			win.StartFadeOut ();
 			switchToReset = true;
-			StartCoroutine ("WinReset");
+			StartCoroutine ( WinReset() );
 		}
 	}
 
@@ -123,12 +130,32 @@ public class MOBManager : MonoBehaviour {
 			yield return new WaitForSeconds (2f);
 			CameraMain ();
 			switchToGamePlay = true;
-
-
 		} else {
 			curState = MOBState.win;
 			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Man Overbard" );
 		}
+	}
 
+	public void ClosedInstructionsPanel() {
+		switch( curState ) {
+		case MOBState.briefing:
+			{
+				briefingUI.SetActive( false );
+				setup1InstructionsUI.SetActive( true );
+				break;
+			}
+		case MOBState.setup1Instructions:
+			{
+				setup1InstructionsUI.SetActive( false );
+				gameplayUI.SetActive( true );
+				break;
+			}
+		case MOBState.setup2Instructions:
+			{
+				setup2InstructionsUI.SetActive( false );
+				gameplayUI.SetActive( true );
+				break;
+			}
+		}
 	}
 }
