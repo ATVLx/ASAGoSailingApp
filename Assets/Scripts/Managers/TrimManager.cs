@@ -75,6 +75,7 @@ public class TrimManager : MonoBehaviour {
 	public void NextPOSButton () {
 		trimSlider.value = 80;
 		posIndex++;
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		if (posIndex > 2 && posIndex < 6) {
 			trimSlider.value = 5;
 
