@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class DockingManager : MonoBehaviour {
-	enum DockingState {intro, gameplay, reset,win};
+	enum DockingState {briefing, instructions, gameplay, reset, win};
 	DockingState curState;
 	public static DockingManager s_instance;
 	[SerializeField]
@@ -18,6 +18,11 @@ public class DockingManager : MonoBehaviour {
 	[SerializeField]
 	Transform setup1transform, setup2transform;
 
+	[Header("UI")]
+	public GameObject briefingUI;
+	public GameObject instructionsUI;
+	public GameObject gameplayUi;
+
 	void Awake() {
 		if (s_instance == null) {
 			s_instance = this;
@@ -26,9 +31,13 @@ public class DockingManager : MonoBehaviour {
 		}
 	}
 
+	void Start () {
+		curState = DockingState.briefing;
+	}
+
 	void Update () {
 		switch (curState) {
-		case DockingState.intro:
+		case DockingState.instructions:
 			{
 				if (switchToGamePlay) {
 					playerBoat.GetComponent<Rigidbody> ().isKinematic = false;
@@ -88,7 +97,6 @@ public class DockingManager : MonoBehaviour {
 	}
 
 	void CameraMain() {
-
 		overhead.GetComponent<Camera> ().enabled = false;
 		main.GetComponent<Camera> ().enabled = true;
 	}
@@ -130,6 +138,21 @@ public class DockingManager : MonoBehaviour {
 			curState = DockingState.win;
 			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Docking" );
 		}
+	}
 
+	public void ClosedInstructionsPanel() {
+		switch( curState ) {
+		case DockingState.briefing:
+			briefingUI.SetActive( false );
+			instructionsUI.SetActive( true );
+			curState = DockingState.instructions;
+			break;
+
+		case DockingState.instructions:
+			instructionsUI.SetActive( false );
+			gameplayUi.SetActive( true );
+			StartGame();
+			break;
+		}
 	}
 }

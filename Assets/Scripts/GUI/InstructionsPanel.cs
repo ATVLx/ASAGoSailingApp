@@ -79,7 +79,7 @@ public class InstructionsPanel : MonoBehaviour {
 				break;
 
 			case GameManager.LevelState.Docking:
-				DockingManager.s_instance.StartGame();
+				DockingManager.s_instance.ClosedInstructionsPanel();
 				break;
 
 			case GameManager.LevelState.LearnToTack:
