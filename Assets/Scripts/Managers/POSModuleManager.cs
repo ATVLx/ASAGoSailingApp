@@ -30,13 +30,11 @@ public class POSModuleManager : MonoBehaviour {
 	public GameObject circle1, circle2;
 	bool clickedStart;
 
-	public GameObject IdlePage, TestPage, InstructionsPage, GameplayPage, winPage, challengePage;
+	[SerializeField] GameObject learningPanel, gameplayPanel, challengeInstruction;
 	GameObject currentPage;
 
 	public TextAsset pointsOfSailTxt;
 	public Slider masteryMeter;
-	public Text youbeatlevel2;
-	public Text endOfLevel2Text;
 	public Text currentQuestion;
 	public Text wrongAnswerText;
 	public Text correctText;
@@ -54,7 +52,6 @@ public class POSModuleManager : MonoBehaviour {
 		else {
 			Destroy(gameObject);
 		}
-		currentPage = IdlePage;
 	}
 
 	public void MainMenu() {
@@ -77,8 +74,7 @@ public class POSModuleManager : MonoBehaviour {
 		case GameState.Idle :
 			if (clickedStart){
 				clickedStart = false;	
-				IdlePage.SetActive(false);
-				TestPage.SetActive(true);
+
 				gameState = GameState.TestPage;
 				//beep.Play();
 			}
@@ -86,20 +82,16 @@ public class POSModuleManager : MonoBehaviour {
 	
 		case GameState.TestPage :
 			if (Input.GetKeyDown(KeyCode.Space)){
-				TestPage.SetActive(false);
-				InstructionsPage.SetActive(true);
+
 				gameState = GameState.Instructions;
 				//beep.Play();
 			}
 			break;
 		case GameState.Instructions :
-			if (Input.GetKeyDown(KeyCode.Space)){
-				InstructionsPage.SetActive(false);
-				GameplayPage.SetActive(true);
-				gameState = GameState.Config;
-				//beep.Play();
-				Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
-			}
+
+			gameState = GameState.Config;
+			//beep.Play();
+			Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
 			break;
 		case GameState.Config :
 			numberWrong = 0;
@@ -150,9 +142,6 @@ public class POSModuleManager : MonoBehaviour {
 		case GameState.Challenge :
 			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
 				gameState = GameState.Config;
-				//beep.Play ();
-				challengePage.SetActive(false);
-				GameplayPage.SetActive(true);
 			}
 			break;
 		case GameState.CheckAnswer :
@@ -183,13 +172,9 @@ public class POSModuleManager : MonoBehaviour {
 			break;
 			
 		case GameState.WinScreen :
-			GameplayPage.SetActive(false);
-			winPage.SetActive(true);
 			if (currentLevel == 1) {
 				thisBreatheAnimation.enabled = true;
 				thisColorChange.enabled = true;
-				youbeatlevel2.text = "you beat level 2";
-				endOfLevel2Text.text = "Click here to play level 2 again";
 				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
 			}
 			winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
@@ -295,12 +280,17 @@ public class POSModuleManager : MonoBehaviour {
 		isCameraRotating = true;
 	}
 
+	public void SwitchToLearningMode () {
+		learningPanel.SetActive (true);
+	}
+
+	public void SwitchToTestMode () {
+
+	}
+
 	public void SwitchToChallenge () {
-		//beep.Play ();
-		IdlePage.SetActive (false);
-		GameplayPage.SetActive (false);
-		challengePage.SetActive (true);
-		winPage.SetActive (false);
+
+
 
 		currentLevel = 1;
 		if (gameState == GameState.WinScreen) {
