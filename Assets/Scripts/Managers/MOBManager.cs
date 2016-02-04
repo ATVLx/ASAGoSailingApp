@@ -106,6 +106,8 @@ public class MOBManager : MonoBehaviour {
 
 	IEnumerator FailReset () {
 		CameraOverhead ();
+		if (SoundtrackManager.s_instance != null)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
 		yield return new WaitForSeconds (3f);
 		CameraMain ();
 		if (setup2.gameObject.activeSelf == false) {
@@ -121,6 +123,8 @@ public class MOBManager : MonoBehaviour {
 
 	IEnumerator WinReset () {
 		CameraOverhead ();
+		if (SoundtrackManager.s_instance != null)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		yield return new WaitForSeconds (3f);
 		if (setup2.activeSelf == false) {
 			setup2.SetActive (true);
@@ -138,6 +142,8 @@ public class MOBManager : MonoBehaviour {
 //			switchToGamePlay = true;
 		} else {
 			curState = MOBState.win;
+			if (SoundtrackManager.s_instance != null)
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
 			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Man Overbard" );
 		}
 	}

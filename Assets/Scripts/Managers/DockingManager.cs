@@ -76,6 +76,8 @@ public class DockingManager : MonoBehaviour {
 		if (curState == DockingState.gameplay) {
 			win.StartFadeOut ();
 			switchToReset = true;
+			if (SoundtrackManager.s_instance != null)
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 			StartCoroutine ("WinReset");
 		}
 	}
@@ -84,6 +86,8 @@ public class DockingManager : MonoBehaviour {
 		if (curState == DockingState.gameplay && isFailing == false) {
 			isFailing = true;
 			lose.StartFadeOut ();
+			if (SoundtrackManager.s_instance != null)
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
 			switchToReset = true;
 			StopAllCoroutines ();
 			StartCoroutine ("FailReset");
@@ -109,6 +113,7 @@ public class DockingManager : MonoBehaviour {
 
 	IEnumerator FailReset () {
 		CameraOverhead ();
+
 		yield return new WaitForSeconds (3f);
 		CameraMain ();
 		if (setup2.gameObject.activeSelf == false) {
@@ -121,10 +126,13 @@ public class DockingManager : MonoBehaviour {
 		switchToGamePlay = true;
 		isFailing = true;
 
+
 	}
 
 	IEnumerator WinReset () {
 		CameraOverhead ();
+		if (SoundtrackManager.s_instance != null)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
 		yield return new WaitForSeconds (3f);
 		if (setup2.activeSelf == false) {
 			setup2.SetActive (true);
@@ -138,6 +146,8 @@ public class DockingManager : MonoBehaviour {
 
 		} else {
 			curState = DockingState.win;
+			if (SoundtrackManager.s_instance != null)
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
 			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Docking" );
 		}
 	}
