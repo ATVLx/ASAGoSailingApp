@@ -366,6 +366,8 @@ public class NavBoatControl : MonoBehaviour {
 		rudderSlider.interactable = false;
 		boomSlider.interactable = false;
 		controlsAreActive = false;
+		if (SoundtrackManager.s_instance != null)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.gybe);
 		if (MOBManager.s_instance != null) {
 			MOBManager.s_instance.Fail();
 		}
