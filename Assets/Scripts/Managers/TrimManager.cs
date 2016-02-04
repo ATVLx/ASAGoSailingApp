@@ -17,7 +17,7 @@ public class TrimManager : MonoBehaviour {
 	[SerializeField]
 	Slider sailEfficiencySlider, trimSlider;
 	[SerializeField]
-	GameObject introText,goodJob,complete,panel;
+	GameObject introText,goodJob,complete,panel,gameplayPanel,instructionsPanel;
 
 	//switches
 	bool switchToPlaying, switchToComplete;
@@ -66,7 +66,8 @@ public class TrimManager : MonoBehaviour {
 	}
 
 	public void BeginTutorial () {
-		introText.GetComponent<Fader> ().StartFade ();
+		instructionsPanel.SetActive (true);
+		gameplayPanel.SetActive (true);
 		posIndex = 0;
 		GameObject.FindGameObjectWithTag("Player").transform.rotation = Quaternion.Euler(new Vector3(0,listOfPositions[posIndex],0));
 		switchToPlaying = true;
@@ -75,6 +76,7 @@ public class TrimManager : MonoBehaviour {
 	public void NextPOSButton () {
 		trimSlider.value = 80;
 		posIndex++;
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		if (posIndex > 2 && posIndex < 6) {
 			trimSlider.value = 5;
 
