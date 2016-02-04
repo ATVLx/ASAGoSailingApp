@@ -143,6 +143,8 @@ public class POSModuleManager : MonoBehaviour {
 		case GameState.CorrectAnswer :
 			if (AnswerCorrect()){
 				WinRound();
+				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
+
 				gameState = GameState.WinScreen;
 			}
 			else {
@@ -155,12 +157,10 @@ public class POSModuleManager : MonoBehaviour {
 			gameState = GameState.Playing;
 			break;
 			
-		case GameState.WinScreen :
-			if (currentLevel == 1) {
-				thisBreatheAnimation.enabled = true;
-				thisColorChange.enabled = true;
-				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
-			}
+		case GameState.WinScreen:
+
+			gameplayPanel.SetActive (false);
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
 			winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
 			break;
 		}
@@ -184,7 +184,7 @@ public class POSModuleManager : MonoBehaviour {
 	}
 	bool AnswerCorrect(){
 		circle1.SetActive(false);
-		//correct.Play ();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		wrongAnswerText.enabled = false;
 		correctText.enabled = true;
 		correctText.GetComponent<Fader>().StartFadeOut();
@@ -285,6 +285,7 @@ public class POSModuleManager : MonoBehaviour {
 
 	public void SwitchToChallenge () {
 		circle1.SetActive (false);
+		gameplayPanel.SetActive (true);
 
 
 		currentLevel = 1;
