@@ -13,11 +13,11 @@ public class TrimManager : MonoBehaviour {
 	bool answerSubmitted;
 	int posIndex = 0;
 	[SerializeField]
-	Button submitButton, gotoNextModule;
+	Button submitButton;
 	[SerializeField]
 	Slider sailEfficiencySlider, trimSlider;
 	[SerializeField]
-	GameObject introText,goodJob,complete,panel,gameplayPanel,instructionsPanel;
+	GameObject introText,goodJob,panel,gameplayPanel,instructionsPanel;
 
 	//switches
 	bool switchToPlaying, switchToComplete;
@@ -51,8 +51,6 @@ public class TrimManager : MonoBehaviour {
 			if (switchToComplete) {
 				switchToComplete = false;
 				submitButton.gameObject.SetActive( false );
-				gotoNextModule.gameObject.SetActive (true);
-				complete.SetActive (true);
 				thisTrimManagerState = TrimManagerState.Complete;
 				panel.SetActive (false);
 				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Trimming" );
