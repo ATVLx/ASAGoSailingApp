@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MOBManager : MonoBehaviour {
-	enum MOBState {briefing, setup1Instructions, setup2Instructions, gameplay, reset,win};
+	enum MOBState {briefing, setup1Instructions, setup2Instructions, gameplay, reset, win};
 	MOBState curState;
 	public static MOBManager s_instance;
 	[SerializeField]
@@ -127,9 +127,15 @@ public class MOBManager : MonoBehaviour {
 			setup1.SetActive (false);
 			playerBoat.transform.position = setup2transform.position;
 			playerBoat.transform.rotation = setup2transform.rotation;
-			yield return new WaitForSeconds (2f);
-			CameraMain ();
-			switchToGamePlay = true;
+			// Update UI state
+			gameplayUI.SetActive( false );
+			setup2InstructionsUI.SetActive( true );
+			playerBoat.GetComponent<Rigidbody>().isKinematic = true;
+			curState = MOBState.setup2Instructions;
+
+//			yield return new WaitForSeconds (2f);
+//			CameraMain ();
+//			switchToGamePlay = true;
 		} else {
 			curState = MOBState.win;
 			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Man Overbard" );
@@ -142,18 +148,21 @@ public class MOBManager : MonoBehaviour {
 			{
 				briefingUI.SetActive( false );
 				setup1InstructionsUI.SetActive( true );
+				curState = MOBState.setup1Instructions;
 				break;
 			}
 		case MOBState.setup1Instructions:
 			{
 				setup1InstructionsUI.SetActive( false );
 				gameplayUI.SetActive( true );
+				StartGame();
 				break;
 			}
 		case MOBState.setup2Instructions:
 			{
 				setup2InstructionsUI.SetActive( false );
 				gameplayUI.SetActive( true );
+				StartGame();
 				break;
 			}
 		}
