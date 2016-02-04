@@ -230,9 +230,9 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 
 	public void Fail () {
-		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
 
 		if (!isFailing) {
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
 			isFailing = true;
 			failure.StartFadeOut ();
 			switchToReset = true;
