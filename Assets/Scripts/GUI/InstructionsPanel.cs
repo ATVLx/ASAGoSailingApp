@@ -99,7 +99,7 @@ public class InstructionsPanel : MonoBehaviour {
 				break;
 
 			case GameManager.LevelState.RightOfWay:
-				RightOfWayManager.s_instance.StartGame();
+				RightOfWayManager.s_instance.ClosedInstructionsPanel();
 				break;
 
 			case GameManager.LevelState.SailTrim:

@@ -4,12 +4,10 @@ using UnityEngine.UI;
 
 public class RightOfWayManager : MonoBehaviour {
 
-	enum ROWState {intro, gameplay, reset};
-	ROWState curState = ROWState.intro;
+	enum ROWState {briefing, instructions, gameplay, reset};
+	ROWState curState;
 	[SerializeField]
-	GameObject AIboat, Player, MotorBoat, gamePlayPanel;
-	[SerializeField]
-	Slider sailtrim;
+	GameObject AIboat, Player, MotorBoat;
 	[SerializeField]
 	Transform windward, leeward, port, starboard, overrun;
 	[SerializeField]
@@ -19,8 +17,6 @@ public class RightOfWayManager : MonoBehaviour {
 	[SerializeField]
 	Fader success;
 	[SerializeField]
-	Text you,them,hint;
-	[SerializeField]
 	Camera cam1, cam2;
 
 	[SerializeField] GameObject congratsText;
@@ -28,6 +24,14 @@ public class RightOfWayManager : MonoBehaviour {
 	bool hasStarted;
 	float resetDelay = 5f;
 	public static RightOfWayManager s_instance;
+	public bool switchToReset, switchToGamePlay;
+
+	[Header("UI")]
+	[SerializeField]
+	Slider boomSlider;
+	[SerializeField]
+	Text youText,themText,hintText;
+	public GameObject briefingUI, instructionsUI, gamePlayUI;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -37,8 +41,8 @@ public class RightOfWayManager : MonoBehaviour {
 		}
 	}
 
-	public bool switchToReset, switchToGamePlay;
 	void Start () {
+		curState = ROWState.briefing;
 		ToggleBoatMovement (false);
 	}
 
@@ -46,7 +50,7 @@ public class RightOfWayManager : MonoBehaviour {
 	void Update () {
 		print (scenario);
 		switch (curState) {
-		case ROWState.intro:
+		case ROWState.instructions:
 			{
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
@@ -64,7 +68,7 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case ROWState.reset:
 			{
-				StartCoroutine ("ShowSituation");
+				StartCoroutine ( ShowSituation() );
 				curState = ROWState.gameplay;
 				break;
 			}
@@ -72,8 +76,8 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 	public void StartGame() {
 		switchToGamePlay = true;
-		gamePlayPanel.SetActive (true);
-		StartCoroutine ("ShowSituation");
+		gamePlayUI.SetActive (true);
+		StartCoroutine ( ShowSituation() );
 	}
 
 	void ToggleCameras (){
@@ -116,10 +120,10 @@ public class RightOfWayManager : MonoBehaviour {
 		switch (scenario) {
 		case 0:
 			{
-				you.text = "You: Windward Same Tack";
-				them.text = "Them: Leeward Same Tack";
-				hint.text = "What to do? Give way to them";
-				sailtrim.value = 40f;
+				youText.text = "You: Windward - Same Tack";
+				themText.text = "Them: Leeward - Same Tack";
+				hintText.text = "Give way to them.";
+				boomSlider.value = 40f;
 				AIboat.GetComponent<AIBoat> ().SetTack (false);
 				Player.transform.position = windward.position;
 				AIboat.transform.position = leeward.position;
@@ -129,11 +133,11 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 1:
 			{
-				you.text = "You: Leeward on Same Tack";
-				them.text = "Them: Windward on Same Tack";
-				hint.text = "What to do? They give way to you";
+				youText.text = "You: Leeward -  Same Tack";
+				themText.text = "Them: Windward - Same Tack";
+				hintText.text = "They give way to you";
 				StartCoroutine ("level2");
-				sailtrim.value = 15f;
+				boomSlider.value = 15f;
 				Player.transform.rotation = leeward.rotation;
 				Player.transform.position = leeward.position;
 				AIboat.transform.rotation = windward.rotation;
@@ -142,12 +146,12 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 2:
 			{
-				you.text = "You: Starboard Tack";
-				them.text = "Them: Port Tack";
-				hint.text = "What to do? They give way to you";
+				youText.text = "You: Starboard Tack";
+				themText.text = "Them: Port Tack";
+				hintText.text = "They give way to you";
 				StartCoroutine ("level3");
 
-				sailtrim.value = 20f;
+				boomSlider.value = 20f;
 				Player.transform.position = starboard.position;
 				AIboat.transform.position = port.position;
 				Player.transform.rotation = starboard.rotation;
@@ -156,10 +160,10 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 3:
 			{
-				you.text = "You: Port Tack";
-				them.text = "Them: Starboard Tack";
-				hint.text = "What to do? Give way to them";
-				sailtrim.value = 14.5f;
+				youText.text = "You: Port Tack";
+				themText.text = "Them: Starboard Tack";
+				hintText.text = "Give way to them";
+				boomSlider.value = 14.5f;
 				Player.transform.position = port.position;
 				Player.transform.rotation = port.rotation;
 				AIboat.transform.position = starboard.position;
@@ -168,9 +172,9 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 4:
 			{
-				you.text = "You: Sailboat";
-				them.text = "Them: Motorized Behemoth";
-				hint.text = "What to do? Get the heck out of the way!";
+				youText.text = "You: Sailboat";
+				themText.text = "Them: Motorized Behemoth";
+				hintText.text = "Get the heck out of the way!";
 				AIboat.SetActive (false);
 				Player.transform.position = starboard.position;
 				MotorBoat.transform.position = overrun.position;
@@ -198,10 +202,10 @@ public class RightOfWayManager : MonoBehaviour {
 
 
 	void WinModule() {
-		you.text = "";
-		them.text = "";
-		hint.text = "";
-		gamePlayPanel.SetActive (false);
+		youText.text = "";
+		themText.text = "";
+		hintText.text = "";
+		gamePlayUI.SetActive (false);
 		congratsText.SetActive (true);
 		CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Right of Way" );
 	}
@@ -236,6 +240,18 @@ public class RightOfWayManager : MonoBehaviour {
 			isFailing = true;
 			failure.StartFadeOut ();
 			switchToReset = true;
+		}
+	}
+
+	public void ClosedInstructionsPanel() {
+		switch( curState ) {
+		case ROWState.briefing:
+			instructionsUI.SetActive( true );
+			curState = ROWState.instructions;
+			break;
+		case ROWState.instructions:
+			StartGame();
+			break;
 		}
 	}
 }
