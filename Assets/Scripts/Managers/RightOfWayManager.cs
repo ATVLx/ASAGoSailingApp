@@ -110,6 +110,8 @@ public class RightOfWayManager : MonoBehaviour {
 
 	//TODO make boats turn after X seconds on each module
 	void SetPositions() {
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
+
 		print ("SET POS" + scenario);
 		switch (scenario) {
 		case 0:
@@ -205,7 +207,10 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 
 	public void WinScenario() {
+
 		if (!isFailing) {
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
+
 			isFailing = true;
 			success.StartFadeOut ();
 			scenario++;
@@ -225,6 +230,8 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 
 	public void Fail () {
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
+
 		if (!isFailing) {
 			isFailing = true;
 			failure.StartFadeOut ();

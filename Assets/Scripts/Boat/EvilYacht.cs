@@ -14,4 +14,9 @@ public class EvilYacht : MonoBehaviour {
 			GetComponent<Rigidbody> ().AddForce (transform.forward * 100000f);
 		}
 	}
+
+	void OnCollisionEnter() {
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.crash);
+
+	}
 }
