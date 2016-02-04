@@ -72,20 +72,14 @@ public class POSModuleManager : MonoBehaviour {
 		}
 		switch (gameState) {
 		case GameState.Idle :
-			if (clickedStart){
-				clickedStart = false;	
+			
 
 				gameState = GameState.TestPage;
-				//beep.Play();
-			}
+
 			break;
 	
 		case GameState.TestPage :
-			if (Input.GetKeyDown(KeyCode.Space)){
 
-				gameState = GameState.Instructions;
-				//beep.Play();
-			}
 			break;
 		case GameState.Instructions :
 
@@ -280,16 +274,24 @@ public class POSModuleManager : MonoBehaviour {
 		isCameraRotating = true;
 	}
 
+	public void SubmitAnswer () {
+
+
+	}
+
 	public void SwitchToLearningMode () {
 		learningPanel.SetActive (true);
+		gameState = GameState.TestPage;
 	}
 
 	public void SwitchToTestMode () {
+		gameState = GameState.Playing;
+		gameplayPanel.SetActive (true);
 
 	}
 
 	public void SwitchToChallenge () {
-
+		gameState = GameState.Challenge;
 
 
 		currentLevel = 1;
