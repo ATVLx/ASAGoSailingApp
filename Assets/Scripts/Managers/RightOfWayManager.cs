@@ -201,6 +201,7 @@ public class RightOfWayManager : MonoBehaviour {
 		hint.text = "";
 		meThemPanel.SetActive (false);
 		congratsText.SetActive (true);
+		CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Right of Way" );
 	}
 
 	public void WinScenario() {

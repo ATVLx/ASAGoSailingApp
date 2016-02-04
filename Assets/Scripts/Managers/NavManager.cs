@@ -86,6 +86,7 @@ public class NavManager : MonoBehaviour {
 			Camera.main.GetComponent<HoverFollowCam>().PanOut();
 			GameObject.FindGameObjectWithTag("arrow").SetActive(false);
 			NavBoatControl.s_instance.canMove = false;
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Navigation" );
 //			if (elapsedTime > 200f) {
 ////				rating = 0;
 //			}

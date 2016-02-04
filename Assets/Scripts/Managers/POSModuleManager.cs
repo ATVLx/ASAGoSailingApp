@@ -190,6 +190,7 @@ public class POSModuleManager : MonoBehaviour {
 				thisColorChange.enabled = true;
 				youbeatlevel2.text = "you beat level 2";
 				endOfLevel2Text.text = "Click here to play level 2 again";
+				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
 			}
 			winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
 			break;

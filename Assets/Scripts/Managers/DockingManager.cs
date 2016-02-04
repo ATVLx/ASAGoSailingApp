@@ -128,6 +128,7 @@ public class DockingManager : MonoBehaviour {
 
 		} else {
 			curState = DockingState.win;
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Docking" );
 		}
 
 	}
