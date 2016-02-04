@@ -144,7 +144,7 @@ public class MOBManager : MonoBehaviour {
 			curState = MOBState.win;
 			if (SoundtrackManager.s_instance != null)
 				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
-			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Man Overbard" );
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Man Overboard" );
 		}
 	}
 
