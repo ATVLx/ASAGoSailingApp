@@ -7,7 +7,7 @@ public class RightOfWayManager : MonoBehaviour {
 	enum ROWState {intro, gameplay, reset};
 	ROWState curState = ROWState.intro;
 	[SerializeField]
-	GameObject AIboat, Player, MotorBoat, meThemPanel;
+	GameObject AIboat, Player, MotorBoat, gamePlayPanel;
 	[SerializeField]
 	Slider sailtrim;
 	[SerializeField]
@@ -72,7 +72,7 @@ public class RightOfWayManager : MonoBehaviour {
 	}
 	public void StartGame() {
 		switchToGamePlay = true;
-		meThemPanel.SetActive (true);
+		gamePlayPanel.SetActive (true);
 		StartCoroutine ("ShowSituation");
 	}
 
@@ -199,7 +199,7 @@ public class RightOfWayManager : MonoBehaviour {
 		you.text = "";
 		them.text = "";
 		hint.text = "";
-		meThemPanel.SetActive (false);
+		gamePlayPanel.SetActive (false);
 		congratsText.SetActive (true);
 	}
 
