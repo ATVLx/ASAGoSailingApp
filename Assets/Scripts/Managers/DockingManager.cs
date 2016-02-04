@@ -9,6 +9,7 @@ public class DockingManager : MonoBehaviour {
 	GameObject playerBoat;
 	[SerializeField]
 	GameObject setup1, setup2;
+	bool isFailing = false;
 	bool switchToGamePlay, switchToReset;
 	[SerializeField]
 	Fader win,lose;
@@ -80,9 +81,9 @@ public class DockingManager : MonoBehaviour {
 	}
 
 	public void Fail(){
-		if (curState == DockingState.gameplay) {
+		if (curState == DockingState.gameplay && isFailing == false) {
+			isFailing = true;
 			lose.StartFadeOut ();
-			curState = DockingState.reset;
 			switchToReset = true;
 			StopAllCoroutines ();
 			StartCoroutine ("FailReset");
@@ -118,6 +119,7 @@ public class DockingManager : MonoBehaviour {
 			playerBoat.transform.rotation = setup2transform.rotation;
 		}
 		switchToGamePlay = true;
+		isFailing = true;
 
 	}
 
