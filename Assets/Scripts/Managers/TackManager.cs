@@ -127,6 +127,7 @@ public class TackManager : MonoBehaviour {
 
 		} else {
 			curState = TackState.win;
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Tacking" );
 		}
 
 	}

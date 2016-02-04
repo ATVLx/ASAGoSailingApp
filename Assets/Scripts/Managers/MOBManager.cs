@@ -127,6 +127,7 @@ public class MOBManager : MonoBehaviour {
 
 		} else {
 			curState = MOBState.win;
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Man Overbard" );
 		}
 
 	}

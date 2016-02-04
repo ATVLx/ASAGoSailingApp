@@ -55,6 +55,7 @@ public class TrimManager : MonoBehaviour {
 				complete.SetActive (true);
 				thisTrimManagerState = TrimManagerState.Complete;
 				panel.SetActive (false);
+				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Trimming" );
 			}
 			break;
 
