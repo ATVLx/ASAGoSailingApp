@@ -77,7 +77,9 @@ public class NavBoatControl : MonoBehaviour {
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
-		boomSlider.navigation.mode = Navigation.Mode.None;
+		Navigation newNav = new Navigation ();
+		newNav.mode = Navigation.Mode.None;
+		boomSlider.navigation = newNav;
 		// Subscribe to boom slider update event
 		if( boomSlider != null ){
 		}
