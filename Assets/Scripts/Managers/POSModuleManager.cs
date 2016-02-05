@@ -247,7 +247,7 @@ public class POSModuleManager : MonoBehaviour {
 			currMastery+=x.mastery;
 		}
 		masteryMeter.value = (float)(currMastery)/totalMastery;
-		masteryMeter.transform.GetChild(1).transform.GetChild(1).GetComponent<Text>().text = "Mastery: " + Mathf.FloorToInt(masteryMeter.value*100f).ToString()+"%";
+	//	masteryMeter.transform.GetChild(1).transform.GetChild(1).GetComponent<Text>().text = "Mastery: " + Mathf.FloorToInt(masteryMeter.value*100f).ToString()+"%";
 	}
 
 	bool isCameraRotating;
