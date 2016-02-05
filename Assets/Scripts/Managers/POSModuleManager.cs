@@ -33,6 +33,7 @@ public class POSModuleManager : MonoBehaviour {
 	[SerializeField] GameObject learningPanel, gameplayPanel, challengeInstruction;
 	GameObject currentPage;
 
+	[Header("UI")]
 	public TextAsset pointsOfSailTxt;
 	public Slider masteryMeter;
 	public Text currentQuestion;
