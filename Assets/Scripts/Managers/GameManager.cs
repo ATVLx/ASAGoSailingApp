@@ -58,11 +58,8 @@ public class GameManager : MonoBehaviour {
 	#region UI Logic
 	public void PressedPause() {
 		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
-
-		if( TogglePause != null ) {
-			//TogglePause( true );
-		}
-		Time.timeScale = 0f;
+		if( thisLevelState != LevelState.POS )
+			Time.timeScale = 0f;
 
 		isPaused = true;
 		ToggleSlide( pauseMenu, true );
@@ -70,13 +67,8 @@ public class GameManager : MonoBehaviour {
 
 	public void ResumeGame() {
 		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
-
 		isPaused = false;
 		ToggleSlide( pauseMenu, false );
-
-		if( TogglePause != null ) {
-//			TogglePause( false );
-		}
 		Time.timeScale = 1f;
 	}
 
