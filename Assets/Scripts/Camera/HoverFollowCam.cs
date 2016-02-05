@@ -28,15 +28,11 @@ public class HoverFollowCam : MonoBehaviour
 		camPos = GameObject.FindGameObjectWithTag("CamPos").transform;
 	}
 
-	
-	void Update()
-	{
+	void LateUpdate() {
 		if (lookAtPlayer) {
 			transform.LookAt (new Vector3 (player.position.x, player.position.y + verticalLookOffset, player.position.z));
 		}
-	}
 
-	void FixedUpdate() {
 		switch (thisCameraMode) {
 		case CameraMode.follow:
 			if (ignoreYAxis) {
