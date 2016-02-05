@@ -145,7 +145,6 @@ public class NavBoatControl : MonoBehaviour {
 	private void HandleRudderRotation() {
 		float horizontalInput = Input.GetAxis( "Horizontal" );
 		if( rudderSliderSelected == false && horizontalInput == 0f && rudderSlider.value != 0f ) {
-			Debug.Log( "IF IS RUNNING" );
 			if( rudderResetTimer >= rudderResetTimeBuffer && !rudderIsLerping ) {
 				rudderIsLerping = true;
 				rudderStartVal = rudderSlider.value;
@@ -163,7 +162,6 @@ public class NavBoatControl : MonoBehaviour {
 				rudderSlider.value = Mathf.Lerp( rudderStartVal, 0f, t );
 			}				
 		} else {
-			Debug.Log( "ELSE IS RUNNING" );
 			rudderIsLerping = false;
 			rudderResetTimer = 0f;
 			float rudderDirectionScalar = 0f;
