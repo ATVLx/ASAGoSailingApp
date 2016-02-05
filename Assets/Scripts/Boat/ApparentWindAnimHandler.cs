@@ -36,6 +36,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 					RaycastHit hit;
 					ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 					if (Physics.Raycast(ray, out hit, 1000.0f)) {
+						
 						ApparentWindModuleManager.s_instance.hasClickedRun = false;
 
 						//checks which point of sail object was clicked for animation states
@@ -96,6 +97,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 					RaycastHit hit;
 					ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 					if (Physics.Raycast(ray, out hit, 1000.0f)){
+						
 						POSModuleManager.s_instance.hasClickedRun = false;
 						//checks which point of sail object was clicked for animation states
 						switch(hit.collider.gameObject.name){
