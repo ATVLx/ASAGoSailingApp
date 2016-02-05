@@ -104,7 +104,7 @@ public class NavBoatControl : MonoBehaviour {
 
 	void Update () {
 		//velocity.text = "Knots: "+ Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
-		velocity.text = "" + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
+//		velocity.text = "" + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 		HandleRudderRotation();
 		IdentifyPointOfSail();
 	}

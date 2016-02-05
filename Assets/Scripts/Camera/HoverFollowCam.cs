@@ -8,7 +8,7 @@ using System.Collections;
 public class HoverFollowCam : MonoBehaviour
 {
 	[SerializeField]
-	bool ignoreYAxis = false, lookAtPlayer = false;
+	bool ignoreYAxis = false, lookAtPlayer = false, fixedUpdate = true;
 
 	Transform player, camPos;
 	float camDistanceToCamPos;
@@ -28,35 +28,67 @@ public class HoverFollowCam : MonoBehaviour
 		camPos = GameObject.FindGameObjectWithTag("CamPos").transform;
 	}
 
-	void LateUpdate() {
-		if (lookAtPlayer) {
-			transform.LookAt (new Vector3 (player.position.x, player.position.y + verticalLookOffset, player.position.z));
-		}
-
-		switch (thisCameraMode) {
-		case CameraMode.follow:
-			if (ignoreYAxis) {
-
-				transform.position -= (new Vector3(transform.position.x,0,transform.position.z) - new Vector3(camPos.position.x, 0, camPos.position.z)) * smoothRate * Time.deltaTime;
-			} else {
-				transform.position -= (transform.position - camPos.position) * smoothRate * Time.deltaTime;
+	void FixedUpdate() {
+		if (fixedUpdate) {
+			if (lookAtPlayer) {
+				transform.LookAt (new Vector3 (player.position.x, player.position.y + verticalLookOffset, player.position.z));
 			}
-			break;
-		case CameraMode.stationary :
-			break;
-		case CameraMode.lerpToDestination :
-			if (isPanningOut) {
-				float fraction;
-				fraction = (Time.time - lerpTimer) / lerpDuration;
-				transform.position = Vector3.Lerp(startPosition, panAwayPosition, fraction);
-				if (fraction >= .99f) {
-					isPanningOut = false;
+
+			switch (thisCameraMode) {
+			case CameraMode.follow:
+				if (ignoreYAxis) {
+
+					transform.position -= (new Vector3 (transform.position.x, 0, transform.position.z) - new Vector3 (camPos.position.x, 0, camPos.position.z)) * smoothRate * Time.deltaTime;
+				} else {
+					transform.position -= (transform.position - camPos.position) * smoothRate * Time.deltaTime;
 				}
+				break;
+			case CameraMode.stationary:
+				break;
+			case CameraMode.lerpToDestination:
+				if (isPanningOut) {
+					float fraction;
+					fraction = (Time.time - lerpTimer) / lerpDuration;
+					transform.position = Vector3.Lerp (startPosition, panAwayPosition, fraction);
+					if (fraction >= .99f) {
+						isPanningOut = false;
+					}
+				}
+				break;
 			}
-			break;
 		}
 	}
 
+	void LateUpdate() {
+		if (!fixedUpdate) {
+			if (lookAtPlayer) {
+				transform.LookAt (new Vector3 (player.position.x, player.position.y + verticalLookOffset, player.position.z));
+			}
+
+			switch (thisCameraMode) {
+			case CameraMode.follow:
+				if (ignoreYAxis) {
+
+					transform.position -= (new Vector3 (transform.position.x, 0, transform.position.z) - new Vector3 (camPos.position.x, 0, camPos.position.z)) * smoothRate * Time.deltaTime;
+				} else {
+					transform.position -= (transform.position - camPos.position) * smoothRate * Time.deltaTime;
+				}
+				break;
+			case CameraMode.stationary:
+				break;
+			case CameraMode.lerpToDestination:
+				if (isPanningOut) {
+					float fraction;
+					fraction = (Time.time - lerpTimer) / lerpDuration;
+					transform.position = Vector3.Lerp (startPosition, panAwayPosition, fraction);
+					if (fraction >= .99f) {
+						isPanningOut = false;
+					}
+				}
+				break;
+			}
+		}
+	}
 
 	//call this to pan out and away from boat at end of level
 	public void PanOut() {
