@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class DieOnHitBoat : MonoBehaviour {
-	[SerializeField] GameObject explosion;
+//	[SerializeField] GameObject explosion;
 	// Use this for initialization
 	void Start () {
 	
@@ -10,8 +10,10 @@ public class DieOnHitBoat : MonoBehaviour {
 	
 	void OnTriggerEnter( Collider col ) {
 		if (col.tag == "Player") {
-			Instantiate (explosion,transform.position, Quaternion.identity);
+//			Instantiate (explosion,transform.position, Quaternion.identity);
 			Destroy (gameObject);
+			if (SoundtrackManager.s_instance != null)
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.laser);
 		}
 			
 	}

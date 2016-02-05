@@ -11,6 +11,8 @@ public class ApparentWindModuleGuiManager : MonoBehaviour {
 	public Text trueWindText;
 	public Text boatSpeedText;
 	public Text apparentWindText;
+	public Button highWindButton;
+	public Button lowWindButton;
 
 	private float currentWindSpeed;
 	private float currentBoatSpeed;

@@ -55,6 +55,7 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], true );
 		UpdatePageNumber();
 		UpdateButtons();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
 	}
 
 	public void ClickedPreviousPage() {
@@ -63,9 +64,13 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], true );
 		UpdatePageNumber();
 		UpdateButtons();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
 	}
 
 	public void ClickedDoneButton() {
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
 		// ~NOTE~ We should create a generic way for this to get back to the game. Perhaps a ModuleManager base class?
 		if( GameManager.s_instance != null ) {
 			switch( GameManager.s_instance.thisLevelState ) {
@@ -74,7 +79,7 @@ public class InstructionsPanel : MonoBehaviour {
 				break;
 
 			case GameManager.LevelState.Docking:
-				DockingManager.s_instance.StartGame();
+				DockingManager.s_instance.ClosedInstructionsPanel();
 				break;
 
 			case GameManager.LevelState.LearnToTack:
@@ -82,7 +87,7 @@ public class InstructionsPanel : MonoBehaviour {
 				break;
 
 			case GameManager.LevelState.ManOverboard:
-				MOBManager.s_instance.StartGame();
+				MOBManager.s_instance.ClosedInstructionsPanel();
 				break;
 
 			case GameManager.LevelState.Navigation:
@@ -94,7 +99,7 @@ public class InstructionsPanel : MonoBehaviour {
 				break;
 
 			case GameManager.LevelState.RightOfWay:
-				RightOfWayManager.s_instance.StartGame();
+				RightOfWayManager.s_instance.ClosedInstructionsPanel();
 				break;
 
 			case GameManager.LevelState.SailTrim:

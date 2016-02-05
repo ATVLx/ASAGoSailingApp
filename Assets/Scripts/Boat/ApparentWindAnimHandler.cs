@@ -36,6 +36,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 					RaycastHit hit;
 					ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 					if (Physics.Raycast(ray, out hit, 1000.0f)) {
+						
 						ApparentWindModuleManager.s_instance.hasClickedRun = false;
 
 						//checks which point of sail object was clicked for animation states
@@ -87,7 +88,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 		}
 
 		if( pOSModuleManager != null ) { 
-			if( pOSModuleManager.gameState == POSModuleManager.GameState.TestPage || pOSModuleManager.gameState == POSModuleManager.GameState.Playing || pOSModuleManager.gameState == POSModuleManager.GameState.Challenge ) {
+			if( pOSModuleManager.gameState == POSModuleManager.GameState.TestPage || pOSModuleManager.gameState == POSModuleManager.GameState.Playing ) {
 				//Cast ray at point of mouse click
 				if (Input.GetButtonDown("Fire1")) 
 				{
@@ -96,6 +97,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 					RaycastHit hit;
 					ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 					if (Physics.Raycast(ray, out hit, 1000.0f)){
+						
 						POSModuleManager.s_instance.hasClickedRun = false;
 						//checks which point of sail object was clicked for animation states
 						switch(hit.collider.gameObject.name){
@@ -110,14 +112,14 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						case "PTCloseHaul":
 							boatAnim.SetTrigger("PTCloseHaul");
 							pOSModuleManager.currAnimState = "Close Hauled Port Tack";
-							tackDescriptor.text = "Close Hauled on a " + "<color=#FF0000> port tack </color>";
+							tackDescriptor.text = "Close Hauled on a " + "<color=#00FF00> port tack </color>";
 							auxInfo.text = "the boat is sailing as close to the wind as possible (~45 degrees)";
 
 							break;
 						case "PTCloseReach":
 							boatAnim.SetTrigger("PTCloseReach");
 							pOSModuleManager.currAnimState = "Close Reach Port Tack";
-							tackDescriptor.text = "Close Reach on a " + "<color=#FF0000> port tack </color>";
+							tackDescriptor.text = "Close Reach on a " + "<color=#00FF00> port tack </color>";
 							auxInfo.text = "the point of sail between close-hauled and beam reach. (~60 degrees";
 
 							break;
@@ -125,7 +127,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						case "PTBeamReach":
 							boatAnim.SetTrigger ("PTBeamReach");
 							pOSModuleManager.currAnimState = "Beam Reach Port Tack";
-							tackDescriptor.text = "Beam Reach on a " + "<color=#FF0000> port tack </color>"; 
+							tackDescriptor.text = "Beam Reach on a " + "<color=#00FF00> port tack </color>"; 
 							auxInfo.text = "The wind is abeam of the boat (~90 degrees)";
 
 							break;
@@ -133,7 +135,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						case "PTBroadReach":
 							boatAnim.SetTrigger("PTBroadReach");
 							pOSModuleManager.currAnimState = "Broad Reach Port Tack";
-							tackDescriptor.text = "Broad Reach on a " + "<color=#FF0000> port tack </color>"; 
+							tackDescriptor.text = "Broad Reach on a " + "<color=#00FF00> port tack </color>"; 
 							auxInfo.text = "The point of sail between a beam reach and a run (~135 degrees)";
 							break;
 						case "Run":
@@ -147,26 +149,26 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						case "STBroadReach":
 							boatAnim.SetTrigger("STBroadReach");
 							pOSModuleManager.currAnimState = "Broad Reach Starboard Tack";
-							tackDescriptor.text = "Broad Reach on a " + "<color=#00FF00> starboard tack </color>";
+							tackDescriptor.text = "Broad Reach on a " + "<color=#FF0000> starboard tack </color>";
 							auxInfo.text = "The point of sail between a beam reach and a run (~135 degrees)";
 							break;
 						case "STBeamReach":
 							boatAnim.SetTrigger("STBeamReach");
 							pOSModuleManager.currAnimState = "Beam Reach Starboard Tack";
-							tackDescriptor.text = "Beam Reach on a " + "<color=#00FF00> starboard tack </color>"; 
+							tackDescriptor.text = "Beam Reach on a " + "<color=#FF0000> starboard tack </color>"; 
 							auxInfo.text = "The wind is abeam of the boat (~90 degrees)";
 
 							break;
 						case "STCloseReach":
 							boatAnim.SetTrigger("STCloseReach");
 							pOSModuleManager.currAnimState = "Close Reach Starboard Tack";
-							tackDescriptor.text = "Close Reach on a " + "<color=#00FF00> starboard tack </color>";
+							tackDescriptor.text = "Close Reach on a " + "<color=#FF0000> starboard tack </color>";
 							auxInfo.text = "The point of sail between close-hauled and beam reach. (~60 degrees)";
 							break;
 						case "STCloseHaul":
 							boatAnim.SetTrigger("STCloseHaul");
 							pOSModuleManager.currAnimState = "Close Hauled Starboard Tack";
-							tackDescriptor.text = "Close Hauled on a " + "<color=#00FF00> starboard tack </color>";  
+							tackDescriptor.text = "Close Hauled on a " + "<color=#FF0000> starboard tack </color>";  
 							auxInfo.text = "The boat is sailing as close to the wind as possible (~45 degrees)";
 							break;
 						}

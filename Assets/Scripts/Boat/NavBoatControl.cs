@@ -68,13 +68,18 @@ public class NavBoatControl : MonoBehaviour {
 	private float rudderLerpSpeed = 50f;
 	private float rudderStartVal = 0f;
 	private bool rudderIsLerping = false;
+	/// <summary>
+	/// The rudder slider selected. This requires the UI slider to have an OnPointerDown and OnPointerUp event to set this.
+	/// </summary>
 	private bool rudderSliderSelected = true;
 
 	[SerializeField] Transform respawnTransform;
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
-
+		Navigation newNav = new Navigation ();
+		newNav.mode = Navigation.Mode.None;
+		boomSlider.navigation = newNav;
 		// Subscribe to boom slider update event
 		if( boomSlider != null ){
 		}
@@ -141,7 +146,7 @@ public class NavBoatControl : MonoBehaviour {
 
 	private void HandleRudderRotation() {
 		float horizontalInput = Input.GetAxis( "Horizontal" );
-		if( rudderSliderSelected == false && horizontalInput == 0f) {
+		if( rudderSliderSelected == false && horizontalInput == 0f && rudderSlider.value != 0f ) {
 			if( rudderResetTimer >= rudderResetTimeBuffer && !rudderIsLerping ) {
 				rudderIsLerping = true;
 				rudderStartVal = rudderSlider.value;
@@ -151,7 +156,7 @@ public class NavBoatControl : MonoBehaviour {
 
 			if( rudderIsLerping ) {
 				float t =  1f -(( Mathf.Abs(rudderSlider.value) - ( rudderLerpSpeed*Time.deltaTime ) ) / Mathf.Abs(rudderStartVal));
-				if( t >= 0.99f ) {
+				if( t >= 0.95f ) {
 					rudderIsLerping = false;
 					rudderSlider.value = Mathf.Lerp( rudderStartVal, 0f, 1f );
 					return;
@@ -230,7 +235,6 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		else if (boomSlider.value < optimalAngle && angle > 165f){
 			isNegative = isNegative *((180-angle)/15f);
-			print ("angle " + angle);
 			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
 		}
 		else {
@@ -364,6 +368,8 @@ public class NavBoatControl : MonoBehaviour {
 		rudderSlider.interactable = false;
 		boomSlider.interactable = false;
 		controlsAreActive = false;
+		if (SoundtrackManager.s_instance != null)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.gybe);
 		if (MOBManager.s_instance != null) {
 			MOBManager.s_instance.Fail();
 		}
