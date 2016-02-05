@@ -53,6 +53,8 @@ public class TrimManager : MonoBehaviour {
 				submitButton.gameObject.SetActive( false );
 				thisTrimManagerState = TrimManagerState.Complete;
 				panel.SetActive (false);
+				if (SoundtrackManager.s_instance != null)
+					SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
 				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Trimming" );
 			}
 			break;
@@ -72,6 +74,8 @@ public class TrimManager : MonoBehaviour {
 	}
 
 	public void NextPOSButton () {
+		if (SoundtrackManager.s_instance != null)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		trimSlider.value = 80;
 		posIndex++;
 		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
