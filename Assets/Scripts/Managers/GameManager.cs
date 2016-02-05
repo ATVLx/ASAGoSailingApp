@@ -60,8 +60,9 @@ public class GameManager : MonoBehaviour {
 		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
 
 		if( TogglePause != null ) {
-			TogglePause( true );
+			//TogglePause( true );
 		}
+		Time.timeScale = 0f;
 
 		isPaused = true;
 		ToggleSlide( pauseMenu, true );
@@ -74,8 +75,9 @@ public class GameManager : MonoBehaviour {
 		ToggleSlide( pauseMenu, false );
 
 		if( TogglePause != null ) {
-			TogglePause( false );
+//			TogglePause( false );
 		}
+		Time.timeScale = 1f;
 	}
 
 	public void RestartModule() {
@@ -84,7 +86,7 @@ public class GameManager : MonoBehaviour {
 				ToggleSlide( pauseMenu, false );
 				LoadLevel( (int)thisLevelState );
 				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
-
+				Time.timeScale = 1f;
 			}
 		});
 	}
@@ -95,7 +97,7 @@ public class GameManager : MonoBehaviour {
 				ToggleSlide( pauseMenu, false );
 				LoadLevel( (int)LevelState.MainMenu );
 				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
-
+				Time.timeScale = 1f;
 			}
 		});
 	}
