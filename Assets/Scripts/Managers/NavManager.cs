@@ -20,6 +20,8 @@ public class NavManager : MonoBehaviour {
 	private float startTime;
 	public float elapsedTime;
 
+	[SerializeField] GameObject INarrows, OUTarrows, levelTrigger0, levelTrigger1;
+
 	void Awake() {
 		if (s_instance == null) {
 			s_instance = this;
@@ -31,15 +33,11 @@ public class NavManager : MonoBehaviour {
 	}
 
 	void Update () {
-		if( Input.GetKeyDown( KeyCode.Space ) )
-			ChangeState (GameState.Gameplay );
 
 		switch (gameState) 
 		{
 		case GameState.Instructions :
-			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
 				ChangeState( GameState.Gameplay );
-			}
 			break;
 
 		case GameState.Gameplay :
@@ -73,8 +71,6 @@ public class NavManager : MonoBehaviour {
 //			NavBoatControl.s_instance.arrow.SetActive(true);
 
 			NavBoatControl.s_instance.canMove = true;
-			NavBoatControl.s_instance.GetComponent<GhostPathRecorder>().StartRecording();
-			//beep.Play();
 			StartClock();
 			break;
 
@@ -125,7 +121,18 @@ public class NavManager : MonoBehaviour {
 			
 		}
 	}
-	
+
+	public void WinNavModule () {
+
+	}
+
+	public void HasReachedHarbor () {
+		INarrows.SetActive (false);
+		OUTarrows.SetActive (true);
+		levelTrigger0.SetActive (false);
+		levelTrigger1.SetActive (true);
+	}
+
 	public string ReturnCurrNavPointName() {
 		if (currNavPoint<navigationPoints.Length) {
 			return navigationPoints[currNavPoint].name;

@@ -32,7 +32,7 @@ public class NavBoatControl : MonoBehaviour {
 	protected float sailEffectiveness, optimalAngle;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 15000f;
+	private float boatMovementVelocityScalar = 18000f;
 	private float keelCoefficient = 10f;
 	private float velocityKeelCoefficient = 7f; //assumes max speed of 7
 	private Quaternion comeAboutStart, comeAboutEnd;
@@ -416,8 +416,8 @@ public class NavBoatControl : MonoBehaviour {
 
 	IEnumerator Sink() {
 		myRigidbody.mass *= 10f;
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = true;
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().text = "You crashed and sank, try again!";
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = true;
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().text = "You crashed and sank, try again!";
 		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.stationary;
 
 		yield return new WaitForSeconds (4f);
@@ -433,7 +433,7 @@ public class NavBoatControl : MonoBehaviour {
 		yield return new WaitForSeconds (.1f);
 		myRigidbody.isKinematic = false;
 
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = false;
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = false;
 		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.follow;
 		isCrashing = false;
 	}
