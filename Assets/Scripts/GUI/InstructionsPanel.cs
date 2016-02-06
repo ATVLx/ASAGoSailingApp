@@ -83,7 +83,7 @@ public class InstructionsPanel : MonoBehaviour {
 				break;
 
 			case GameManager.LevelState.LearnToTack:
-				TackManager.s_instance.StartGame();
+				TackManager.s_instance.ClosedInstructionsPanel();
 				break;
 
 			case GameManager.LevelState.ManOverboard:
