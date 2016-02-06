@@ -32,7 +32,7 @@ public class NavBoatControl : MonoBehaviour {
 	protected float sailEffectiveness, optimalAngle;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 12000f;
+	private float boatMovementVelocityScalar = 15000f;
 	private float keelCoefficient = 10f;
 	private float velocityKeelCoefficient = 7f; //assumes max speed of 7
 	private Quaternion comeAboutStart, comeAboutEnd;
