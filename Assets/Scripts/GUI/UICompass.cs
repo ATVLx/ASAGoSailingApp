@@ -9,7 +9,6 @@ public class UICompass : MonoBehaviour {
 	/// </summary>
 	public RectTransform childedCompassIndicator;
 	public Text headingText;
-
 	public Transform boatTransform;
 
 	void Start () {
@@ -32,7 +31,6 @@ public class UICompass : MonoBehaviour {
 
 	private void UpdateHeadingText( float boatRotation ) {
 		float trunkatedRotation = ((boatRotation + 22.5f) % 360f) / 45f;
-		Debug.Log( trunkatedRotation.ToString() );
 		if( trunkatedRotation < 1f ) {
 			headingText.text = "N";
 		} else if ( trunkatedRotation < 2f ) {
