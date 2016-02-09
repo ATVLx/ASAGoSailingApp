@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class TackManager : MonoBehaviour {
-	enum TackState {intro, gameplay, reset,win};
+	enum TackState {tackingIntro, jibingIntro, gameplay, reset, win};
 	TackState curState;
 	public static TackManager s_instance;
 	[SerializeField]
@@ -18,6 +19,12 @@ public class TackManager : MonoBehaviour {
 	[SerializeField]
 	Transform setup1transform, setup2transform;
 
+	[Header("UI")]
+	public GameObject tackingInstructionsUI;
+	public GameObject jibingInformationUI;
+	public GameObject jibingInstructionsUI;
+	public GameObject gameplayUI;
+
 	void Awake() {
 		if (s_instance == null) {
 			s_instance = this;
@@ -26,9 +33,14 @@ public class TackManager : MonoBehaviour {
 		}
 	}
 
+	void Start() {
+		curState = TackState.tackingIntro;
+	}
+
 	void Update () {
 		switch (curState) {
-		case TackState.intro:
+		case TackState.tackingIntro:
+		case TackState.jibingIntro:
 			{
 				if (switchToGamePlay) {
 					playerBoat.GetComponent<Rigidbody> ().isKinematic = false;
@@ -120,14 +132,37 @@ public class TackManager : MonoBehaviour {
 			setup1.SetActive (false);
 			playerBoat.transform.position = setup2transform.position;
 			playerBoat.transform.rotation = setup2transform.rotation;
-			yield return new WaitForSeconds (2f);
-			CameraMain ();
-			switchToGamePlay = true;
+			// UI
+			gameplayUI.SetActive( false );
+			jibingInformationUI.SetActive( true );
+			playerBoat.GetComponent<Rigidbody>().isKinematic = true;
+			curState = TackState.jibingIntro;
 
-
+//			yield return new WaitForSeconds (2f);
+//			CameraMain ();
+//			switchToGamePlay = true;
 		} else {
 			curState = TackState.win;
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Tacking" );
 		}
+	}
 
+	public void ClosedInstructionsPanel() {
+		switch( curState ) {
+		case TackState.tackingIntro:
+			{
+				tackingInstructionsUI.SetActive( false );
+				gameplayUI.SetActive( true );
+				StartGame();
+				break;
+			}
+		case TackState.jibingIntro:
+			{
+				jibingInstructionsUI.SetActive( false );
+				gameplayUI.SetActive( true );
+				StartGame();
+				break;
+			}
+		}
 	}
 }

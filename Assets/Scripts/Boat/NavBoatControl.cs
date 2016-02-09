@@ -32,7 +32,7 @@ public class NavBoatControl : MonoBehaviour {
 	protected float sailEffectiveness, optimalAngle;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 12000f;
+	private float boatMovementVelocityScalar = 18000f;
 	private float keelCoefficient = 10f;
 	private float velocityKeelCoefficient = 7f; //assumes max speed of 7
 	private Quaternion comeAboutStart, comeAboutEnd;
@@ -62,10 +62,24 @@ public class NavBoatControl : MonoBehaviour {
 
 	private float boatThrust = 0f;
 
+	// Boat rudders reset
+	private float rudderResetTimeBuffer = .2f;
+	private float rudderResetTimer = 0f;
+	private float rudderLerpSpeed = 50f;
+	private float rudderStartVal = 0f;
+	private bool rudderIsLerping = false;
+	/// <summary>
+	/// The rudder slider selected. This requires the UI slider to have an OnPointerDown and OnPointerUp event to set this.
+	/// </summary>
+	private bool rudderSliderSelected = true;
+
+	[SerializeField] Transform respawnTransform;
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
-
+		Navigation newNav = new Navigation ();
+		newNav.mode = Navigation.Mode.None;
+		boomSlider.navigation = newNav;
 		// Subscribe to boom slider update event
 		if( boomSlider != null ){
 		}
@@ -89,11 +103,10 @@ public class NavBoatControl : MonoBehaviour {
 	}
 
 	void Update () {
-		velocity.text = "Knots: " + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
-
+		//velocity.text = "Knots: "+ Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
+//		velocity.text = "" + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 		HandleRudderRotation();
 		IdentifyPointOfSail();
-
 	}
 
 	void FixedUpdate () {	
@@ -123,20 +136,49 @@ public class NavBoatControl : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Sets the rudderSliderSelected bool true or false. This methos is called externally by the OnPointerDown() and OnPointerUp() event triggers on the rudderSlider
+	/// </summary>
+	/// <param name="selectionState">If set to <c>true</c> it indicates that the rudderSlider was selected.</param>
+	public void RudderSliderValueWasChanged( bool selectionState ) {
+		rudderSliderSelected = selectionState;
+	}
+
 	private void HandleRudderRotation() {
 		float horizontalInput = Input.GetAxis( "Horizontal" );
-		float rudderDirectionScalar = 0f;
-
-		if( controlsAreActive ) {
-			if( horizontalInput < 0f ) {
-				// If player is pressing left
-				rudderDirectionScalar = 1f;
-			} else if( horizontalInput > 0f ) {
-				// If player is pressing right
-				rudderDirectionScalar = -1f;
+		if( rudderSliderSelected == false && horizontalInput == 0f && rudderSlider.value != 0f ) {
+			if( rudderResetTimer >= rudderResetTimeBuffer && !rudderIsLerping ) {
+				rudderIsLerping = true;
+				rudderStartVal = rudderSlider.value;
+			} else {
+				rudderResetTimer += Time.deltaTime;
 			}
+
+			if( rudderIsLerping ) {
+				float t =  1f -(( Mathf.Abs(rudderSlider.value) - ( rudderLerpSpeed*Time.deltaTime ) ) / Mathf.Abs(rudderStartVal));
+				if( t >= 0.95f ) {
+					rudderIsLerping = false;
+					rudderSlider.value = Mathf.Lerp( rudderStartVal, 0f, 1f );
+					return;
+				}
+				rudderSlider.value = Mathf.Lerp( rudderStartVal, 0f, t );
+			}				
+		} else {
+			rudderIsLerping = false;
+			rudderResetTimer = 0f;
+			float rudderDirectionScalar = 0f;
+
+			if( controlsAreActive ) {
+				if( horizontalInput < 0f ) {
+					// If player is pressing left
+					rudderDirectionScalar = 1f;
+				} else if( horizontalInput > 0f ) {
+					// If player is pressing right
+					rudderDirectionScalar = -1f;
+				}
+			}
+			rudderSlider.value += rudderRotationSpeed*rudderDirectionScalar*Time.deltaTime;
 		}
-		rudderSlider.value += rudderRotationSpeed*rudderDirectionScalar*Time.deltaTime;
 		rudderL.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 		rudderR.localRotation = Quaternion.Euler( new Vector3( 0f, rudderSlider.value, 0f ) );
 	}
@@ -166,7 +208,7 @@ public class NavBoatControl : MonoBehaviour {
 	protected void ApplyForwardThrust () {
 		myRigidbody.AddForce( transform.forward * boatThrust);
 	}
-
+	#region SailAnimPlusKeel
 	protected void SetSailAnimator () {
 		//sail animator handles luffing etc...
 		float isNegative = -1f;//which side of the wind are we on -1 is 0-180 1 is 180-360
@@ -193,7 +235,6 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		else if (boomSlider.value < optimalAngle && angle > 165f){
 			isNegative = isNegative *((180-angle)/15f);
-			print ("angle " + angle);
 			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
 		}
 		else {
@@ -211,7 +252,8 @@ public class NavBoatControl : MonoBehaviour {
 		newRotation = new Vector3 (newRotation.x, newRotation.y, zAxisRotation*keelCoefficient*isNegative*myRigidbody.velocity.magnitude/velocityKeelCoefficient);
 		boatModel.transform.rotation = Quaternion.Euler (newRotation); 
 	}
-	
+	#endregion
+	#region ApplyBoatRotation
 	private void ApplyBoatRotation() {
 		// Depending on forward velocity of the boat, it will rotate faster or slower.
 		// We will have a base level rotation speed for when the boat is still.
@@ -224,13 +266,17 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		if (Mathf.Abs (rudderSlider.value) > rudderNullZone * maxRudderRotation) {
 			myRigidbody.AddTorque (-Vector3.up * rudderSlider.value * turnStrength * velocityScalar);
-		} else {
-//			myRigidbody.angularVelocity = Vector3.zero;
 		}
 	}
-
+	#endregion
+	#region SetPointOfSailText
 	protected void IdentifyPointOfSail() {
-		if ((angleWRTWind < 360f && angleWRTWind > 315f) ||
+		if( pointOfSail == null ) {
+			Debug.LogWarning( gameObject.name +"'s "+ this.GetType().ToString() +" is missing a reference to the \"Point of Sail\" Text object." );
+			return;
+		}
+
+		if ((angleWRTWind < 360f && angleWRTWind > 330f) ||
 		    (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "In Irons";
 		}
@@ -266,7 +312,8 @@ public class NavBoatControl : MonoBehaviour {
 			pointOfSail.text = "Close-Hauled Port Tack";
 		}
 	}
-
+	#endregion
+	#region MastRotation
 	protected void MastRotation() {
 
 		//handles jibes, and mast rotation
@@ -316,7 +363,8 @@ public class NavBoatControl : MonoBehaviour {
 		}
 
 	}
-	
+	#endregion
+	#region Jibe
 	protected virtual void Jibe(float negative) {
 		isJibing = true;
 		lerpTimer = Time.time;
@@ -325,11 +373,14 @@ public class NavBoatControl : MonoBehaviour {
 		rudderSlider.interactable = false;
 		boomSlider.interactable = false;
 		controlsAreActive = false;
+		if (SoundtrackManager.s_instance != null)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.gybe);
 		if (MOBManager.s_instance != null) {
 			MOBManager.s_instance.Fail();
 		}
 	}
-
+	#endregion
+	#region ApplySailTrim
 	protected void ApplySailTrim() {
 //		if( controlsAreActive ) {
 //			float input = Input.GetAxis( "Vertical" );
@@ -361,7 +412,8 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		boom.localRotation = Quaternion.LookRotation (newBoomDirection);
 	}
-
+	#endregion
+	#region SinkMechanics
 	private void BoatHasCrashed() {
 		isCrashing = true;
 		StartCoroutine ("Sink");
@@ -369,30 +421,33 @@ public class NavBoatControl : MonoBehaviour {
 
 	IEnumerator Sink() {
 		myRigidbody.mass *= 10f;
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = true;
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().text = "You crashed and sank, try again!";
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = true;
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().text = "You crashed and sank, try again!";
 		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.stationary;
 
 		yield return new WaitForSeconds (4f);
-		transform.position = Vector3.zero;
+		if (respawnTransform == null) {
+			transform.position = Vector3.zero;
+			Debug.LogWarning ("No Respawn Transformed Assigned to NavBoatControl");
+		} else {
+			transform.position = respawnTransform.position;
+		}
 		transform.rotation = Quaternion.identity;
 		myRigidbody.mass /= 10f;
 		myRigidbody.isKinematic = true;
 		yield return new WaitForSeconds (.1f);
 		myRigidbody.isKinematic = false;
 
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = false;
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = false;
 		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.follow;
 		isCrashing = false;
-
-
 	}
-
+	#endregion
 	void OnCollisionEnter (Collision thisCollision) {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
 			BoatHasCrashed ();
 		}
-		if (thisCollision.gameObject.tag == "ROWFail") {
+		if (thisCollision.gameObject.tag == "ROWFail" ) {
 			RightOfWayManager.s_instance.Fail ();
 		}
 	}

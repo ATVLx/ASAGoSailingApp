@@ -33,15 +33,16 @@ public class InstructionsPanel : MonoBehaviour {
 	/// <param name="cG">Reference to CanvasGroup instance.</param>
 	/// <param name="turnOn">If set to <c>true</c> toggles CanvasGroup on.</param>
 	private void ToggleSlide( CanvasGroup cG, bool turnOn ) {
-		if( turnOn ) {
-			cG.alpha = 1f;
-			cG.interactable = true;
-			cG.blocksRaycasts = true;
-		} else {
-			cG.alpha = 0f;
-			cG.interactable = false;
-			cG.blocksRaycasts = false;
-		}
+		cG.gameObject.SetActive( turnOn );
+//		if( turnOn ) {
+//			cG.alpha = 1f;
+//			cG.interactable = true;
+//			cG.blocksRaycasts = true;
+//		} else {
+//			cG.alpha = 0f;
+//			cG.interactable = false;
+//			cG.blocksRaycasts = false;
+//		}
 	}
 
 	private void UpdatePageNumber() {
@@ -54,6 +55,7 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], true );
 		UpdatePageNumber();
 		UpdateButtons();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
 	}
 
 	public void ClickedPreviousPage() {
@@ -62,27 +64,50 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], true );
 		UpdatePageNumber();
 		UpdateButtons();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
 	}
 
 	public void ClickedDoneButton() {
-		// TODO Create a generic way for this to get back to the game. Perhaps a ModuleManager base class?
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
+		// ~NOTE~ We should create a generic way for this to get back to the game. Perhaps a ModuleManager base class?
 		if( GameManager.s_instance != null ) {
 			switch( GameManager.s_instance.thisLevelState ) {
 			case GameManager.LevelState.ApparentWind:
 				ApparentWindModuleManager.s_instance.ChangeState( ApparentWindModuleManager.GameState.Playing );
 				break;
+
 			case GameManager.LevelState.Docking:
+				DockingManager.s_instance.ClosedInstructionsPanel();
 				break;
+
 			case GameManager.LevelState.LearnToTack:
+				TackManager.s_instance.ClosedInstructionsPanel();
 				break;
+
+			case GameManager.LevelState.ManOverboard:
+				MOBManager.s_instance.ClosedInstructionsPanel();
+				break;
+
 			case GameManager.LevelState.Navigation:
+				NavManager.s_instance.StartGame();
 				break;
+
 			case GameManager.LevelState.POS:
+				POSModuleManager.s_instance.ClickStart();
 				break;
+
+			case GameManager.LevelState.RightOfWay:
+				RightOfWayManager.s_instance.ClosedInstructionsPanel();
+				break;
+
 			case GameManager.LevelState.SailTrim:
+				TrimManager.s_instance.BeginTutorial();
 				break;
 			}
 		}
+		gameObject.SetActive( false );
 	}
 
 	/// <summary>

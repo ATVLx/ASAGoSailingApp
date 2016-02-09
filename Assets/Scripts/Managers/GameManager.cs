@@ -43,27 +43,33 @@ public class GameManager : MonoBehaviour {
 	}
 		
 	public void LoadLevel(int levelIndex) {
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
 		thisLevelState = (LevelState)levelIndex;
 		SceneManager.LoadScene (levelIndex);
+		print ("LEVEL WAS LOADED " + levelIndex);
+
+		if (levelIndex == 1) {
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.music);
+			SoundtrackManager.s_instance.StartCoroutine("FadeOutAudioSource",SoundtrackManager.s_instance.oceanBreeze);
+		}
 	}
 
 	#region UI Logic
 	public void PressedPause() {
-		if( TogglePause != null ) {
-			TogglePause( true );
-		}
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+		if( thisLevelState != LevelState.POS )
+			Time.timeScale = 0f;
 
 		isPaused = true;
 		ToggleSlide( pauseMenu, true );
 	}
 
 	public void ResumeGame() {
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
 		isPaused = false;
 		ToggleSlide( pauseMenu, false );
-
-		if( TogglePause != null ) {
-			TogglePause( false );
-		}
+		Time.timeScale = 1f;
 	}
 
 	public void RestartModule() {
@@ -71,6 +77,8 @@ public class GameManager : MonoBehaviour {
 			if( confirmed ) {
 				ToggleSlide( pauseMenu, false );
 				LoadLevel( (int)thisLevelState );
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+				Time.timeScale = 1f;
 			}
 		});
 	}
@@ -80,6 +88,8 @@ public class GameManager : MonoBehaviour {
 			if( confirmed ) {
 				ToggleSlide( pauseMenu, false );
 				LoadLevel( (int)LevelState.MainMenu );
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+				Time.timeScale = 1f;
 			}
 		});
 	}
@@ -87,6 +97,8 @@ public class GameManager : MonoBehaviour {
 	public void PressedOptionsButton() {
 		ToggleSlide( pauseMenu, false );
 		ToggleSlide( optionsMenu, true );
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
 	}
 
 	/// <summary>
@@ -95,6 +107,8 @@ public class GameManager : MonoBehaviour {
 	public void ReturnToPauseScreen() {
 		ToggleSlide( optionsMenu, false );
 		ToggleSlide( pauseMenu, true );
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+
 	}
 
 	public void UpdatedMusicVolume() {

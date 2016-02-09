@@ -5,6 +5,7 @@ using UnityEngine.UI;
 	This class handles game flow in the Trim Module
 */
 public class TrimManager : MonoBehaviour {
+	public static TrimManager s_instance;
 
 	enum TrimManagerState {Intro, Playing, Complete};
 	TrimManagerState thisTrimManagerState;
@@ -12,21 +13,29 @@ public class TrimManager : MonoBehaviour {
 	bool answerSubmitted;
 	int posIndex = 0;
 	[SerializeField]
-	Button submitButton, gotoNextModule;
+	Button submitButton;
 	[SerializeField]
 	Slider sailEfficiencySlider, trimSlider;
 	[SerializeField]
-	GameObject introText,goodJob,complete,panel;
+	GameObject introText,goodJob,gameplayPanel,instructionsPanel;
 
 	//switches
 	bool switchToPlaying, switchToComplete;
 
-	// Use this for initialization
+	void Awake() {
+		if (s_instance == null) {
+			s_instance = this;
+		}
+		else {
+			Destroy(gameObject);
+			Debug.LogWarning( "Deleting "+ gameObject.name +" because it is a duplicate TrimManager." );
+		}
+	}
+		
 	void Start () {
 		submitButton.gameObject.SetActive(false);
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		switch (thisTrimManagerState) {
 		case TrimManagerState.Intro: 
@@ -42,10 +51,11 @@ public class TrimManager : MonoBehaviour {
 			if (switchToComplete) {
 				switchToComplete = false;
 				submitButton.gameObject.SetActive( false );
-				gotoNextModule.gameObject.SetActive (true);
-				complete.SetActive (true);
 				thisTrimManagerState = TrimManagerState.Complete;
-				panel.SetActive (false);
+				gameplayPanel.SetActive( false );
+				if (SoundtrackManager.s_instance != null)
+					SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
+				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Trimming" );
 			}
 			break;
 
@@ -56,17 +66,21 @@ public class TrimManager : MonoBehaviour {
 	}
 
 	public void BeginTutorial () {
-		introText.GetComponent<Fader> ().StartFade ();
+		instructionsPanel.SetActive (true);
+		gameplayPanel.SetActive (true);
 		posIndex = 0;
 		GameObject.FindGameObjectWithTag("Player").transform.rotation = Quaternion.Euler(new Vector3(0,listOfPositions[posIndex],0));
 		switchToPlaying = true;
 	}
 
 	public void NextPOSButton () {
+		if (SoundtrackManager.s_instance != null)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		trimSlider.value = 80;
 		posIndex++;
+		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		if (posIndex > 2 && posIndex < 6) {
-			trimSlider.value = 0;
+			trimSlider.value = 5;
 
 		}
 		goodJob.GetComponent<Fader> ().StartFade ();

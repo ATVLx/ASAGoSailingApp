@@ -1,0 +1,178 @@
+fileFormatVersion: 2
+guid: f5d893e0f3f00464d8726464897ee076
+timeCreated: 1454631307
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: beach
+    100002: boundaries
+    100004: city
+    100006: dock_01
+    100008: dock_02
+    100010: fake_forest
+    100012: house_01
+    100014: house_02
+    100016: house_03
+    100018: land
+    100020: lighthouse
+    100022: loadingRamp
+    100024: //RootNode
+    100026: pCylinder3
+    100028: pCylinder4
+    100030: pCylinder5
+    100032: stand_01
+    100034: stand_02
+    100036: stand_03
+    100038: town_01
+    100040: town_02
+    100042: walkway
+    400000: beach
+    400002: boundaries
+    400004: city
+    400006: dock_01
+    400008: dock_02
+    400010: fake_forest
+    400012: house_01
+    400014: house_02
+    400016: house_03
+    400018: land
+    400020: lighthouse
+    400022: loadingRamp
+    400024: //RootNode
+    400026: pCylinder3
+    400028: pCylinder4
+    400030: pCylinder5
+    400032: stand_01
+    400034: stand_02
+    400036: stand_03
+    400038: town_01
+    400040: town_02
+    400042: walkway
+    2300000: beach
+    2300002: boundaries
+    2300004: city
+    2300006: dock_01
+    2300008: dock_02
+    2300010: fake_forest
+    2300012: house_01
+    2300014: house_02
+    2300016: house_03
+    2300018: land
+    2300020: lighthouse
+    2300022: loadingRamp
+    2300024: pCylinder3
+    2300026: pCylinder4
+    2300028: pCylinder5
+    2300030: stand_01
+    2300032: stand_02
+    2300034: stand_03
+    2300036: town_01
+    2300038: town_02
+    2300040: walkway
+    3300000: beach
+    3300002: boundaries
+    3300004: city
+    3300006: dock_01
+    3300008: dock_02
+    3300010: fake_forest
+    3300012: house_01
+    3300014: house_02
+    3300016: house_03
+    3300018: land
+    3300020: lighthouse
+    3300022: loadingRamp
+    3300024: pCylinder3
+    3300026: pCylinder4
+    3300028: pCylinder5
+    3300030: stand_01
+    3300032: stand_02
+    3300034: stand_03
+    3300036: town_01
+    3300038: town_02
+    3300040: walkway
+    4300000: house_02
+    4300002: house_01
+    4300004: pCylinder3
+    4300006: pCylinder4
+    4300008: pCylinder5
+    4300010: loadingRamp
+    4300012: lighthouse
+    4300014: dock_02
+    4300016: house_03
+    4300018: stand_01
+    4300020: dock_01
+    4300022: town_01
+    4300024: town_02
+    4300026: boundaries
+    4300028: land
+    4300030: city
+    4300032: beach
+    4300034: fake_forest
+    4300036: stand_02
+    4300038: walkway
+    4300040: stand_03
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1.5
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

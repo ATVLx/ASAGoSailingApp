@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class POSModuleManager : MonoBehaviour {
 
 	//Manages the Points of Sail Module
-	public enum GameState {Idle, Instructions, TestPage, Config, ImageLoad, Intro, SetRound, Playing, CheckAnswer, WrongAnswer, CorrectAnswer, WinScreen, Challenge};
+	public enum GameState {Idle, Instructions, TestPage, Config, ImageLoad, Intro, SetRound, Playing, CheckAnswer, WrongAnswer, CorrectAnswer, WinScreen};
 	public GameState gameState;
 	public List<Term> listOfPOSTerms,tempListPointTerms,randomListPoints;
 	List<pointOfSail> allPoints;
@@ -27,16 +27,15 @@ public class POSModuleManager : MonoBehaviour {
 	float currMastery;
 	public Vector3 directionOfWind = new Vector3 (1f,0,1f);
 	//public AudioSource wrong, correct, beep, waterPaddle;
-	public GameObject circle1, circle2;
+	public GameObject circle1;
 	bool clickedStart;
 
-	public GameObject IdlePage, TestPage, InstructionsPage, GameplayPage, winPage, challengePage;
+	[SerializeField] GameObject learningPanel, gameplayPanel, challengeInstruction;
 	GameObject currentPage;
 
+	[Header("UI")]
 	public TextAsset pointsOfSailTxt;
 	public Slider masteryMeter;
-	public Text youbeatlevel2;
-	public Text endOfLevel2Text;
 	public Text currentQuestion;
 	public Text wrongAnswerText;
 	public Text correctText;
@@ -54,7 +53,10 @@ public class POSModuleManager : MonoBehaviour {
 		else {
 			Destroy(gameObject);
 		}
-		currentPage = IdlePage;
+	}
+
+	void Start () {
+		currAnimState = "In Irons";
 	}
 
 	public void MainMenu() {
@@ -75,31 +77,19 @@ public class POSModuleManager : MonoBehaviour {
 		}
 		switch (gameState) {
 		case GameState.Idle :
-			if (clickedStart){
-				clickedStart = false;	
-				IdlePage.SetActive(false);
-				TestPage.SetActive(true);
+			
+
 				gameState = GameState.TestPage;
-				//beep.Play();
-			}
+
 			break;
 	
 		case GameState.TestPage :
-			if (Input.GetKeyDown(KeyCode.Space)){
-				TestPage.SetActive(false);
-				InstructionsPage.SetActive(true);
-				gameState = GameState.Instructions;
-				//beep.Play();
-			}
+
 			break;
 		case GameState.Instructions :
-			if (Input.GetKeyDown(KeyCode.Space)){
-				InstructionsPage.SetActive(false);
-				GameplayPage.SetActive(true);
-				gameState = GameState.Config;
-				//beep.Play();
-				Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
-			}
+
+			gameState = GameState.Config;
+			Camera.main.GetComponent<QuaternionLerp>().StartLerp(5f);
 			break;
 		case GameState.Config :
 			numberWrong = 0;
@@ -139,21 +129,9 @@ public class POSModuleManager : MonoBehaviour {
 			CheckForSequenceMastery(); //eliminate mastered sequences
 			InitiateTerm();
 			gameState = GameState.Playing;
-			circle2.SetActive(true);
 			circle1.SetActive(false);
 			break;
 		case GameState.Playing :
-			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
-				gameState = GameState.CheckAnswer;
-			}
-			break;
-		case GameState.Challenge :
-			if (Input.GetKeyDown(KeyCode.Space)){ //when boat has been rotated
-				gameState = GameState.Config;
-				//beep.Play ();
-				challengePage.SetActive(false);
-				GameplayPage.SetActive(true);
-			}
 			break;
 		case GameState.CheckAnswer :
 			if (Checker()) {
@@ -170,6 +148,8 @@ public class POSModuleManager : MonoBehaviour {
 		case GameState.CorrectAnswer :
 			if (AnswerCorrect()){
 				WinRound();
+				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
+
 				gameState = GameState.WinScreen;
 			}
 			else {
@@ -182,15 +162,10 @@ public class POSModuleManager : MonoBehaviour {
 			gameState = GameState.Playing;
 			break;
 			
-		case GameState.WinScreen :
-			GameplayPage.SetActive(false);
-			winPage.SetActive(true);
-			if (currentLevel == 1) {
-				thisBreatheAnimation.enabled = true;
-				thisColorChange.enabled = true;
-				youbeatlevel2.text = "you beat level 2";
-				endOfLevel2Text.text = "Click here to play level 2 again";
-			}
+		case GameState.WinScreen:
+
+			gameplayPanel.SetActive (false);
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
 			winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
 			break;
 		}
@@ -214,8 +189,7 @@ public class POSModuleManager : MonoBehaviour {
 	}
 	bool AnswerCorrect(){
 		circle1.SetActive(false);
-		circle2.SetActive(true);
-		//correct.Play ();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		wrongAnswerText.enabled = false;
 		correctText.enabled = true;
 		correctText.GetComponent<Fader>().StartFadeOut();
@@ -230,12 +204,11 @@ public class POSModuleManager : MonoBehaviour {
 	}
 	void AnswerWrong(){
 		numberWrong++;
-		circle2.SetActive(false);
 		circle1.SetActive(true);
-		//wrong.Play ();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
 		AdjustMasteryMeter(false);
 		timer.timesUp = true;
-		timer.pause = true;
+		timer.timeLeft = 0f;
 		DisplayFeedbackText();
 	}
 
@@ -247,6 +220,8 @@ public class POSModuleManager : MonoBehaviour {
 		//Nope, you selected this position, try again
 		wrongAnswerText.enabled = true;
 		wrongAnswerText.text = "Incorrect, you selected: " + currAnimState;
+		wrongAnswerText.gameObject.GetComponent<Fader>().StartFadeOut(5f);
+
 
 	}
 	void GotoNextModule(){
@@ -276,7 +251,7 @@ public class POSModuleManager : MonoBehaviour {
 			currMastery+=x.mastery;
 		}
 		masteryMeter.value = (float)(currMastery)/totalMastery;
-		masteryMeter.transform.GetChild(1).transform.GetChild(1).GetComponent<Text>().text = "Mastery: " + Mathf.FloorToInt(masteryMeter.value*100f).ToString()+"%";
+	//	masteryMeter.transform.GetChild(1).transform.GetChild(1).GetComponent<Text>().text = "Mastery: " + Mathf.FloorToInt(masteryMeter.value*100f).ToString()+"%";
 	}
 
 	bool isCameraRotating;
@@ -294,12 +269,29 @@ public class POSModuleManager : MonoBehaviour {
 		isCameraRotating = true;
 	}
 
+	public void SubmitAnswer () {
+		gameState = GameState.CheckAnswer;
+	}
+
+	public void SwitchToLearningMode () {
+		learningPanel.SetActive (true);
+		gameState = GameState.TestPage;
+		circle1.SetActive (true);
+
+	}
+
+	public void SwitchToTestMode () {
+		gameState = GameState.Config;
+
+		gameplayPanel.SetActive (true);
+		circle1.SetActive (false);
+
+	}
+
 	public void SwitchToChallenge () {
-		//beep.Play ();
-		IdlePage.SetActive (false);
-		GameplayPage.SetActive (false);
-		challengePage.SetActive (true);
-		winPage.SetActive (false);
+		circle1.SetActive (false);
+		gameplayPanel.SetActive (true);
+
 
 		currentLevel = 1;
 		if (gameState == GameState.WinScreen) {
@@ -311,7 +303,7 @@ public class POSModuleManager : MonoBehaviour {
 				x.mastery = 0;
 			}
 		}
-		gameState = GameState.Challenge;
+		gameState = GameState.Config;
 	}
 
 	public void CheckForSequenceMastery() {
@@ -333,5 +325,4 @@ public class POSModuleManager : MonoBehaviour {
 			}
 		}
 	}
-
 }
