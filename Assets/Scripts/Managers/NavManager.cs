@@ -2,39 +2,33 @@
 using System.Collections;
 using UnityEngine.UI;
 
-/*
-	This class handles the State machine for the boat navigation module
-  	it also handles the game flow and level progress logic
-*/
-
-
+/// <summary>
+/// Nav manager. This class handles the State machine for the boat navigation module it also handles the game flow and level progress logic.
+/// </summary>
 public class NavManager : MonoBehaviour {
 
 	public static NavManager s_instance;
 
 	public enum GameState {Instructions, Gameplay, Win};
-	public GameState gameState = GameState.Gameplay;
+	public GameState gameState = GameState.Instructions;
 	public GameObject[] navigationPoints;
 	public bool hasReachedAllTargets;
 	public int currNavPoint = 0;
 	private float startTime;
 	public float elapsedTime;
-	[SerializeField] Text timerText;
 	[SerializeField] Rigidbody boat;
 	[SerializeField] GameObject INarrows, OUTarrows, levelTrigger0, levelTrigger1;
+	[Header("UI")]
+	[SerializeField] Text timerText;
+	[SerializeField] GameObject GameplayUI;
 
 	void Awake() {
 		if (s_instance == null) {
 			s_instance = this;
-			DontDestroyOnLoad( this.gameObject );
 		}
 		else {
 			Destroy(gameObject);
 		}
-	}
-
-	void Start () {
-		StartGame ();
 	}
 
 	void Update () {
@@ -47,7 +41,6 @@ public class NavManager : MonoBehaviour {
 		case GameState.Gameplay :
 			elapsedTime = Time.time - startTime;
 			SetTimerText(false);
-
 			break;
 
 		case GameState.Win :
@@ -60,6 +53,7 @@ public class NavManager : MonoBehaviour {
 		{
 
 		case GameState.Gameplay:
+			GameplayUI.SetActive( true );
 			break;
 
 		case GameState.Win:
@@ -76,9 +70,8 @@ public class NavManager : MonoBehaviour {
 ////				rating = 1;
 //			}
 			break;
-
+		}
 		gameState = newState;
-	}
 	}
 
 	public void SwitchNavigationPoint() {
@@ -130,6 +123,6 @@ public class NavManager : MonoBehaviour {
 	public void StartGame () {
 		boat.isKinematic = false;
 		startTime = Time.time;
-
+		ChangeState( GameState.Gameplay );
 	}
 }
