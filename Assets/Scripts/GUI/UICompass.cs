@@ -8,7 +8,7 @@ public class UICompass : MonoBehaviour {
 	/// The childed compass indicator.
 	/// </summary>
 	public RectTransform childedCompassIndicator;
-
+	public Text headingText;
 	public Transform boatTransform;
 
 	void Start () {
@@ -23,7 +23,30 @@ public class UICompass : MonoBehaviour {
 	}
 
 	void LateUpdate () {
-		Quaternion newRot = Quaternion.Euler( 0f, 0f, boatTransform.rotation.eulerAngles.y );
+		float boatYRot = boatTransform.rotation.eulerAngles.y;
+		UpdateHeadingText( boatYRot );
+		Quaternion newRot = Quaternion.Euler( 0f, 0f, -boatYRot );
 		childedCompassIndicator.rotation = newRot;
+	}
+
+	private void UpdateHeadingText( float boatRotation ) {
+		float trunkatedRotation = ((boatRotation + 22.5f) % 360f) / 45f;
+		if( trunkatedRotation < 1f ) {
+			headingText.text = "N";
+		} else if ( trunkatedRotation < 2f ) {
+			headingText.text = "NE";
+		} else if ( trunkatedRotation < 3f ) {
+			headingText.text = "E";
+		} else if ( trunkatedRotation < 4f ) {
+			headingText.text = "SE";
+		} else if ( trunkatedRotation < 5f ) {
+			headingText.text = "S";
+		} else if ( trunkatedRotation < 6f ) {
+			headingText.text = "SW";
+		} else if ( trunkatedRotation < 7f ) {
+			headingText.text = "W";
+		} else  {
+			headingText.text = "NW";
+		}
 	}
 }
