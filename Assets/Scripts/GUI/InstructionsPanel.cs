@@ -91,7 +91,7 @@ public class InstructionsPanel : MonoBehaviour {
 				break;
 
 			case GameManager.LevelState.Navigation:
-				NavManager.s_instance.ChangeState( NavManager.GameState.Gameplay );
+				NavManager.s_instance.StartGame();
 				break;
 
 			case GameManager.LevelState.POS:
