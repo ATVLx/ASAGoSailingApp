@@ -17,7 +17,7 @@ public class TrimManager : MonoBehaviour {
 	[SerializeField]
 	Slider sailEfficiencySlider, trimSlider;
 	[SerializeField]
-	GameObject introText,goodJob,panel,gameplayPanel,instructionsPanel;
+	GameObject introText,goodJob,gameplayPanel,instructionsPanel;
 
 	//switches
 	bool switchToPlaying, switchToComplete;
@@ -52,7 +52,7 @@ public class TrimManager : MonoBehaviour {
 				switchToComplete = false;
 				submitButton.gameObject.SetActive( false );
 				thisTrimManagerState = TrimManagerState.Complete;
-				panel.SetActive (false);
+				gameplayPanel.SetActive( false );
 				if (SoundtrackManager.s_instance != null)
 					SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
 				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Trimming" );
