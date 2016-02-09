@@ -271,6 +271,11 @@ public class NavBoatControl : MonoBehaviour {
 	#endregion
 	#region SetPointOfSailText
 	protected void IdentifyPointOfSail() {
+		if( pointOfSail == null ) {
+			Debug.LogWarning( gameObject.name +"'s "+ this.GetType().ToString() +" is missing a reference to the \"Point of Sail\" Text object." );
+			return;
+		}
+
 		if ((angleWRTWind < 360f && angleWRTWind > 330f) ||
 		    (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "In Irons";
@@ -442,7 +447,7 @@ public class NavBoatControl : MonoBehaviour {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
 			BoatHasCrashed ();
 		}
-		if (thisCollision.gameObject.tag == "ROWFail") {
+		if (thisCollision.gameObject.tag == "ROWFail" ) {
 			RightOfWayManager.s_instance.Fail ();
 		}
 	}
