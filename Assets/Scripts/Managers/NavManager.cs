@@ -2,28 +2,29 @@
 using System.Collections;
 using UnityEngine.UI;
 
-/*
-	This class handles the State machine for the boat navigation module
-  	it also handles the game flow and level progress logic
-*/
-
-
+/// <summary>
+/// Nav manager. This class handles the State machine for the boat navigation module it also handles the game flow and level progress logic.
+/// </summary>
 public class NavManager : MonoBehaviour {
 
 	public static NavManager s_instance;
 
-	public enum GameState {IntroCredit, MainMenu, Pause, Instructions, Gameplay, Win, Lose, GameOver};
+	public enum GameState {Instructions, Gameplay, Win};
 	public GameState gameState = GameState.Instructions;
 	public GameObject[] navigationPoints;
 	public bool hasReachedAllTargets;
 	public int currNavPoint = 0;
 	private float startTime;
 	public float elapsedTime;
+	[SerializeField] Rigidbody boat;
+	[SerializeField] GameObject INarrows, OUTarrows, levelTrigger0, levelTrigger1;
+	[Header("UI")]
+	[SerializeField] Text timerText;
+	[SerializeField] GameObject GameplayUI;
 
 	void Awake() {
 		if (s_instance == null) {
 			s_instance = this;
-			DontDestroyOnLoad( this.gameObject );
 		}
 		else {
 			Destroy(gameObject);
@@ -31,24 +32,15 @@ public class NavManager : MonoBehaviour {
 	}
 
 	void Update () {
-		if( Input.GetKeyDown( KeyCode.Space ) )
-			ChangeState (GameState.Gameplay );
 
 		switch (gameState) 
 		{
 		case GameState.Instructions :
-			if (Input.GetKeyDown(KeyCode.Space) || ( Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended ) ){
-				ChangeState( GameState.Gameplay );
-			}
 			break;
 
 		case GameState.Gameplay :
-			if (hasReachedAllTargets) {
-				ChangeState( GameState.Win );
-				break;
-			}
-//			directionalArrow.transform.LookAt(navigationPoints[currNavPoint].transform);
-			elapsedTime = Time.time - startTime;			                                   
+			elapsedTime = Time.time - startTime;
+			SetTimerText(false);
 			break;
 
 		case GameState.Win :
@@ -59,34 +51,15 @@ public class NavManager : MonoBehaviour {
 	public void ChangeState( GameState newState ) {
 		switch( newState )
 		{
-		case GameState.IntroCredit:
-			break;
-
-		case GameState.MainMenu:
-			break;
-
-		case GameState.Instructions:
-			break;
 
 		case GameState.Gameplay:
-			Camera.main.GetComponent<HoverFollowCam>().enabled = true;
-//			NavBoatControl.s_instance.arrow.SetActive(true);
-
-			NavBoatControl.s_instance.canMove = true;
-			NavBoatControl.s_instance.GetComponent<GhostPathRecorder>().StartRecording();
-			//beep.Play();
-			StartClock();
-			break;
-
-		case GameState.Pause:
+			GameplayUI.SetActive( true );
 			break;
 
 		case GameState.Win:
-			NavBoatControl.s_instance.arrow.SetActive(false);
-			Camera.main.GetComponent<HoverFollowCam>().PanOut();
-			GameObject.FindGameObjectWithTag("arrow").SetActive(false);
-			NavBoatControl.s_instance.canMove = false;
-			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Navigation" );
+			boat.isKinematic = true;
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel ("Navigation");
+			SetTimerText (true);
 //			if (elapsedTime > 200f) {
 ////				rating = 0;
 //			}
@@ -97,19 +70,8 @@ public class NavManager : MonoBehaviour {
 ////				rating = 1;
 //			}
 			break;
-
-		case GameState.Lose:
-			break;
-
-		case GameState.GameOver:
-			break;
 		}
-
 		gameState = newState;
-	}
-
-	void StartClock() {
-		startTime = Time.time;
 	}
 
 	public void SwitchNavigationPoint() {
@@ -125,7 +87,18 @@ public class NavManager : MonoBehaviour {
 			
 		}
 	}
-	
+
+	public void WinNavModule () {
+		ChangeState (GameState.Win);
+	}
+
+	public void HasReachedHarbor () {
+		INarrows.SetActive (false);
+		OUTarrows.SetActive (true);
+		levelTrigger0.SetActive (false);
+		levelTrigger1.SetActive (true);
+	}
+
 	public string ReturnCurrNavPointName() {
 		if (currNavPoint<navigationPoints.Length) {
 			return navigationPoints[currNavPoint].name;
@@ -133,5 +106,23 @@ public class NavManager : MonoBehaviour {
 		else {
 			return "";
 		}
+	}
+
+	void SetTimerText(bool x = false) {
+		string min;
+		string sec;
+		min = Mathf.CeilToInt((elapsedTime / 60)-1).ToString();
+		sec = (elapsedTime % 60).ToString("F0");
+		if (!x) {
+			timerText.text = "Time:\n" + min + "\'" + sec + "\"";
+		} else {
+			timerText.text = "Your Time Was:\n" + min + "\'" + sec + "\"";
+		}
+	}
+
+	public void StartGame () {
+		boat.isKinematic = false;
+		startTime = Time.time;
+		ChangeState( GameState.Gameplay );
 	}
 }

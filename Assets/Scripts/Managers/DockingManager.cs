@@ -124,7 +124,7 @@ public class DockingManager : MonoBehaviour {
 			playerBoat.transform.rotation = setup2transform.rotation;
 		}
 		switchToGamePlay = true;
-		isFailing = true;
+		isFailing = false;
 
 
 	}

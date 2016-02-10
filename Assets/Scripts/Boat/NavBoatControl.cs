@@ -32,7 +32,7 @@ public class NavBoatControl : MonoBehaviour {
 	protected float sailEffectiveness, optimalAngle;
 	private float rudderNullZone = 0.2f;
 	private float boatRotationVelocityScalar = .07f;
-	private float boatMovementVelocityScalar = 12000f;
+	private float boatMovementVelocityScalar = 18000f;
 	private float keelCoefficient = 10f;
 	private float velocityKeelCoefficient = 7f; //assumes max speed of 7
 	private Quaternion comeAboutStart, comeAboutEnd;
@@ -271,6 +271,11 @@ public class NavBoatControl : MonoBehaviour {
 	#endregion
 	#region SetPointOfSailText
 	protected void IdentifyPointOfSail() {
+		if( pointOfSail == null ) {
+			Debug.LogWarning( gameObject.name +"'s "+ this.GetType().ToString() +" is missing a reference to the \"Point of Sail\" Text object." );
+			return;
+		}
+
 		if ((angleWRTWind < 360f && angleWRTWind > 330f) ||
 		    (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "In Irons";
@@ -416,8 +421,8 @@ public class NavBoatControl : MonoBehaviour {
 
 	IEnumerator Sink() {
 		myRigidbody.mass *= 10f;
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = true;
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().text = "You crashed and sank, try again!";
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = true;
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().text = "You crashed and sank, try again!";
 		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.stationary;
 
 		yield return new WaitForSeconds (4f);
@@ -433,7 +438,7 @@ public class NavBoatControl : MonoBehaviour {
 		yield return new WaitForSeconds (.1f);
 		myRigidbody.isKinematic = false;
 
-		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = false;
+//		GameObject.FindGameObjectWithTag ("deathPopUp").GetComponent<Text> ().enabled = false;
 		Camera.main.GetComponent<HoverFollowCam> ().thisCameraMode = HoverFollowCam.CameraMode.follow;
 		isCrashing = false;
 	}
@@ -442,7 +447,7 @@ public class NavBoatControl : MonoBehaviour {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
 			BoatHasCrashed ();
 		}
-		if (thisCollision.gameObject.tag == "ROWFail") {
+		if (thisCollision.gameObject.tag == "ROWFail" ) {
 			RightOfWayManager.s_instance.Fail ();
 		}
 	}

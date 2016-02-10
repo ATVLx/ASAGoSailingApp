@@ -55,6 +55,10 @@ public class POSModuleManager : MonoBehaviour {
 		}
 	}
 
+	void Start () {
+		currAnimState = "In Irons";
+	}
+
 	public void MainMenu() {
 		//Application.LoadLevel(0);
 	}
@@ -321,5 +325,4 @@ public class POSModuleManager : MonoBehaviour {
 			}
 		}
 	}
-
 }

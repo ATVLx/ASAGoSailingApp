@@ -18,6 +18,8 @@ public class MOBManager : MonoBehaviour {
 	[SerializeField]
 	Transform setup1transform, setup2transform;
 
+	bool isFailing;
+
 	[Header("UI")]
 	public GameObject briefingUI;
 	public GameObject setup1InstructionsUI;
@@ -70,7 +72,7 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public void WinScenario() {
-		if (curState == MOBState.gameplay) {
+		if (curState == MOBState.gameplay &&!isFailing) {
 			win.StartFadeOut ();
 			switchToReset = true;
 			StartCoroutine ( WinReset() );
@@ -78,7 +80,8 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public void Fail(){
-		if (curState == MOBState.gameplay) {
+		if (curState == MOBState.gameplay&&!isFailing) {
+			isFailing = true;
 			lose.StartFadeOut ();
 			switchToReset = true;
 			StopAllCoroutines ();
@@ -88,6 +91,7 @@ public class MOBManager : MonoBehaviour {
 
 	public IEnumerator Land() {
 		if (curState == MOBState.gameplay) {
+			isFailing = true;
 			yield return new WaitForSeconds (3f);
 			WinScenario ();
 		}
@@ -118,6 +122,7 @@ public class MOBManager : MonoBehaviour {
 			playerBoat.transform.rotation = setup2transform.rotation;
 		}
 		switchToGamePlay = true;
+		isFailing = false;
 
 	}
 
@@ -137,15 +142,14 @@ public class MOBManager : MonoBehaviour {
 			playerBoat.GetComponent<Rigidbody>().isKinematic = true;
 			curState = MOBState.setup2Instructions;
 
-//			yield return new WaitForSeconds (2f);
-//			CameraMain ();
-//			switchToGamePlay = true;
+
 		} else {
 			curState = MOBState.win;
 			if (SoundtrackManager.s_instance != null)
 				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
 			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Man Overboard" );
 		}
+		isFailing = false;
 	}
 
 	public void ClosedInstructionsPanel() {
