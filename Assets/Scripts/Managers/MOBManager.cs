@@ -35,6 +35,8 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	void Update () {
+
+		print("CURSTATE " + curState + " IsFail " + isFailing);
 		switch (curState) {
 		case MOBState.setup1Instructions:
 		case MOBState.setup2Instructions:
@@ -72,7 +74,7 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public void WinScenario() {
-		if (curState == MOBState.gameplay &&!isFailing) {
+		if (curState == MOBState.gameplay) {
 			win.StartFadeOut ();
 			switchToReset = true;
 			StartCoroutine ( WinReset() );
@@ -90,7 +92,7 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	public IEnumerator Land() {
-		if (curState == MOBState.gameplay) {
+		if (curState == MOBState.gameplay &&!isFailing) {
 			isFailing = true;
 			yield return new WaitForSeconds (3f);
 			WinScenario ();
