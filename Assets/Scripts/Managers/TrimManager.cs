@@ -66,7 +66,6 @@ public class TrimManager : MonoBehaviour {
 	}
 
 	public void BeginTutorial () {
-		instructionsPanel.SetActive (true);
 		gameplayPanel.SetActive (true);
 		posIndex = 0;
 		GameObject.FindGameObjectWithTag("Player").transform.rotation = Quaternion.Euler(new Vector3(0,listOfPositions[posIndex],0));
