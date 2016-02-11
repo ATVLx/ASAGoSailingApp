@@ -95,7 +95,7 @@ public class DockingManager : MonoBehaviour {
 	}
 
 	public IEnumerator Land() {
-		if (curState == DockingState.gameplay) {
+		if (curState == DockingState.gameplay&&!isFailing) {
 			yield return new WaitForSeconds (3f);
 			WinScenario ();
 		}
