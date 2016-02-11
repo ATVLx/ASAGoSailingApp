@@ -452,8 +452,11 @@ public class NavBoatControl : MonoBehaviour {
 			if (RightOfWayManager.s_instance != null) {
 				RightOfWayManager.s_instance.Fail ();
 			} else {
+				
 				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.crash);
 				StartCoroutine ("Sink");
+				if (thisCollision.gameObject.GetComponent<EvilYacht> ()!=null)
+				thisCollision.gameObject.GetComponent<EvilYacht> ().Kill ();
 			}
 		}
 	}
