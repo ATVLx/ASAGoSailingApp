@@ -22,7 +22,7 @@ public class RightOfWayManager : MonoBehaviour {
 	[SerializeField] GameObject congratsText;
 	bool isFailing;
 	bool hasStarted;
-	float resetDelay = 5f;
+	float resetDelay = 9f;
 	public static RightOfWayManager s_instance;
 	public bool switchToReset, switchToGamePlay;
 
@@ -30,7 +30,7 @@ public class RightOfWayManager : MonoBehaviour {
 	[SerializeField]
 	Slider boomSlider;
 	[SerializeField]
-	Text youText,themText,hintText;
+	Text hintText;
 	public GameObject briefingUI, instructionsUI, gamePlayUI;
 
 	void Awake() {
@@ -120,9 +120,7 @@ public class RightOfWayManager : MonoBehaviour {
 		switch (scenario) {
 		case 0:
 			{
-				youText.text = "You: Windward - Same Tack";
-				themText.text = "Them: Leeward - Same Tack";
-				hintText.text = "Give way to them.";
+				hintText.text = "Remember: You give way to them.";
 				boomSlider.value = 40f;
 				AIboat.GetComponent<AIBoat> ().SetTack (false);
 				Player.transform.position = windward.position;
@@ -133,9 +131,7 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 1:
 			{
-				youText.text = "You: Leeward -  Same Tack";
-				themText.text = "Them: Windward - Same Tack";
-				hintText.text = "They give way to you";
+				hintText.text = "Remember: They give way to you";
 				StartCoroutine ("level2");
 				boomSlider.value = 15f;
 				Player.transform.rotation = leeward.rotation;
@@ -146,9 +142,7 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 2:
 			{
-				youText.text = "You: Starboard Tack";
-				themText.text = "Them: Port Tack";
-				hintText.text = "They give way to you";
+				hintText.text = "Remember: They give way to you";
 				StartCoroutine ("level3");
 
 				boomSlider.value = 20f;
@@ -160,9 +154,7 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 3:
 			{
-				youText.text = "You: Port Tack";
-				themText.text = "Them: Starboard Tack";
-				hintText.text = "Give way to them";
+				hintText.text = "Remember: You give way to them";
 				boomSlider.value = 14.5f;
 				Player.transform.position = port.position;
 				Player.transform.rotation = port.rotation;
@@ -172,8 +164,6 @@ public class RightOfWayManager : MonoBehaviour {
 			}
 		case 4:
 			{
-				youText.text = "You: Sailboat";
-				themText.text = "Them: Motorized Behemoth";
 				hintText.text = "Get the heck out of the way!";
 				AIboat.SetActive (false);
 				Player.transform.position = starboard.position;
@@ -202,8 +192,6 @@ public class RightOfWayManager : MonoBehaviour {
 
 
 	void WinModule() {
-		youText.text = "";
-		themText.text = "";
 		hintText.text = "";
 		gamePlayUI.SetActive (false);
 		congratsText.SetActive (true);
