@@ -8,6 +8,6 @@ public class SinusoidalAlpha : MonoBehaviour {
 
 	void Update () {
 		opac += Time.deltaTime;
-		GetComponent<Text>().color = new Color(1,1,1,Mathf.Sin(opac));
+		GetComponent<Text>().color = new Color(1,1,1,Mathf.PingPong( Time.time, 1f ));
 	}
 }
