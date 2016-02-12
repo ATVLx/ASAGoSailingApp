@@ -4,7 +4,7 @@ using System.Collections;
 public class EvilYacht : MonoBehaviour {
 	public bool isMoving;
 	public float speed = 100000f;
-	public bool isDying;
+	public bool isDying, canDie = false;
 	public bool isGoingInCircles;
 	[SerializeField] GameObject explosion;
 	// Use this for initialization
@@ -30,10 +30,12 @@ public class EvilYacht : MonoBehaviour {
 
 	}
 	public void Kill() {
-		if (!isDying) {
+		if (!isDying && canDie) {
 			isDying = true;
 			StartCoroutine ("Death");
 			if (explosion != null)
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.explode);
+			
 				Instantiate (explosion, transform.position, Quaternion.identity);
 		}
 	}

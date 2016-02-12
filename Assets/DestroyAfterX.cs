@@ -10,7 +10,7 @@ public class DestroyAfterX : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
 	IEnumerator Death() {
