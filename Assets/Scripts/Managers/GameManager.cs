@@ -28,8 +28,12 @@ public class GameManager : MonoBehaviour {
 	[Header("UI")]
 	public CanvasGroup pauseMenu;
 	public CanvasGroup optionsMenu;
+	public CanvasGroup loadingBarScreen;
 	public Slider musicVolumeSlider;
 	public Slider soundsVolumeSlider;
+	public Slider loadingSlider;
+
+	private AsyncOperation async = null;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -44,15 +48,21 @@ public class GameManager : MonoBehaviour {
 		
 	public void LoadLevel(int levelIndex) {
 		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
-
+		loadingBarScreen.alpha = 1;
+		StartCoroutine (LevelLoader (levelIndex));
 		thisLevelState = (LevelState)levelIndex;
-		SceneManager.LoadScene (levelIndex);
-		print ("LEVEL WAS LOADED " + levelIndex);
+	
 
-		if (levelIndex == 1) {
+	}
+	IEnumerator LevelLoader (int level) {
+		async = SceneManager.LoadSceneAsync (level);
+		yield return async;
+		if (level == 1) {
 			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.music);
 			SoundtrackManager.s_instance.StartCoroutine("FadeOutAudioSource",SoundtrackManager.s_instance.oceanBreeze);
 		}
+		loadingBarScreen.alpha = 0;
+
 	}
 
 	#region UI Logic
@@ -142,6 +152,11 @@ public class GameManager : MonoBehaviour {
 	#endregion
 
 	void Update() {
+
+		if (async != null && !async.isDone) {
+			loadingSlider.value = async.progress;
+		}
+
 		if( Input.GetKeyDown( KeyCode.Space ) )
 			PressedPause();
 	}
