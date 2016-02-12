@@ -5,6 +5,7 @@ public class EvilYacht : MonoBehaviour {
 	public bool isMoving;
 	public float speed = 100000f;
 	public bool isDying;
+	public bool isGoingInCircles;
 	[SerializeField] GameObject explosion;
 	// Use this for initialization
 	void Start () {
@@ -15,11 +16,17 @@ public class EvilYacht : MonoBehaviour {
 	void FixedUpdate () {
 		if (isMoving) {
 			GetComponent<Rigidbody> ().AddForce (transform.forward * speed);
+			if (isGoingInCircles) {
+				GetComponent<Rigidbody> ().AddTorque (Vector3.up * 100000f);
+			}
 		}
 	}
 
-	void OnCollisionEnter() {
-		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.crash);
+	void OnCollisionEnter(Collision thisCol) {
+		if (thisCol.gameObject.tag == "Player") {
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.crash);
+		}
+		Kill ();
 
 	}
 	public void Kill() {

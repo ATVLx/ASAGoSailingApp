@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class DestroyAfterX : MonoBehaviour {
-
+	public float x = 3f;
 	// Use this for initialization
 	void Start () {
 		StartCoroutine ("Death");
@@ -14,7 +14,7 @@ public class DestroyAfterX : MonoBehaviour {
 	}
 
 	IEnumerator Death() {
-		yield return new WaitForSeconds (3f);
+		yield return new WaitForSeconds (x);
 		Destroy (gameObject);
 	}
 }
