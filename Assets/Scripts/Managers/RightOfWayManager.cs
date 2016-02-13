@@ -22,7 +22,7 @@ public class RightOfWayManager : MonoBehaviour {
 	[SerializeField] GameObject congratsText;
 	bool isFailing;
 	bool hasStarted;
-	float resetDelay = 5f;
+	float resetDelay = 10f;
 	public static RightOfWayManager s_instance;
 	public bool switchToReset, switchToGamePlay;
 
@@ -30,8 +30,11 @@ public class RightOfWayManager : MonoBehaviour {
 	[SerializeField]
 	Slider boomSlider;
 	[SerializeField]
-	Text youText,themText,hintText;
+	Text hintText;
 	public GameObject briefingUI, instructionsUI, gamePlayUI;
+	public CanvasGroup windward_LeewardStandOnCG, windward_LeewardGiveWayCG, port_StarboardGiveWayCG, port_StarboardStandOnCG, powerboat_SailboatCG;
+
+	private CanvasGroup currentGraphicCG;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -99,6 +102,8 @@ public class RightOfWayManager : MonoBehaviour {
 		ToggleBoatMovement (false);
 		SetPositions ();
 		yield return new WaitForSeconds (resetDelay);
+		currentGraphicCG.alpha = 0f;
+		gamePlayUI.SetActive( true );
 		ToggleCameras ();
 		ToggleBoatMovement (true);
 
@@ -120,35 +125,33 @@ public class RightOfWayManager : MonoBehaviour {
 		switch (scenario) {
 		case 0:
 			{
-				youText.text = "You: Windward - Same Tack";
-				themText.text = "Them: Leeward - Same Tack";
-				hintText.text = "Give way to them.";
+				hintText.text = "Remember: You give way to them.";
 				boomSlider.value = 40f;
 				AIboat.GetComponent<AIBoat> ().SetTack (false);
 				Player.transform.position = windward.position;
 				AIboat.transform.position = leeward.position;
 				Player.transform.rotation = windward.rotation;
 				AIboat.transform.rotation = leeward.rotation;
+
+				currentGraphicCG = windward_LeewardGiveWayCG;
 				break;
 			}
 		case 1:
 			{
-				youText.text = "You: Leeward -  Same Tack";
-				themText.text = "Them: Windward - Same Tack";
-				hintText.text = "They give way to you";
+				hintText.text = "Remember: They give way to you.";
 				StartCoroutine ("level2");
 				boomSlider.value = 15f;
 				Player.transform.rotation = leeward.rotation;
 				Player.transform.position = leeward.position;
 				AIboat.transform.rotation = windward.rotation;
 				AIboat.transform.position = windward.position;
+
+				currentGraphicCG = windward_LeewardStandOnCG;
 				break;
 			}
 		case 2:
 			{
-				youText.text = "You: Starboard Tack";
-				themText.text = "Them: Port Tack";
-				hintText.text = "They give way to you";
+				hintText.text = "Remember: They give way to you.";
 				StartCoroutine ("level3");
 
 				boomSlider.value = 20f;
@@ -156,24 +159,24 @@ public class RightOfWayManager : MonoBehaviour {
 				AIboat.transform.position = port.position;
 				Player.transform.rotation = starboard.rotation;
 				AIboat.transform.rotation = port.rotation;
+
+				currentGraphicCG = port_StarboardStandOnCG;
 				break;
 			}
 		case 3:
 			{
-				youText.text = "You: Port Tack";
-				themText.text = "Them: Starboard Tack";
-				hintText.text = "Give way to them";
+				hintText.text = "Remember: You give way to them.";
 				boomSlider.value = 14.5f;
 				Player.transform.position = port.position;
 				Player.transform.rotation = port.rotation;
 				AIboat.transform.position = starboard.position;
 				AIboat.transform.rotation = starboard.rotation;
+
+				currentGraphicCG = port_StarboardGiveWayCG;
 				break;
 			}
 		case 4:
 			{
-				youText.text = "You: Sailboat";
-				themText.text = "Them: Motorized Behemoth";
 				hintText.text = "Get the heck out of the way!";
 				AIboat.SetActive (false);
 				Player.transform.position = starboard.position;
@@ -181,10 +184,13 @@ public class RightOfWayManager : MonoBehaviour {
 				Player.transform.rotation = starboard.rotation;
 				MotorBoat.transform.rotation = overrun.rotation;
 				MotorBoat.GetComponent<EvilYacht> ().isMoving = true;
+
+				currentGraphicCG = powerboat_SailboatCG;
 				break;
 			}
-		
 		}
+		gamePlayUI.SetActive( false );
+		currentGraphicCG.alpha = 1f;
 	}
 
 	IEnumerator level2 () {
@@ -200,10 +206,27 @@ public class RightOfWayManager : MonoBehaviour {
 		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
 	}
 
+	/// <summary>
+	/// Fades the current CG alpha.
+	/// </summary>
+	/// <returns>The current CG alpha.</returns>
+	/// <param name="fadeOut">If set to <c>true</c> fade out. If false, will fade in.</param>
+	IEnumerator FadeCurrentCGAlpha( bool fadeOut = true ) {
+		float lerpTime = 0.05f;
+		float startTime = Time.time;
+		float startAlpha = ( fadeOut ) ? 1f : 0f;
+		float endAlpha = ( fadeOut ) ? 0f : 1f;
+
+		while( lerpTime >= Time.time - startTime ) {
+			currentGraphicCG.alpha = Mathf.Lerp( startAlpha, endAlpha, ( Time.time - startTime )/lerpTime );
+			yield return null;
+		}
+
+		currentGraphicCG.alpha = endAlpha;
+	}
+
 
 	void WinModule() {
-		youText.text = "";
-		themText.text = "";
 		hintText.text = "";
 		gamePlayUI.SetActive (false);
 		congratsText.SetActive (true);

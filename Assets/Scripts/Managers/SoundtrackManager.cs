@@ -8,7 +8,7 @@ public class SoundtrackManager : MonoBehaviour {
 	public static SoundtrackManager s_instance;
 	float currentVolume =1f, musicVolume=1f;
 	[SerializeField] Slider volumeSlider, musicSlider;
-	public AudioSource correct, wrong, gybe, bell, crash, beep, laser, waterWoosh, music;
+	public AudioSource correct, wrong, gybe, bell, crash, beep, laser, waterWoosh, music, explode;
 	void Awake () {
 		if (s_instance == null) {
 			s_instance = this;

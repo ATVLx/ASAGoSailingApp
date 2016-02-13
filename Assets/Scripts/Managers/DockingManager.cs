@@ -95,7 +95,7 @@ public class DockingManager : MonoBehaviour {
 	}
 
 	public IEnumerator Land() {
-		if (curState == DockingState.gameplay) {
+		if (curState == DockingState.gameplay&&!isFailing) {
 			yield return new WaitForSeconds (3f);
 			WinScenario ();
 		}
@@ -124,7 +124,7 @@ public class DockingManager : MonoBehaviour {
 			playerBoat.transform.rotation = setup2transform.rotation;
 		}
 		switchToGamePlay = true;
-		isFailing = true;
+		isFailing = false;
 
 
 	}

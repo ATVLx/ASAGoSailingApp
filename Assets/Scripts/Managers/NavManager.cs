@@ -114,7 +114,7 @@ public class NavManager : MonoBehaviour {
 		min = Mathf.CeilToInt((elapsedTime / 60)-1).ToString();
 		sec = (elapsedTime % 60).ToString("F0");
 		if (!x) {
-			timerText.text = "Time:\n" + min + "\'" + sec + "\"";
+			timerText.text = min.ToString() + "\'" + sec.ToString() + "\"";
 		} else {
 			timerText.text = "Your Time Was:\n" + min + "\'" + sec + "\"";
 		}

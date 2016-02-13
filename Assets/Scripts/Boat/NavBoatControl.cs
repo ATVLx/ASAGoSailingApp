@@ -272,7 +272,7 @@ public class NavBoatControl : MonoBehaviour {
 	#region SetPointOfSailText
 	protected void IdentifyPointOfSail() {
 		if( pointOfSail == null ) {
-			Debug.LogWarning( gameObject.name +"'s "+ this.GetType().ToString() +" is missing a reference to the \"Point of Sail\" Text object." );
+//			Debug.LogWarning( gameObject.name +"'s "+ this.GetType().ToString() +" is missing a reference to the \"Point of Sail\" Text object." );
 			return;
 		}
 
@@ -448,7 +448,16 @@ public class NavBoatControl : MonoBehaviour {
 			BoatHasCrashed ();
 		}
 		if (thisCollision.gameObject.tag == "ROWFail" ) {
-			RightOfWayManager.s_instance.Fail ();
+
+			if (RightOfWayManager.s_instance != null) {
+				RightOfWayManager.s_instance.Fail ();
+			} else {
+				
+				SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.crash);
+				StartCoroutine ("Sink");
+				if (thisCollision.gameObject.GetComponent<EvilYacht> ()!=null)
+				thisCollision.gameObject.GetComponent<EvilYacht> ().Kill ();
+			}
 		}
 	}
 }

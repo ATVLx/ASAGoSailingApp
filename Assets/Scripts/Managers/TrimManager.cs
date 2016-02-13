@@ -66,7 +66,6 @@ public class TrimManager : MonoBehaviour {
 	}
 
 	public void BeginTutorial () {
-		instructionsPanel.SetActive (true);
 		gameplayPanel.SetActive (true);
 		posIndex = 0;
 		GameObject.FindGameObjectWithTag("Player").transform.rotation = Quaternion.Euler(new Vector3(0,listOfPositions[posIndex],0));
@@ -76,7 +75,7 @@ public class TrimManager : MonoBehaviour {
 	public void NextPOSButton () {
 		if (SoundtrackManager.s_instance != null)
 			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
-		trimSlider.value = 80;
+		trimSlider.value = 80f;
 		posIndex++;
 		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
 		if (posIndex > 2 && posIndex < 6) {
