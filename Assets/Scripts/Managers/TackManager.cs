@@ -79,6 +79,8 @@ public class TackManager : MonoBehaviour {
 			win.StartFadeOut ();
 			switchToReset = true;
 			StartCoroutine ("WinReset");
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.correct);
+
 		}
 	}
 
@@ -88,6 +90,8 @@ public class TackManager : MonoBehaviour {
 			switchToReset = true;
 			StopAllCoroutines ();
 			StartCoroutine ("FailReset");
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
+
 		}
 	}
 
@@ -143,6 +147,7 @@ public class TackManager : MonoBehaviour {
 //			switchToGamePlay = true;
 		} else {
 			curState = TackState.win;
+
 			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Tacking" );
 		}
 	}
