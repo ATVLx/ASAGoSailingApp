@@ -145,20 +145,27 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	}
 
 	private void CalculateApparentWind() {
-		Vector3 fakeWindVector = (boatVelocityRendererOrigin.position - windLineRendererOrigin.position).normalized;
-		Vector3 fakeBoatSpeedVector = (mastRendererPosition.position - boatVelocityRendererOrigin.position).normalized;
+		if( apparentWindBoatControl.currentPOS != ApparentWindBoatControl.BoatPointOfSail.InIrons ) {
+			Vector3 fakeWindVector = (boatVelocityRendererOrigin.position - windLineRendererOrigin.position).normalized;
+			Vector3 fakeBoatSpeedVector = (mastRendererPosition.position - boatVelocityRendererOrigin.position).normalized;
 
-		if( !isWindSpeedSetToHigh ) {
-			fakeWindVector *= lowWindSpeed;
-			fakeBoatSpeedVector *= lowBoatSpeed;
+			if( !isWindSpeedSetToHigh ) {
+				fakeWindVector *= lowWindSpeed;
+				fakeBoatSpeedVector *= lowBoatSpeed;
+			} else {
+				fakeWindVector *= highWindSpeed;
+				fakeBoatSpeedVector *= highBoatSpeed;
+			}
+
+			Vector3 calculatedApparentWind = fakeWindVector + fakeBoatSpeedVector;
+
+			guiManager.UpdateApparentWindSpeed( calculatedApparentWind.magnitude );
 		} else {
-			fakeWindVector *= highWindSpeed;
-			fakeBoatSpeedVector *= highBoatSpeed;
+			if( !isWindSpeedSetToHigh ) 
+				guiManager.UpdateApparentWindSpeed( lowWindSpeed );
+			else
+				guiManager.UpdateApparentWindSpeed( highWindSpeed );
 		}
-
-		Vector3 calculatedApparentWind = fakeWindVector + fakeBoatSpeedVector;
-
-		guiManager.UpdateApparentWindSpeed( calculatedApparentWind.magnitude );
 	}
 
 	/// <summary>
