@@ -32,7 +32,11 @@ public class ApparentWindLineArrow : MonoBehaviour {
 	}
 		
 	void UpdatePosition () {
-		myTransform.position = Vector3.Lerp( origin.position, destination.position, percentageTraveled );
+		if( float.IsNaN( percentageTraveled) ) {
+			Destroy( gameObject );
+			return;
+		}
+		myTransform.position = Vector3.Lerp( origin.position, destination.position, Mathf.Clamp( percentageTraveled, 0f, 1f ) );
 		myTransform.LookAt( destination );
 
 		Vector3 lerpPath = destination.position - origin.position;
