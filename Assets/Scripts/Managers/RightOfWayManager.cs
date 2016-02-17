@@ -292,5 +292,6 @@ public class RightOfWayManager : MonoBehaviour {
 	/// </summary>
 	public void SkippedScenarioIntro() {
 		scenarioWaitTime = 0f;
+		SoundtrackManager.s_instance.beep.Play();
 	}
 }
