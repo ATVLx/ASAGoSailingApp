@@ -109,6 +109,10 @@ public class NavBoatControl : MonoBehaviour {
 		IdentifyPointOfSail();
 	}
 
+	public float ReturnSailEfficiency() {
+		return sailEffectiveness;
+	}
+
 	void FixedUpdate () {	
 		MastRotation();
 		CalculateForwardThrust();
@@ -203,6 +207,7 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
+		print ("SAIL EFFECTIVENESS " + sailEffectiveness);
 	}
 
 	protected void ApplyForwardThrust () {
