@@ -36,6 +36,13 @@ public class DockingManager : MonoBehaviour {
 		curState = DockingState.briefing;
 	}
 
+	IEnumerator HackyBSFix() {
+		//fixes the provlem where you win when you lose
+		yield return new WaitForSeconds (1f);
+		StopAllCoroutines ();
+
+	}
+
 	void Update () {
 		switch (curState) {
 		case DockingState.instructions:
@@ -61,6 +68,7 @@ public class DockingManager : MonoBehaviour {
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
 					curState = DockingState.gameplay;
+					StartCoroutine ("HackingBSFix");
 				}
 				break;
 			}
