@@ -2,11 +2,9 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-/*
-	This class controls the movement input and physics of the boat in the navigation module
-*/
-
-
+/// <summary>
+/// This class controls the movement input and physics of the boat in the navigation module.
+/// </summary>
 public class NavBoatControl : MonoBehaviour {
 	public const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 

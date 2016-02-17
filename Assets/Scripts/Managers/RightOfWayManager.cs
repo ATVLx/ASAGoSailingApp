@@ -36,6 +36,8 @@ public class RightOfWayManager : MonoBehaviour {
 
 	private CanvasGroup currentGraphicCG;
 
+	private float scenarioWaitTime = 0f;
+
 	void Awake() {
 		if (s_instance == null) {
 			s_instance = this;
@@ -101,13 +103,11 @@ public class RightOfWayManager : MonoBehaviour {
 
 		ToggleBoatMovement (false);
 		SetPositions ();
-		yield return new WaitForSeconds (resetDelay);
+		yield return WaitForSecondsOrTap( resetDelay );
 		currentGraphicCG.alpha = 0f;
 		gamePlayUI.SetActive( true );
 		ToggleCameras ();
 		ToggleBoatMovement (true);
-
-
 	}
 
 	void ToggleBoatMovement (bool thisBool) {
@@ -276,5 +276,21 @@ public class RightOfWayManager : MonoBehaviour {
 			StartGame();
 			break;
 		}
+	}
+
+	private IEnumerator WaitForSecondsOrTap( float newWaitTime ) {
+		scenarioWaitTime = newWaitTime;
+
+		while( scenarioWaitTime > 0f ) {
+			scenarioWaitTime -= Time.deltaTime;
+			yield return null;
+		}
+	}
+
+	/// <summary>
+	/// Method called when the player taps to exit the 
+	/// </summary>
+	public void SkippedScenarioIntro() {
+		scenarioWaitTime = 0f;
 	}
 }
