@@ -30,7 +30,9 @@ public class HoverFollowCam : MonoBehaviour
 	{
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		camPos = GameObject.FindGameObjectWithTag("CamPos").transform;
-		camPos2 = GameObject.FindGameObjectWithTag("CamPos2").transform;
+		if (wideAngleEffect) {
+			camPos2 = GameObject.FindGameObjectWithTag ("CamPos2").transform;
+		}
 		playerBody = player.GetComponent<Rigidbody> ();
 	}
 
@@ -39,6 +41,8 @@ public class HoverFollowCam : MonoBehaviour
 			if (wideAngleEffect) {
 				SetCameraFocalLength ();
 				SetCameraDistanceToBoat ();
+			} else {
+				cameraDestination = camPos.position;
 			}
 
 
