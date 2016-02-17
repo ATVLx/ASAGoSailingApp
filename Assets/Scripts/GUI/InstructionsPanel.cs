@@ -129,4 +129,16 @@ public class InstructionsPanel : MonoBehaviour {
 			pageNumberText.enabled = true;
 		}
 	}
+
+	public void GoToPanel( GameObject panel ) {
+		if( !panel.transform.IsChildOf( transform ) )
+			return;
+
+		ToggleSlide( slides[currentSlide], false );
+		currentSlide = panel.transform.GetSiblingIndex();
+		ToggleSlide( slides[currentSlide], true );
+		UpdatePageNumber();
+		UpdateButtons();
+		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+	}
 }

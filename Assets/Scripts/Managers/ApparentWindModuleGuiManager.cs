@@ -34,7 +34,7 @@ public class ApparentWindModuleGuiManager : MonoBehaviour {
 	}
 
 	void LateUpdate() {
-		trueWindText.text = "<color=#FF0000FF>True Wind:</color>\t\t\t" + currentWindSpeed.ToString() + " knots";
+		trueWindText.text = "<color=#FF0000FF>True Wind:</color>\t\t\t\t" + currentWindSpeed.ToString() + " knots";
 		apparentWindText.text = "<color=#FF8000FF>Apparent Wind:</color>\t" + currentApparentWindSpeed.ToString("F1") + " knots";
 
 		float boatSpeed = currentBoatSpeed;
