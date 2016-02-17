@@ -68,7 +68,7 @@ public class DockingManager : MonoBehaviour {
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
 					curState = DockingState.gameplay;
-					StartCoroutine ("HackingBSFix");
+					StartCoroutine ("HackyBSFix");
 				}
 				break;
 			}
