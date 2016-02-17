@@ -7,8 +7,19 @@ using System.Collections;
 public class WorldResetTrigger : MonoBehaviour {
 	void OnTriggerExit( Collider col ) {
 		if( col.tag == "Player" ) {
-			Vector3 resetPosition = new Vector3( 0f, col.transform.position.y, 0f );
-			col.transform.position = resetPosition;
+			if( GameManager.s_instance.thisLevelState == GameManager.LevelState.SailTrim ) {
+				// Hover follow cam will behave badly without this
+				Transform mainCam = Camera.main.transform;
+				Vector3 camToPlayerOffset = mainCam.position - col.transform.position;
+
+				Vector3 newPos = new Vector3( 0f, col.transform.position.y, 0f );
+				col.transform.position = newPos;
+
+				mainCam.position = col.transform.position + camToPlayerOffset;
+			} else {
+				Vector3 resetPosition = new Vector3( 0f, col.transform.position.y, 0f );
+				col.transform.position = resetPosition;
+			}
 		}
 	}
 }
