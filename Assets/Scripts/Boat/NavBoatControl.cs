@@ -28,7 +28,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float rudderRotationSpeed = 50f;
 	private float maxRudderRotation = 60f;
 	protected float sailEffectiveness, optimalAngle;
-	private float rudderNullZone = 0.2f;
+	private float rudderNullZone = 0.1f;
 	private float boatRotationVelocityScalar = .07f;
 	private float boatMovementVelocityScalar = 18000f;
 	private float keelCoefficient = 10f;
@@ -44,6 +44,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// This is the text file that we store in Unity Project folder that holds the values in CSV format of all of the points of sail names and angles associated with them
 	/// </summary>
 	public Text pointOfSail;
+	[Header("UI")]
 	public Slider boomSlider;
 	public Slider rudderSlider;
 
