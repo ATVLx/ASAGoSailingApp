@@ -50,10 +50,10 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	private bool cameraIsLerping = false;
 
 	// GUI Text values
-	private float lowWindSpeed = 12f;
-	private float highWindSpeed = 24f;
-	private float lowBoatSpeed = 7f;
-	private float highBoatSpeed = 11f;
+	private float lowWindSpeed = 9f;
+	private float highWindSpeed = 13f;
+	private float lowBoatSpeed = 3f;
+	private float highBoatSpeed = 6f;
 
 	void Awake() {
 		if (s_instance == null) {

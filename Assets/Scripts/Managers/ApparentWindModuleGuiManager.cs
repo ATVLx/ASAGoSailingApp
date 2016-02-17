@@ -40,7 +40,7 @@ public class ApparentWindModuleGuiManager : MonoBehaviour {
 		float boatSpeed = currentBoatSpeed;
 		if( ApparentWindBoatControl.s_instance.currentPOS == ApparentWindBoatControl.BoatPointOfSail.InIrons )
 			boatSpeed = 0f;
-			boatSpeedText.text = "<color=#FFFF00FF>Boat Speed:</color>\t\t" + boatSpeed.ToString() + " knots";
+			boatSpeedText.text = "<color=#FFFF00FF>Boat Speed:</color>\t\t\t" + boatSpeed.ToString() + " knots";
 	}
 
 	public void UpdateTrueWindSpeed( float newSpeed ) {
