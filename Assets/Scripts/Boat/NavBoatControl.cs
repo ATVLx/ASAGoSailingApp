@@ -2,11 +2,9 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-/*
-	This class controls the movement input and physics of the boat in the navigation module
-*/
-
-
+/// <summary>
+/// This class controls the movement input and physics of the boat in the navigation module.
+/// </summary>
 public class NavBoatControl : MonoBehaviour {
 	public const float METERS_PER_SECOND_TO_KNOTS = 1.94384f;
 
@@ -30,7 +28,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float rudderRotationSpeed = 50f;
 	private float maxRudderRotation = 60f;
 	protected float sailEffectiveness, optimalAngle;
-	private float rudderNullZone = 0.2f;
+	private float rudderNullZone = 0.1f;
 	private float boatRotationVelocityScalar = .07f;
 	private float boatMovementVelocityScalar = 18000f;
 	private float keelCoefficient = 10f;
@@ -46,6 +44,7 @@ public class NavBoatControl : MonoBehaviour {
 	/// This is the text file that we store in Unity Project folder that holds the values in CSV format of all of the points of sail names and angles associated with them
 	/// </summary>
 	public Text pointOfSail;
+	[Header("UI")]
 	public Slider boomSlider;
 	public Slider rudderSlider;
 
@@ -65,7 +64,7 @@ public class NavBoatControl : MonoBehaviour {
 	// Boat rudders reset
 	private float rudderResetTimeBuffer = .2f;
 	private float rudderResetTimer = 0f;
-	private float rudderLerpSpeed = 50f;
+	private float rudderLerpSpeed = 80f;
 	private float rudderStartVal = 0f;
 	private bool rudderIsLerping = false;
 	/// <summary>
@@ -107,6 +106,10 @@ public class NavBoatControl : MonoBehaviour {
 //		velocity.text = "" + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 		HandleRudderRotation();
 		IdentifyPointOfSail();
+	}
+
+	public float ReturnSailEfficiency() {
+		return sailEffectiveness;
 	}
 
 	void FixedUpdate () {	
@@ -203,6 +206,7 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
+		print ("SAIL EFFECTIVENESS " + sailEffectiveness);
 	}
 
 	protected void ApplyForwardThrust () {

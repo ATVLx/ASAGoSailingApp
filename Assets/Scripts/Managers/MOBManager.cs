@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MOBManager : MonoBehaviour {
@@ -35,8 +35,6 @@ public class MOBManager : MonoBehaviour {
 	}
 
 	void Update () {
-
-		print("CURSTATE " + curState + " IsFail " + isFailing);
 		switch (curState) {
 		case MOBState.setup1Instructions:
 		case MOBState.setup2Instructions:
@@ -62,10 +60,18 @@ public class MOBManager : MonoBehaviour {
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
 					curState = MOBState.gameplay;
+					StartCoroutine ("HackyBSFix");
 				}
 				break;
 			}
 		}
+	}
+
+	IEnumerator HackyBSFix() {
+		//fixes the provlem where you win when you lose
+		yield return new WaitForSeconds (1f);
+		StopAllCoroutines ();
+
 	}
 
 	public void StartGame() {

@@ -50,10 +50,10 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	private bool cameraIsLerping = false;
 
 	// GUI Text values
-	private float lowWindSpeed = 12f;
-	private float highWindSpeed = 24f;
-	private float lowBoatSpeed = 7f;
-	private float highBoatSpeed = 11f;
+	private float lowWindSpeed = 9f;
+	private float highWindSpeed = 13f;
+	private float lowBoatSpeed = 3f;
+	private float highBoatSpeed = 6f;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -145,20 +145,27 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	}
 
 	private void CalculateApparentWind() {
-		Vector3 fakeWindVector = (boatVelocityRendererOrigin.position - windLineRendererOrigin.position).normalized;
-		Vector3 fakeBoatSpeedVector = (mastRendererPosition.position - boatVelocityRendererOrigin.position).normalized;
+		if( apparentWindBoatControl.currentPOS != ApparentWindBoatControl.BoatPointOfSail.InIrons ) {
+			Vector3 fakeWindVector = (boatVelocityRendererOrigin.position - windLineRendererOrigin.position).normalized;
+			Vector3 fakeBoatSpeedVector = (mastRendererPosition.position - boatVelocityRendererOrigin.position).normalized;
 
-		if( !isWindSpeedSetToHigh ) {
-			fakeWindVector *= lowWindSpeed;
-			fakeBoatSpeedVector *= lowBoatSpeed;
+			if( !isWindSpeedSetToHigh ) {
+				fakeWindVector *= lowWindSpeed;
+				fakeBoatSpeedVector *= lowBoatSpeed;
+			} else {
+				fakeWindVector *= highWindSpeed;
+				fakeBoatSpeedVector *= highBoatSpeed;
+			}
+
+			Vector3 calculatedApparentWind = fakeWindVector + fakeBoatSpeedVector;
+
+			guiManager.UpdateApparentWindSpeed( calculatedApparentWind.magnitude );
 		} else {
-			fakeWindVector *= highWindSpeed;
-			fakeBoatSpeedVector *= highBoatSpeed;
+			if( !isWindSpeedSetToHigh ) 
+				guiManager.UpdateApparentWindSpeed( lowWindSpeed );
+			else
+				guiManager.UpdateApparentWindSpeed( highWindSpeed );
 		}
-
-		Vector3 calculatedApparentWind = fakeWindVector + fakeBoatSpeedVector;
-
-		guiManager.UpdateApparentWindSpeed( calculatedApparentWind.magnitude );
 	}
 
 	/// <summary>

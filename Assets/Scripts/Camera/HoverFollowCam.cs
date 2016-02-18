@@ -8,12 +8,14 @@ using System.Collections;
 public class HoverFollowCam : MonoBehaviour
 {
 	[SerializeField]
-	bool ignoreYAxis = false, lookAtPlayer = false, fixedUpdate = true;
-
-	Transform player, camPos;
+	bool ignoreYAxis = false, lookAtPlayer = false, fixedUpdate = true, wideAngleEffect;
+	Rigidbody playerBody;
+	Transform player, camPos, camPos2;
+	Vector3 cameraDestination;
 	float camDistanceToCamPos;
 	float smoothRate = 1f;
 	float verticalLookOffset = 5f;
+	float maxVelocityMagnitude = 10f;
 	public enum CameraMode {stationary, follow, lerpToDestination};
 	public CameraMode thisCameraMode = CameraMode.stationary;
 	public Vector3 panAwayPosition, startPosition;
@@ -21,15 +23,29 @@ public class HoverFollowCam : MonoBehaviour
 	//switches
 	bool isAdjustingToCamPos;
 	bool isPanningOut;
+	float minFocalLength = 95f, maxFocalLength = 80f;
+
 
 	void Start()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		camPos = GameObject.FindGameObjectWithTag("CamPos").transform;
+		if (wideAngleEffect) {
+			camPos2 = GameObject.FindGameObjectWithTag ("CamPos2").transform;
+		}
+		playerBody = player.GetComponent<Rigidbody> ();
 	}
 
 	void FixedUpdate() {
 		if (fixedUpdate) {
+			if (wideAngleEffect) {
+				SetCameraFocalLength ();
+				SetCameraDistanceToBoat ();
+			} else {
+				cameraDestination = camPos.position;
+			}
+
+
 			if (lookAtPlayer) {
 				transform.LookAt (new Vector3 (player.position.x, player.position.y + verticalLookOffset, player.position.z));
 			}
@@ -38,9 +54,9 @@ public class HoverFollowCam : MonoBehaviour
 			case CameraMode.follow:
 				if (ignoreYAxis) {
 
-					transform.position -= (new Vector3 (transform.position.x, 0, transform.position.z) - new Vector3 (camPos.position.x, 0, camPos.position.z)) * smoothRate * Time.deltaTime;
+					transform.position -= (new Vector3 (transform.position.x, 0, transform.position.z) - new Vector3 (cameraDestination.x, 0, cameraDestination.z)) * smoothRate * Time.deltaTime;
 				} else {
-					transform.position -= (transform.position - camPos.position) * smoothRate * Time.deltaTime;
+					transform.position -= (transform.position - cameraDestination) * smoothRate * Time.deltaTime;
 				}
 				break;
 			case CameraMode.stationary:
@@ -57,6 +73,14 @@ public class HoverFollowCam : MonoBehaviour
 				break;
 			}
 		}
+	}
+
+	void SetCameraFocalLength () {
+		GetComponent<Camera>().fieldOfView = Mathf.Lerp(maxFocalLength, minFocalLength, playerBody.velocity.magnitude / maxVelocityMagnitude);
+	}
+
+	void SetCameraDistanceToBoat(){
+		cameraDestination = Vector3.Lerp (camPos.position, camPos2.position, Mathf.Ceil(10f*playerBody.velocity.magnitude / maxVelocityMagnitude)/10f);
 	}
 
 	void LateUpdate() {

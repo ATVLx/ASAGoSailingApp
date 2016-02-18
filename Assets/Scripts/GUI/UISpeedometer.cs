@@ -19,10 +19,10 @@ public class UISpeedometer : MonoBehaviour {
 
 	void LateUpdate () {
 		float boatVelocity = boatRigidbody.velocity.magnitude * NavBoatControl.METERS_PER_SECOND_TO_KNOTS;
-		velocityText.text = Mathf.Round( boatVelocity ).ToString();
+		velocityText.text = Mathf.Round( boatVelocity / 2.2f ).ToString();
 
 		float newRot = boatVelocity / 15f;
-		Quaternion newSpeedDialPivotRot = Quaternion.Euler( 0f, 0f, -(newRot*135f) );
+		Quaternion newSpeedDialPivotRot = Quaternion.Euler( 0f, 0f, -(newRot*135f) );			// -135 because the dial rotates between 0 and -135
 		speedDialPivot.rotation = newSpeedDialPivotRot;
 	}
 }

@@ -43,43 +43,53 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						switch(hit.collider.gameObject.name) {
 						case "Irons":
 							boatAnim.SetTrigger("Irons");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.InIrons;
 							break;
 
 						case "PTCloseHaul":
 							boatAnim.SetTrigger("PTCloseHaul");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.PTCloseHaul;
 							break;
 
 						case "PTCloseReach":
 							boatAnim.SetTrigger("PTCloseReach");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.PTCloseReach;
 							break;
 
 						case "PTBeamReach":
 							boatAnim.SetTrigger ("PTBeamReach");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.PTBeamReach;
 							break;
 
 						case "PTBroadReach":
 							boatAnim.SetTrigger("PTBroadReach");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.PTBroadReach;
 							break;
 
 						case "Run":
 							ApparentWindModuleManager.s_instance.hasClickedRun = true;
 							boatAnim.SetTrigger("Run");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.Run;
 							break;
 
 						case "STBroadReach":
 							boatAnim.SetTrigger("STBroadReach");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.STBroadReach;
 							break;
 						
 						case "STBeamReach":
 							boatAnim.SetTrigger("STBeamReach");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.STBeamReach;
 							break;
 
 						case "STCloseReach":
 							boatAnim.SetTrigger("STCloseReach");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.STCloseReach;
 							break;
 
 						case "STCloseHaul":
 							boatAnim.SetTrigger("STCloseHaul");
+							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.STCloseHaul;
 							break;
 						}
 					}
