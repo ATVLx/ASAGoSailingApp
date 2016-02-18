@@ -17,7 +17,9 @@ public class NavManager : MonoBehaviour {
 	private float startTime;
 	public float elapsedTime;
 	[SerializeField] Rigidbody boat;
-	[SerializeField] GameObject INarrows, OUTarrows, levelTrigger0, levelTrigger1;
+	[SerializeField] GameObject INArrows, OUTArrows, levelTrigger0, levelTrigger1;
+	[SerializeField] Transform respawn2;
+
 	[Header("UI")]
 	[SerializeField] Text timerText;
 	[SerializeField] Text yourTimeWasText;
@@ -96,10 +98,12 @@ public class NavManager : MonoBehaviour {
 	}
 
 	public void HasReachedHarbor () {
-		INarrows.SetActive (false);
-		OUTarrows.SetActive (true);
+		INArrows.SetActive (false);
+		OUTArrows.SetActive (true);
 		levelTrigger0.SetActive (false);
 		levelTrigger1.SetActive (true);
+
+		NavBoatControl.s_instance.respawnTransform = respawn2;
 	}
 
 	public string ReturnCurrNavPointName() {

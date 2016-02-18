@@ -40,6 +40,7 @@ public class NavBoatControl : MonoBehaviour {
 	public GameObject arrow;
 	public Transform boom;
 	public Transform rudderR, rudderL;
+	public Transform respawnTransform;
 	/// <summary>
 	/// This is the text file that we store in Unity Project folder that holds the values in CSV format of all of the points of sail names and angles associated with them
 	/// </summary>
@@ -72,7 +73,6 @@ public class NavBoatControl : MonoBehaviour {
 	/// </summary>
 	private bool rudderSliderSelected = true;
 
-	[SerializeField] Transform respawnTransform;
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
@@ -437,6 +437,8 @@ public class NavBoatControl : MonoBehaviour {
 			transform.position = respawnTransform.position;
 		}
 		transform.rotation = Quaternion.identity;
+		if( GameManager.s_instance.thisLevelState == GameManager.LevelState.Navigation )
+			transform.rotation = respawnTransform.rotation;
 		myRigidbody.mass /= 10f;
 		myRigidbody.isKinematic = true;
 		yield return new WaitForSeconds (.1f);
