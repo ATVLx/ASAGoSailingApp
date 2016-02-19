@@ -38,7 +38,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public Camera mainCamera;
 	public Transform lowWindCameraPos;
 	public Transform highWindCameraPos;
-	public GameObject[] instructionPanels;
+	public Transform circle1;
 
 	private ApparentWindModuleGuiManager guiManager;
 	private ApparentWindBoatControl apparentWindBoatControl;
@@ -221,16 +221,20 @@ public class ApparentWindModuleManager : MonoBehaviour {
 				guiManager.UpdateTrueWindSpeed( lowWindSpeed );
 				guiManager.UpdateBoatSpeed( lowBoatSpeed );
 				apparentWindBoatControl.SetHighSpeed( false );
+
 				guiManager.lowWindButton.gameObject.SetActive( true );
 				guiManager.highWindButton.gameObject.SetActive( false );
+				circle1.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
  			}
 			else {
 				LerpCamera( true );
 				guiManager.UpdateTrueWindSpeed( highWindSpeed );
 				guiManager.UpdateBoatSpeed( highBoatSpeed );
 				apparentWindBoatControl.SetHighSpeed( true );
+
 				guiManager.lowWindButton.gameObject.SetActive( false );
 				guiManager.highWindButton.gameObject.SetActive( true );
+				circle1.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 			}
 
 			isWindSpeedSetToHigh = !isWindSpeedSetToHigh;
