@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour {
 		yield return async;
 		if (level == 1) {
 			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.music);
-			SoundtrackManager.s_instance.StartCoroutine("FadeOutAudioSource",SoundtrackManager.s_instance.oceanBreeze);
+			SoundtrackManager.s_instance.StartCoroutine( "FadeOutOceanAudioSource" );
 		}
 		loadingBarScreen.alpha = 0;
 
