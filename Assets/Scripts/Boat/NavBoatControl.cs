@@ -21,7 +21,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float currThrust = 0f;
 	private float sinkMultiplier;
 	private float angleToAdjustTo;
-	private float turnStrength = 50f;
+	private float turnStrength = 75f;
 	/// <summary>
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
