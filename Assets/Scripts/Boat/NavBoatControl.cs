@@ -206,7 +206,6 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
-		print ("SAIL EFFECTIVENESS " + sailEffectiveness);
 	}
 
 	protected void ApplyForwardThrust () {
@@ -229,7 +228,12 @@ public class NavBoatControl : MonoBehaviour {
 			blendFloatValue = sailEffectiveness;
 		}
 
-		if (boomSlider.value < optimalAngle && angle > 5f && angle <= 165f) {
+		if (angle >= 115f&&!isJibing) {
+			print ("THIS ANGLE " + angle);
+			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
+		}
+
+		else if (boomSlider.value < optimalAngle && angle > 5f && angle <= 165f) {
 			blendFloatValue = isNegative *angle/5f;
 			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
 		}
