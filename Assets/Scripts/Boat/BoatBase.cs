@@ -22,12 +22,13 @@ public class BoatBase : MonoBehaviour {
 		boatDirection = transform.forward;
 		angleWRTWind = Vector3.Angle(boatDirection,directionWindComingFrom);
 		blendFloatValue = 0f;
+
 		if (transform.rotation.eulerAngles.y > 180f ) {
 			angleWRTWind = 360-angleWRTWind;
-			blendFloatValue = -.8f;
+			blendFloatValue = -1f;
 		}
 		else if (transform.rotation.eulerAngles.y < 180f ) {
-			blendFloatValue = .8f;
+			blendFloatValue = 1f;
 		}
 		
 		blendShape.SetFloat("sailtrim",blendFloatValue);
@@ -94,10 +95,10 @@ public class BoatBase : MonoBehaviour {
 		blendFloatValue = 0f;
 		if (transform.rotation.eulerAngles.y > 180f ) {
 			angleWRTWind = 360-angleWRTWind;
-			blendFloatValue = -.8f;
+			blendFloatValue = -1f;
 		}
 		else if (transform.rotation.eulerAngles.y < 180f && transform.rotation.eulerAngles.y > 10 ) {
-			blendFloatValue = .8f;
+			blendFloatValue = 1f;
 		}
 		
 		if (float.IsNaN(angleWRTWind)) {
