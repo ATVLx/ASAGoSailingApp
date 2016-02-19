@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class OpeningCredits : MonoBehaviour {
 
@@ -14,32 +13,37 @@ public class OpeningCredits : MonoBehaviour {
 	public int currentPanel = 0;
 	public bool isLerping;
 
+	private bool openingSequenceFinished = false;
+
 	void Update () {
-		if( currentPanel >= panels.Length ){
-			SceneManager.LoadScene( (int)GameManager.LevelState.MainMenu );
-			return;
-		} else {
-			if( !isLerping ) {
-				if( timer >= timeAtEachPanel[currentPanel] ) {
-					timer = 0f;
-					isLerping = true;
-				}
-				timer += Time.deltaTime;
+		if( !openingSequenceFinished ) {
+			if( currentPanel >= panels.Length ){
+				GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.MainMenu );
+				openingSequenceFinished = true;
+				return;
 			} else {
-				if( lerpTimer >= lerpDuration ) {
-					panels[currentPanel].gameObject.SetActive( false );
-					isLerping = false;
-					lerpTimer = 0f;
-					currentPanel++;
-					return;
+				if( !isLerping ) {
+					if( timer >= timeAtEachPanel[currentPanel] ) {
+						timer = 0f;
+						isLerping = true;
+					}
+					timer += Time.deltaTime;
+				} else {
+					if( lerpTimer >= lerpDuration ) {
+						panels[currentPanel].gameObject.SetActive( false );
+						isLerping = false;
+						lerpTimer = 0f;
+						currentPanel++;
+						return;
+					}
+					Color temp = panels[currentPanel].color;
+					float newAlpha = Mathf.Lerp( 1f, 0f, lerpTimer/lerpDuration );
+					Image[] images = panels[currentPanel].GetComponentsInChildren<Image>();
+					foreach( Image image in images ) {
+						image.color = new Color( temp.r, temp.g, temp.b, newAlpha );
+					}
+					lerpTimer += Time.deltaTime;
 				}
-				Color temp = panels[currentPanel].color;
-				float newAlpha = Mathf.Lerp( 1f, 0f, lerpTimer/lerpDuration );
-				Image[] images = panels[currentPanel].GetComponentsInChildren<Image>();
-				foreach( Image image in images ) {
-					image.color = new Color( temp.r, temp.g, temp.b, newAlpha );
-				}
-				lerpTimer += Time.deltaTime;
 			}
 		}
 	}

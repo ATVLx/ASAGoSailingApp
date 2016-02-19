@@ -47,7 +47,8 @@ public class GameManager : MonoBehaviour {
 	}
 		
 	public void LoadLevel(int levelIndex) {
-		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+		if( thisLevelState != LevelState.OpeningCredits )
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
 		loadingBarScreen.alpha = 1;
 		StartCoroutine (LevelLoader (levelIndex));
 		thisLevelState = (LevelState)levelIndex;
