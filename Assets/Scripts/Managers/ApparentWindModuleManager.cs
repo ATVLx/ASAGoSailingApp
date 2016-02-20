@@ -137,7 +137,6 @@ public class ApparentWindModuleManager : MonoBehaviour {
 			guiManager.ToggleGameplayUI( true );
 			break;
 		case GameState.Complete:
-			// TODO Do completion animation
 			GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.MainMenu );
 			break;
 		}

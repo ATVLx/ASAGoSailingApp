@@ -6,11 +6,18 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject startPanel;
 	public GameObject modulesMenu;
 
+	private Animator modulesMenuAnimator;
+	private bool restartTimerHasStarterd = false;
+
+	void Awake() {
+		modulesMenuAnimator = modulesMenu.GetComponent<Animator>();
+	}
+
 	void OnLevelWasLoaded() {
 		if (GameManager.s_instance.isReturningFromModule) {
 			GameManager.s_instance.isReturningFromModule = false;
 
-			Animator modulesMenuAnimator = modulesMenu.GetComponent<Animator>();
+			//modulesMenuAnimator = modulesMenu.GetComponent<Animator>();
 			modulesMenuAnimator.SetTrigger ("menuTrigger");
 
 			InstructionsPanel modulesMenuInstructionsPanel = modulesMenu.GetComponent<InstructionsPanel> ();
@@ -56,6 +63,29 @@ public class MainMenuManager : MonoBehaviour {
 
 			startPanel.SetActive (false);
 		}
+	}
+
+	void Update () {
+		// TODO In the case that this is ever ported to something that doens't use touch for input, add a case for keys/mouse
+		if (Input.touches.Length > 0 && restartTimerHasStarterd == true) {
+			restartTimerHasStarterd = false;
+		}
+
+		if ( restartTimerHasStarterd == false && modulesMenuAnimator.GetCurrentAnimatorStateInfo (0).IsName ("onScreen")) {
+			StopAllCoroutines ();
+			restartTimerHasStarterd = true;
+			StartCoroutine (GoBackToStartScreen ());
+		}
+	}
+
+	private IEnumerator GoBackToStartScreen() {
+		yield return new WaitForSeconds (60f);
+		modulesMenuAnimator.SetTrigger ("menuTrigger");
+		startPanel.SetActive (true);
+
+		yield return new WaitForSeconds (2f);
+		restartTimerHasStarterd = false;
+		StopCoroutine ("GoBackToStartScreen");
 	}
 
 	#region LoadLevel methods
