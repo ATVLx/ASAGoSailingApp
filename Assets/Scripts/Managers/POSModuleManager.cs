@@ -148,9 +148,7 @@ public class POSModuleManager : MonoBehaviour {
 		case GameState.CorrectAnswer :
 			if (AnswerCorrect()){
 				WinRound();
-				CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
-
-				gameState = GameState.WinScreen;
+				Win();
 			}
 			else {
 				gameState = GameState.SetRound;
@@ -163,12 +161,17 @@ public class POSModuleManager : MonoBehaviour {
 			break;
 			
 		case GameState.WinScreen:
-
-			gameplayPanel.SetActive (false);
-			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
-			winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
+			
 			break;
 		}
+	}
+
+	void Win() {
+		gameState = GameState.WinScreen;
+
+		gameplayPanel.SetActive (false);
+		CongratulationsPopUp.s_instance.InitializeCongratulationsPanel( "Points of Sail" );
+		winPercentage.text = "Your score is " + Mathf.Ceil(((float)numberCorrect/((float)numberWrong+(float)numberCorrect))*100)+"%";
 	}
 
 	bool Checker() {
