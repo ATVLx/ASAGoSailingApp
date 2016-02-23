@@ -38,7 +38,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	public Camera mainCamera;
 	public Transform lowWindCameraPos;
 	public Transform highWindCameraPos;
-	public GameObject[] instructionPanels;
+	public Transform circle1;
 
 	private ApparentWindModuleGuiManager guiManager;
 	private ApparentWindBoatControl apparentWindBoatControl;
@@ -50,8 +50,8 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	private bool cameraIsLerping = false;
 
 	// GUI Text values
-	private float lowWindSpeed = 9f;
-	private float highWindSpeed = 13f;
+	private float lowWindSpeed = 6f;
+	private float highWindSpeed = 18f;
 	private float lowBoatSpeed = 3f;
 	private float highBoatSpeed = 6f;
 
@@ -137,7 +137,6 @@ public class ApparentWindModuleManager : MonoBehaviour {
 			guiManager.ToggleGameplayUI( true );
 			break;
 		case GameState.Complete:
-			// TODO Do completion animation
 			GameManager.s_instance.LoadLevel( (int)GameManager.LevelState.MainMenu );
 			break;
 		}
@@ -221,16 +220,20 @@ public class ApparentWindModuleManager : MonoBehaviour {
 				guiManager.UpdateTrueWindSpeed( lowWindSpeed );
 				guiManager.UpdateBoatSpeed( lowBoatSpeed );
 				apparentWindBoatControl.SetHighSpeed( false );
+
 				guiManager.lowWindButton.gameObject.SetActive( true );
 				guiManager.highWindButton.gameObject.SetActive( false );
+				circle1.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
  			}
 			else {
 				LerpCamera( true );
 				guiManager.UpdateTrueWindSpeed( highWindSpeed );
 				guiManager.UpdateBoatSpeed( highBoatSpeed );
 				apparentWindBoatControl.SetHighSpeed( true );
+
 				guiManager.lowWindButton.gameObject.SetActive( false );
 				guiManager.highWindButton.gameObject.SetActive( true );
+				circle1.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
 			}
 
 			isWindSpeedSetToHigh = !isWindSpeedSetToHigh;

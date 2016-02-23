@@ -17,10 +17,15 @@ public class NavManager : MonoBehaviour {
 	private float startTime;
 	public float elapsedTime;
 	[SerializeField] Rigidbody boat;
-	[SerializeField] GameObject INarrows, OUTarrows, levelTrigger0, levelTrigger1;
+	[SerializeField] GameObject INArrows, OUTArrows, levelTrigger0, levelTrigger1;
+	[SerializeField] Transform respawn2;
+
 	[Header("UI")]
 	[SerializeField] Text timerText;
+	[SerializeField] Text yourTimeWasText;
 	[SerializeField] GameObject GameplayUI;
+	[SerializeField] GameObject timerTextParent;
+	[SerializeField] GameObject yourTimeWasTextParent;
 
 	void Awake() {
 		if (s_instance == null) {
@@ -58,7 +63,7 @@ public class NavManager : MonoBehaviour {
 
 		case GameState.Win:
 			boat.isKinematic = true;
-			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel ("Navigation");
+			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel ("Sailing Course");
 			SetTimerText (true);
 //			if (elapsedTime > 200f) {
 ////				rating = 0;
@@ -93,10 +98,12 @@ public class NavManager : MonoBehaviour {
 	}
 
 	public void HasReachedHarbor () {
-		INarrows.SetActive (false);
-		OUTarrows.SetActive (true);
+		INArrows.SetActive (false);
+		OUTArrows.SetActive (true);
 		levelTrigger0.SetActive (false);
 		levelTrigger1.SetActive (true);
+
+		NavBoatControl.s_instance.respawnTransform = respawn2;
 	}
 
 	public string ReturnCurrNavPointName() {
@@ -113,10 +120,15 @@ public class NavManager : MonoBehaviour {
 		string sec;
 		min = Mathf.CeilToInt((elapsedTime / 60)-1).ToString();
 		sec = (elapsedTime % 60).ToString("F0");
+		min = ( min.Length < 2 ) ? "0"+min : min;
+		sec = ( sec.Length < 2 ) ? "0"+sec : sec;
+
 		if (!x) {
 			timerText.text = min.ToString() + "\'" + sec.ToString() + "\"";
 		} else {
-			timerText.text = "Your Time Was:\n" + min + "\'" + sec + "\"";
+			timerTextParent.SetActive( false );
+			yourTimeWasTextParent.SetActive( true );
+			yourTimeWasText.text = min + "\'" + sec + "\"";
 		}
 	}
 

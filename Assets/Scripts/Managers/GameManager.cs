@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
 
 	public enum LevelState {OpeningCredits, MainMenu, POS, SailTrim, ApparentWind, LearnToTack, Docking, Navigation, ManOverboard, RightOfWay};
 	public LevelState thisLevelState;
+	public LevelState lastLevelState;
 
 	// Game pausing event
 	public delegate void PauseEvent( bool toggle );
@@ -24,6 +25,8 @@ public class GameManager : MonoBehaviour {
 
 	[System.NonSerialized]
 	public bool isPaused = false;
+	[System.NonSerialized]
+	public bool isReturningFromModule = false;
 
 	[Header("UI")]
 	public CanvasGroup pauseMenu;
@@ -47,19 +50,28 @@ public class GameManager : MonoBehaviour {
 	}
 		
 	public void LoadLevel(int levelIndex) {
-		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+		if( thisLevelState != LevelState.OpeningCredits )
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
 		loadingBarScreen.alpha = 1;
 		StartCoroutine (LevelLoader (levelIndex));
+		lastLevelState = thisLevelState;
 		thisLevelState = (LevelState)levelIndex;
-	
-
 	}
+
 	IEnumerator LevelLoader (int level) {
+		if (level == 1) {
+			if (thisLevelState > 0)
+				isReturningFromModule = true;
+		}
+
 		async = SceneManager.LoadSceneAsync (level);
 		yield return async;
 		if (level == 1) {
+			if (thisLevelState > 0)
+				isReturningFromModule = true;
+
 			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.music);
-			SoundtrackManager.s_instance.StartCoroutine("FadeOutAudioSource",SoundtrackManager.s_instance.oceanBreeze);
+			SoundtrackManager.s_instance.StartCoroutine( "FadeOutOceanAudioSource" );
 		}
 		loadingBarScreen.alpha = 0;
 

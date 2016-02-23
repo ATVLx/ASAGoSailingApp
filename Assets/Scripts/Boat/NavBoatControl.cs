@@ -21,7 +21,7 @@ public class NavBoatControl : MonoBehaviour {
 	private float currThrust = 0f;
 	private float sinkMultiplier;
 	private float angleToAdjustTo;
-	private float turnStrength = 50f;
+	private float turnStrength = 75f;
 	/// <summary>
 	/// The rudder rotation speed in degrees/sec.
 	/// </summary>
@@ -40,6 +40,7 @@ public class NavBoatControl : MonoBehaviour {
 	public GameObject arrow;
 	public Transform boom;
 	public Transform rudderR, rudderL;
+	public Transform respawnTransform;
 	/// <summary>
 	/// This is the text file that we store in Unity Project folder that holds the values in CSV format of all of the points of sail names and angles associated with them
 	/// </summary>
@@ -72,7 +73,6 @@ public class NavBoatControl : MonoBehaviour {
 	/// </summary>
 	private bool rudderSliderSelected = true;
 
-	[SerializeField] Transform respawnTransform;
 
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody>();
@@ -206,7 +206,6 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
-		print ("SAIL EFFECTIVENESS " + sailEffectiveness);
 	}
 
 	protected void ApplyForwardThrust () {
@@ -229,7 +228,12 @@ public class NavBoatControl : MonoBehaviour {
 			blendFloatValue = sailEffectiveness;
 		}
 
-		if (boomSlider.value < optimalAngle && angle > 5f && angle <= 165f) {
+		if (angle >= 115f&&!isJibing) {
+			print ("THIS ANGLE " + angle);
+			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
+		}
+
+		else if (boomSlider.value < optimalAngle && angle > 5f && angle <= 165f) {
 			blendFloatValue = isNegative *angle/5f;
 			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
 		}
@@ -437,6 +441,8 @@ public class NavBoatControl : MonoBehaviour {
 			transform.position = respawnTransform.position;
 		}
 		transform.rotation = Quaternion.identity;
+		if( GameManager.s_instance.thisLevelState == GameManager.LevelState.Navigation )
+			transform.rotation = respawnTransform.rotation;
 		myRigidbody.mass /= 10f;
 		myRigidbody.isKinematic = true;
 		yield return new WaitForSeconds (.1f);

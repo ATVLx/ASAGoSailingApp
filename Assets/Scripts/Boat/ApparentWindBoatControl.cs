@@ -41,7 +41,7 @@ public class ApparentWindBoatControl : MonoBehaviour {
 
 		case BoatPointOfSail.PTCloseHaul:
 		case BoatPointOfSail.STCloseHaul:
-			speedCoefficient = 0.9f;
+			speedCoefficient = 0.95f;
 			break;
 
 		case BoatPointOfSail.PTCloseReach:
@@ -51,7 +51,7 @@ public class ApparentWindBoatControl : MonoBehaviour {
 
 		case BoatPointOfSail.PTBeamReach:
 		case BoatPointOfSail.STBeamReach:
-			speedCoefficient = 0.8f;
+			speedCoefficient = 0.9f;
 			break;
 
 		case BoatPointOfSail.PTBroadReach:

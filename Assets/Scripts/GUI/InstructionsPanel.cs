@@ -13,7 +13,7 @@ public class InstructionsPanel : MonoBehaviour {
 	private int numSlides;
 	private int currentSlide = 0;
 
-	void Start () {
+	void Awake () {
 		finalSlide.SetAsLastSibling();
 		slides = slidesParent.GetComponentsInChildren<CanvasGroup>();
 		numSlides = slides.Length;
@@ -139,6 +139,7 @@ public class InstructionsPanel : MonoBehaviour {
 		ToggleSlide( slides[currentSlide], true );
 		UpdatePageNumber();
 		UpdateButtons();
-		if (SoundtrackManager.s_instance != null)SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
+		if (SoundtrackManager.s_instance != null && GameManager.s_instance.thisLevelState != GameManager.LevelState.MainMenu)
+			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.beep);
 	}
 }
