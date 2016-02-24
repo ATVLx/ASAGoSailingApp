@@ -15,6 +15,8 @@ public class MOBManager : MonoBehaviour {
 	[SerializeField]
 	Camera overhead, main;
 
+
+
 	[SerializeField]
 	Transform setup1transform, setup2transform;
 
@@ -60,6 +62,10 @@ public class MOBManager : MonoBehaviour {
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
 					curState = MOBState.gameplay;
+					DieOnHitBoat[] arrows = GameObject.FindObjectsOfType<DieOnHitBoat> ();
+					foreach (DieOnHitBoat x in arrows) {
+						x.Reset ();
+					}
 					StartCoroutine ("HackyBSFix");
 				}
 				break;

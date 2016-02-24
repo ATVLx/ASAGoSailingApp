@@ -67,6 +67,10 @@ public class DockingManager : MonoBehaviour {
 				//				StartCoroutine ("PauseBoats");
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
+					DieOnHitBoat[] arrows = GameObject.FindObjectsOfType<DieOnHitBoat> ();
+					foreach (DieOnHitBoat x in arrows) {
+						x.Reset ();
+					}
 					curState = DockingState.gameplay;
 					StartCoroutine ("HackyBSFix");
 				}
