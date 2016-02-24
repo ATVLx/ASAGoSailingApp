@@ -65,7 +65,7 @@ public class NavBoatControl : MonoBehaviour {
 	// Boat rudders reset
 	private float rudderResetTimeBuffer = .2f;
 	private float rudderResetTimer = 0f;
-	private float rudderLerpSpeed = 80f;
+	private float rudderLerpSpeed = 115f;
 	private float rudderStartVal = 0f;
 	private bool rudderIsLerping = false;
 	/// <summary>
