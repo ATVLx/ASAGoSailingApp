@@ -63,6 +63,10 @@ public class TackManager : MonoBehaviour {
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
 					curState = TackState.gameplay;
+					DieOnHitBoat[] arrows = GameObject.FindObjectsOfType<DieOnHitBoat> ();
+					foreach (DieOnHitBoat x in arrows) {
+						x.Reset ();
+					}
 				}
 				break;
 			}

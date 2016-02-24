@@ -23,7 +23,7 @@ public class HoverFollowCam : MonoBehaviour
 	//switches
 	bool isAdjustingToCamPos;
 	bool isPanningOut;
-	float minFocalLength = 95f, maxFocalLength = 80f;
+	public float minFocalLength = 95f, maxFocalLength = 80f;
 
 
 	void Start()
