@@ -121,11 +121,11 @@ public class BoatBase : MonoBehaviour {
 
 		if (angleWRTWind ==180) {
 			if (lastAngleWRTWind > 180) {
-				blendShape.SetFloat("sailtrim",-.8f);
+				blendShape.SetFloat("sailtrim",-1f);
 
 			}
 			else if (lastAngleWRTWind < 180) {
-				blendShape.SetFloat("sailtrim",.8f);
+				blendShape.SetFloat("sailtrim",1f);
 
 
 			}
