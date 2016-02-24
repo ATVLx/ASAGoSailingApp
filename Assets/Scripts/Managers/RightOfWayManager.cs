@@ -105,6 +105,8 @@ public class RightOfWayManager : MonoBehaviour {
 		yield return WaitForSecondsOrTap( resetDelay );
 		SetPositions ();
 		currentGraphicCG.alpha = 0f;
+		currentGraphicCG.interactable = false;
+		currentGraphicCG.blocksRaycasts = false;
 		gamePlayUI.SetActive( true );
 		ToggleCameras ();
 		ToggleBoatMovement (true);
@@ -149,6 +151,8 @@ public class RightOfWayManager : MonoBehaviour {
 		}
 		gamePlayUI.SetActive( false );
 		currentGraphicCG.alpha = 1f;
+		currentGraphicCG.interactable = true;
+		currentGraphicCG.blocksRaycasts = true;
 	}
 
 	void SetPositions() {
