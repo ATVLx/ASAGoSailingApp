@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
 
 	public enum LevelState {OpeningCredits, MainMenu, POS, SailTrim, ApparentWind, LearnToTack, Docking, Navigation, ManOverboard, RightOfWay};
 	public LevelState thisLevelState;
+	[System.NonSerialized]
 	public LevelState lastLevelState;
 
 	// Game pausing event
