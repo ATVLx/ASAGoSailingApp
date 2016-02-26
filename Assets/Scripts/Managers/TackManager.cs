@@ -95,7 +95,6 @@ public class TackManager : MonoBehaviour {
 			StopAllCoroutines ();
 			StartCoroutine ("FailReset");
 			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
-
 		}
 	}
 
@@ -129,7 +128,7 @@ public class TackManager : MonoBehaviour {
 			playerBoat.transform.rotation = setup2transform.rotation;
 		}
 		switchToGamePlay = true;
-
+		NavBoatControl.s_instance.boomSlider.value = 80f;
 	}
 
 	IEnumerator WinReset () {
