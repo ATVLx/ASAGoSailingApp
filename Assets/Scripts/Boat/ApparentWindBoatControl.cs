@@ -7,7 +7,7 @@ public class ApparentWindBoatControl : MonoBehaviour {
 	public enum BoatPointOfSail {InIrons, PTCloseHaul, PTCloseReach, PTBeamReach, PTBroadReach, Run, STCloseHaul, STCloseReach, STBeamReach, STBroadReach}
 
 	public Transform boatBody;
-	public float speedInKnots = 4f;
+	private float speedInKnots = 1f;
 	[System.NonSerialized]
 	public Rigidbody myRigidbody;
 	[System.NonSerialized]
@@ -41,32 +41,33 @@ public class ApparentWindBoatControl : MonoBehaviour {
 
 		case BoatPointOfSail.PTCloseHaul:
 		case BoatPointOfSail.STCloseHaul:
-			speedCoefficient = 0.95f;
+			speedCoefficient = 5.5f;
 			break;
 
 		case BoatPointOfSail.PTCloseReach:
 		case BoatPointOfSail.STCloseReach:
-			speedCoefficient = 1.2f;
+			speedCoefficient = 6.2f;
 			break;
 
 		case BoatPointOfSail.PTBeamReach:
 		case BoatPointOfSail.STBeamReach:
-			speedCoefficient = 0.9f;
+			speedCoefficient = 6.8f;
 			break;
 
 		case BoatPointOfSail.PTBroadReach:
 		case BoatPointOfSail.STBroadReach:
-			speedCoefficient = 1.1f;
+			speedCoefficient = 5.6f;
 			break;
 
 		case BoatPointOfSail.Run:
+			speedCoefficient = 3.8f;
 			break;
 		}
 
-		if( highSpeed )
-			speedCoefficient *= boatSpeedScalar;
+		if( !highSpeed )
+			speedCoefficient /= boatSpeedScalar;
 			
-		myRigidbody.velocity = boatBody.forward * (speedInKnots/NavBoatControl.METERS_PER_SECOND_TO_KNOTS) * speedCoefficient;
+		myRigidbody.velocity = boatBody.forward * (speedInKnots * speedCoefficient/NavBoatControl.METERS_PER_SECOND_TO_KNOTS);
 	}
 
 	public void SetHighSpeed( bool val ) {

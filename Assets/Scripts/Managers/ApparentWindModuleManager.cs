@@ -85,7 +85,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		// Get references to singletons
 		guiManager = ApparentWindModuleGuiManager.s_instance;
 		guiManager.UpdateTrueWindSpeed( lowWindSpeed );
-		guiManager.UpdateBoatSpeed( lowBoatSpeed );
+//		guiManager.UpdateBoatSpeed( lowBoatSpeed );
 
 		apparentWindBoatControl = ApparentWindBoatControl.s_instance;
 		ChangeState( GameState.Intro );
@@ -118,6 +118,8 @@ public class ApparentWindModuleManager : MonoBehaviour {
 		boatVelocityRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		windLineRendererOrigin.GetComponent<ConnectLineRenderer>().UpdatePosition();
 		mastRendererPosition.GetComponent<ConnectLineRenderer>().UpdatePosition();
+
+		guiManager.UpdateBoatSpeed( apparentWindBoatControl.myRigidbody.velocity.magnitude*NavBoatControl.METERS_PER_SECOND_TO_KNOTS );
 
 		CalculateApparentWind();
 
@@ -218,7 +220,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 			if( isWindSpeedSetToHigh ) {
 				LerpCamera( false );
 				guiManager.UpdateTrueWindSpeed( lowWindSpeed );
-				guiManager.UpdateBoatSpeed( lowBoatSpeed );
+//				guiManager.UpdateBoatSpeed( lowBoatSpeed );
 				apparentWindBoatControl.SetHighSpeed( false );
 
 				guiManager.lowWindButton.gameObject.SetActive( true );
@@ -228,7 +230,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 			else {
 				LerpCamera( true );
 				guiManager.UpdateTrueWindSpeed( highWindSpeed );
-				guiManager.UpdateBoatSpeed( highBoatSpeed );
+//				guiManager.UpdateBoatSpeed( apparentWindBoatControl.myRigidbody.velocity.magnitude*NavBoatControl.METERS_PER_SECOND_TO_KNOTS );
 				apparentWindBoatControl.SetHighSpeed( true );
 
 				guiManager.lowWindButton.gameObject.SetActive( false );
