@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class DockingManager : MonoBehaviour {
-	enum DockingState {briefing, instructions, gameplay, reset, win};
+	enum DockingState {briefing, instructions1, instructions2, gameplay, reset, win};
 	DockingState curState;
 	public static DockingManager s_instance;
 	[SerializeField]
@@ -21,6 +21,8 @@ public class DockingManager : MonoBehaviour {
 
 	[Header("UI")]
 	public GameObject briefingUI;
+	public GameObject perpendicularMethodUI;
+	public GameObject parallelMethodUI;
 	public GameObject instructionsUI;
 	public GameObject gameplayUi;
 
@@ -45,7 +47,8 @@ public class DockingManager : MonoBehaviour {
 
 	void Update () {
 		switch (curState) {
-		case DockingState.instructions:
+		case DockingState.instructions1:
+		case DockingState.instructions2:
 			{
 				if (switchToGamePlay) {
 					playerBoat.GetComponent<Rigidbody> ().isKinematic = false;
@@ -151,11 +154,13 @@ public class DockingManager : MonoBehaviour {
 			setup1.SetActive (false);
 			playerBoat.transform.position = setup2transform.position;
 			playerBoat.transform.rotation = setup2transform.rotation;
-			yield return new WaitForSeconds (2f);
-			CameraMain ();
-			switchToGamePlay = true;
 
-
+			curState = DockingState.instructions2;
+			playerBoat.GetComponent<Rigidbody>().isKinematic = true;
+			gameplayUi.SetActive (false);
+			parallelMethodUI.SetActive (true);
+			instructionsUI.GetComponent<InstructionsPanel>().GoToPanel( instructionsUI.transform.GetChild (0).GetChild(0).gameObject );
+			
 		} else {
 			curState = DockingState.win;
 			if (SoundtrackManager.s_instance != null)
@@ -168,14 +173,21 @@ public class DockingManager : MonoBehaviour {
 		switch( curState ) {
 		case DockingState.briefing:
 			briefingUI.SetActive( false );
-			instructionsUI.SetActive( true );
-			curState = DockingState.instructions;
+			perpendicularMethodUI.SetActive( true );
+			curState = DockingState.instructions1;
 			break;
 
-		case DockingState.instructions:
-			instructionsUI.SetActive( false );
+		case DockingState.instructions1:
+			perpendicularMethodUI.SetActive( false );
 			gameplayUi.SetActive( true );
 			StartGame();
+			break;
+
+		case DockingState.instructions2:
+			parallelMethodUI.SetActive (false);
+			gameplayUi.SetActive (true);
+			CameraMain ();
+			switchToGamePlay = true;
 			break;
 		}
 	}
