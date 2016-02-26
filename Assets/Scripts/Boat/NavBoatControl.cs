@@ -454,6 +454,10 @@ public class NavBoatControl : MonoBehaviour {
 	#endregion
 	void OnCollisionEnter (Collision thisCollision) {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
+			if (TackManager.s_instance != null) {
+				TackManager.s_instance.Fail ();
+				return;
+			}
 			BoatHasCrashed ();
 		}
 		if (thisCollision.gameObject.tag == "ROWFail" ) {

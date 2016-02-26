@@ -140,6 +140,7 @@ public class TackManager : MonoBehaviour {
 			setup1.SetActive (false);
 			playerBoat.transform.position = setup2transform.position;
 			playerBoat.transform.rotation = setup2transform.rotation;
+			NavBoatControl.s_instance.respawnTransform = setup2transform;
 			// UI
 			gameplayUI.SetActive( false );
 			jibingInformationUI.SetActive( true );
