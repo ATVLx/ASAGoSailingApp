@@ -293,11 +293,11 @@ public class NavBoatControl : MonoBehaviour {
 		         (angleWRTWind > 0f && angleWRTWind < 45f)) {
 			pointOfSail.text = "Close-Hauled Starboard Tack";
 		}
-		else if ((angleWRTWind < 293f && angleWRTWind > 270f) ||
+		else if ((angleWRTWind < 293f && angleWRTWind > 275f) ||
 		         (angleWRTWind > 0f && angleWRTWind < 45f)) {
 			pointOfSail.text = "Close Reach Starboard Tack";
 		}
-		else if ((angleWRTWind < 270f && angleWRTWind > 240f) ||
+		else if ((angleWRTWind <= 275f && angleWRTWind > 240f) ||
 		         (angleWRTWind > 0f && angleWRTWind < 45f)) {
 			pointOfSail.text = "Beam Reach Starboard Tack";
 		}
@@ -311,10 +311,10 @@ public class NavBoatControl : MonoBehaviour {
 		else if (angleWRTWind > 120f && angleWRTWind < 170f) {
 			pointOfSail.text = "Broad Reach Port Tack";
 		}
-		else if (angleWRTWind > 90f && angleWRTWind < 120f) {
+		else if (angleWRTWind >= 85f && angleWRTWind < 120f) {
 			pointOfSail.text = "Beam Reach Port Tack";
 		}
-		else if (angleWRTWind > 66f && angleWRTWind < 90f) {
+		else if (angleWRTWind > 66f && angleWRTWind < 85) {
 			pointOfSail.text = "Close Reach Port Tack";
 		}
 		else if (angleWRTWind > 30f && angleWRTWind < 66f){
@@ -365,7 +365,7 @@ public class NavBoatControl : MonoBehaviour {
 				fracJourney=1;
 				lerpAngleFloatVal = Mathf.Lerp(lerpStart, lerpEnd, fracJourney);
 				boom.localRotation = Quaternion.Euler(0,lerpAngleFloatVal,0);
-				rudderSlider.interactable = true;
+				if (rudderSlider!=null)rudderSlider.interactable = true;
 				boomSlider.interactable = true;
 				controlsAreActive = true;
 			}
@@ -379,7 +379,7 @@ public class NavBoatControl : MonoBehaviour {
 		lerpTimer = Time.time;
 		lerpStart = boom.localRotation.eulerAngles.y > 180 ? boom.localRotation.eulerAngles.y - 360 : boom.localRotation.eulerAngles.y;
 		lerpEnd = -lerpStart;
-		rudderSlider.interactable = false;
+		if (rudderSlider!=null)rudderSlider.interactable = false;
 		boomSlider.interactable = false;
 		controlsAreActive = false;
 //		if (SoundtrackManager.s_instance != null)
