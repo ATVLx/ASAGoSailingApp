@@ -145,8 +145,12 @@ public class NavBoatControl : MonoBehaviour {
 	/// Sets the rudderSliderSelected bool true or false. This methos is called externally by the OnPointerDown() and OnPointerUp() event triggers on the rudderSlider
 	/// </summary>
 	/// <param name="selectionState">If set to <c>true</c> it indicates that the rudderSlider was selected.</param>
-	public void RudderSliderValueWasChanged( bool selectionState ) {
-		rudderSliderSelected = selectionState;
+	public void RudderSliderValueWasChangedTrue( ) {
+		rudderSliderSelected = true;
+	}
+
+	public void RudderSliderValueWasChangedFalse( ) {
+		rudderSliderSelected = false;
 	}
 
 	private void HandleRudderRotation() {
