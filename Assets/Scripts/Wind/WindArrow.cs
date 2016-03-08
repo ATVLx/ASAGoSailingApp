@@ -27,7 +27,7 @@ public class WindArrow : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		if (NavBoatControl.s_instance == null) {
+		if (NavBoatControl.s_instance == null || TrimManager.s_instance!=null) {
 			transform.Translate (Vector3.forward * .7f);
 		}
 	}
