@@ -106,7 +106,6 @@ public class NavBoatControl : MonoBehaviour {
 //		velocity.text = "" + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 		HandleRudderRotation();
 		IdentifyPointOfSail();
-		HandleWindArrowMovement ();
 	}
 
 	public float ReturnSailEfficiency() {
@@ -119,6 +118,8 @@ public class NavBoatControl : MonoBehaviour {
 		ApplyForwardThrust ();
 		ApplyBoatRotation ();
 		SetSailAnimator ();
+		HandleWindArrowMovement ();
+
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -477,7 +478,7 @@ public class NavBoatControl : MonoBehaviour {
 
 	void HandleWindArrowMovement() {
 		foreach (WindArrow x in GetComponentsInChildren<WindArrow>()) {
-			x.transform.Translate (-x.transform.forward*.6f);
+			x.transform.Translate (Vector3.forward*.5f);
 		}
 	}
 }

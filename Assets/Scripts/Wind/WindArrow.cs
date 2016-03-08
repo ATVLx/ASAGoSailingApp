@@ -13,7 +13,10 @@ public class WindArrow : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player").transform;
-		transform.SetParent(player.transform);
+		if (NavBoatControl.s_instance != null) {
+			transform.SetParent (player.transform);
+
+		}
 
 	}
 	
@@ -22,6 +25,10 @@ public class WindArrow : MonoBehaviour {
 		
 		if (Vector3.Distance(transform.position, player.transform.position) > deathDistance) {
 			Destroy(gameObject);
+		}
+
+		if (NavBoatControl.s_instance == null) {
+			transform.Translate (Vector3.forward * .7f);
 		}
 	}
 
