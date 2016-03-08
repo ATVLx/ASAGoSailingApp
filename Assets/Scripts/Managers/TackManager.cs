@@ -63,6 +63,10 @@ public class TackManager : MonoBehaviour {
 				if (switchToGamePlay) {
 					switchToGamePlay = false;
 					curState = TackState.gameplay;
+					DieOnHitBoat[] arrows = GameObject.FindObjectsOfType<DieOnHitBoat> ();
+					foreach (DieOnHitBoat x in arrows) {
+						x.Reset ();
+					}
 				}
 				break;
 			}
@@ -91,7 +95,6 @@ public class TackManager : MonoBehaviour {
 			StopAllCoroutines ();
 			StartCoroutine ("FailReset");
 			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.wrong);
-
 		}
 	}
 
@@ -125,7 +128,7 @@ public class TackManager : MonoBehaviour {
 			playerBoat.transform.rotation = setup2transform.rotation;
 		}
 		switchToGamePlay = true;
-
+		NavBoatControl.s_instance.boomSlider.value = 80f;
 	}
 
 	IEnumerator WinReset () {
@@ -136,6 +139,7 @@ public class TackManager : MonoBehaviour {
 			setup1.SetActive (false);
 			playerBoat.transform.position = setup2transform.position;
 			playerBoat.transform.rotation = setup2transform.rotation;
+			NavBoatControl.s_instance.respawnTransform = setup2transform;
 			// UI
 			gameplayUI.SetActive( false );
 			jibingInformationUI.SetActive( true );

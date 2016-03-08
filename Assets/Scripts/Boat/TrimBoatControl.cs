@@ -18,7 +18,7 @@ public class TrimBoatControl : NavBoatControl {
 	void Update () {
 		MastRotation ();
 		IdentifyPointOfSail ();
-		sailEffiencySlider.value = sailEffectiveness*1.3f;
+		sailEffiencySlider.value = sailEffectiveness*1.1f;
 	}
 
 	void FixedUpdate () {

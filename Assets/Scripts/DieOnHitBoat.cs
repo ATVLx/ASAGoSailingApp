@@ -6,8 +6,9 @@ public class DieOnHitBoat : MonoBehaviour {
 	// Use this for initialization
 	private bool hit = false;
 	private float speed = 0;
+	Vector3 startPos;
 	void Start () {
-	
+		startPos = transform.position;
 	}
 	
 	void OnTriggerEnter( Collider col ) {
@@ -27,10 +28,14 @@ public class DieOnHitBoat : MonoBehaviour {
 		}
 	}
 
-	IEnumerator Die () {
-		yield return new WaitForSeconds (8f);
-		Destroy (gameObject);
+	public void Reset () {
+		transform.position = startPos;
+		hit = false;
+	}
 
+	IEnumerator Die () {
+		yield return new WaitForSeconds (5f);
+		hit = false;
 	}
 
 }

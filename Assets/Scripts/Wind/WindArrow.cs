@@ -13,14 +13,25 @@ public class WindArrow : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player").transform;
-//		spawnTimer = Time.time;
+		if (NavBoatControl.s_instance != null) {
+			transform.SetParent (player.transform);
+
+		}
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Translate(transform.forward* -7f *Time.deltaTime);
+		
 		if (Vector3.Distance(transform.position, player.transform.position) > deathDistance) {
 			Destroy(gameObject);
 		}
+
+		if (NavBoatControl.s_instance == null) {
+			transform.Translate (Vector3.forward * .7f);
+		}
+	}
+
+	void FixedUpdate() {
 	}
 }

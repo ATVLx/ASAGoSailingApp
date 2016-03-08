@@ -65,7 +65,7 @@ public class NavBoatControl : MonoBehaviour {
 	// Boat rudders reset
 	private float rudderResetTimeBuffer = .2f;
 	private float rudderResetTimer = 0f;
-	private float rudderLerpSpeed = 80f;
+	private float rudderLerpSpeed = 115f;
 	private float rudderStartVal = 0f;
 	private bool rudderIsLerping = false;
 	/// <summary>
@@ -118,6 +118,8 @@ public class NavBoatControl : MonoBehaviour {
 		ApplyForwardThrust ();
 		ApplyBoatRotation ();
 		SetSailAnimator ();
+		HandleWindArrowMovement ();
+
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -229,7 +231,6 @@ public class NavBoatControl : MonoBehaviour {
 		}
 
 		if (angle >= 115f&&!isJibing) {
-			print ("THIS ANGLE " + angle);
 			sail.SetFloat ("sailtrim", isNegative*-1);// -1 bc jon setup animator backwards
 		}
 
@@ -381,8 +382,8 @@ public class NavBoatControl : MonoBehaviour {
 		rudderSlider.interactable = false;
 		boomSlider.interactable = false;
 		controlsAreActive = false;
-		if (SoundtrackManager.s_instance != null)
-			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.gybe);
+//		if (SoundtrackManager.s_instance != null)
+//			SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.gybe);
 		if (MOBManager.s_instance != null) {
 			MOBManager.s_instance.Fail();
 		}
@@ -455,6 +456,10 @@ public class NavBoatControl : MonoBehaviour {
 	#endregion
 	void OnCollisionEnter (Collision thisCollision) {
 		if (thisCollision.gameObject.tag == "collisionObject" && !isCrashing) {
+			if (TackManager.s_instance != null) {
+				TackManager.s_instance.Fail ();
+				return;
+			}
 			BoatHasCrashed ();
 		}
 		if (thisCollision.gameObject.tag == "ROWFail" ) {
@@ -468,6 +473,12 @@ public class NavBoatControl : MonoBehaviour {
 				if (thisCollision.gameObject.GetComponent<EvilYacht> ()!=null)
 				thisCollision.gameObject.GetComponent<EvilYacht> ().Kill ();
 			}
+		}
+	}
+
+	void HandleWindArrowMovement() {
+		foreach (WindArrow x in GetComponentsInChildren<WindArrow>()) {
+			x.transform.Translate (Vector3.forward*.5f);
 		}
 	}
 }

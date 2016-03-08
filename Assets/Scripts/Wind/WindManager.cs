@@ -10,7 +10,7 @@ public class WindManager : MonoBehaviour {
 	public static WindManager s_instance;
 	Transform[] spawnPositions;
 	public float distFromBoatToSpawn = 50f;
-	float spawnTime = .4f;
+	public float spawnTime = .4f;
 	float elapsedTime = 0f;
 	public Vector3 directionOfWind = new Vector3(0,0,1f);
 	public GameObject arrowPrefab;
