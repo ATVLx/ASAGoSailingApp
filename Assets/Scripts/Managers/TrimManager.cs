@@ -92,7 +92,7 @@ public class TrimManager : MonoBehaviour {
 	}
 
 	void SubmitButtonLogic () {
-		if (sailEfficiencySlider.value > .8f) {
+		if (sailEfficiencySlider.value > .95f) {
 			submitButton.interactable = true;
 		} else {
 			submitButton.interactable = false;
