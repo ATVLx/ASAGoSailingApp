@@ -106,6 +106,7 @@ public class NavBoatControl : MonoBehaviour {
 //		velocity.text = "" + Mathf.Round(myRigidbody.velocity.magnitude*METERS_PER_SECOND_TO_KNOTS);
 		HandleRudderRotation();
 		IdentifyPointOfSail();
+		HandleWindArrowMovement ();
 	}
 
 	public float ReturnSailEfficiency() {
@@ -471,6 +472,12 @@ public class NavBoatControl : MonoBehaviour {
 				if (thisCollision.gameObject.GetComponent<EvilYacht> ()!=null)
 				thisCollision.gameObject.GetComponent<EvilYacht> ().Kill ();
 			}
+		}
+	}
+
+	void HandleWindArrowMovement() {
+		foreach (WindArrow x in GetComponentsInChildren<WindArrow>()) {
+			x.transform.Translate (-x.transform.forward*.6f);
 		}
 	}
 }
