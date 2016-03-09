@@ -118,7 +118,7 @@ public class NavBoatControl : MonoBehaviour {
 		ApplyForwardThrust ();
 		ApplyBoatRotation ();
 		SetSailAnimator ();
-		HandleWindArrowMovement ();
+//		HandleWindArrowMovement ();
 
 	}
 
