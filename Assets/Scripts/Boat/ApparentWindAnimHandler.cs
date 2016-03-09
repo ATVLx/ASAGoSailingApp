@@ -13,7 +13,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 	/// </summary>
 	public ApparentWindModuleManager apparentWindModuleManager;
 	public POSModuleManager pOSModuleManager;
-	public Text tackDescriptor, auxInfo; 
+	public Text tackDescriptor, auxInfo, POS; 
 
 	void Start() {
 		//TODO Make this class check for the overarching GameManager's current state and then get the corresponding module's s_instance
@@ -28,6 +28,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 	void Update () {
 		if( apparentWindModuleManager != null ) {
 			if( apparentWindModuleManager.gameState == ApparentWindModuleManager.GameState.Playing ) {
+				
 				//Cast ray at point of mouse click
 				if (Input.GetButtonDown("Fire1")) 
 				{
@@ -42,52 +43,67 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						//checks which point of sail object was clicked for animation states
 						switch(hit.collider.gameObject.name) {
 						case "Irons":
+							POS.text = "In Irons";
 							boatAnim.SetTrigger("Irons");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.InIrons;
 							break;
 
 						case "PTCloseHaul":
+							POS.text = "Close Hauled Port Tack";
+
 							boatAnim.SetTrigger("PTCloseHaul");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.PTCloseHaul;
 							break;
 
 						case "PTCloseReach":
+							POS.text = "Close Reach Port Tack";
 							boatAnim.SetTrigger("PTCloseReach");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.PTCloseReach;
 							break;
 
 						case "PTBeamReach":
+							POS.text = "Beam Reach Port Tack";
 							boatAnim.SetTrigger ("PTBeamReach");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.PTBeamReach;
 							break;
 
 						case "PTBroadReach":
+							POS.text = "Broad Reach Port Tack";
 							boatAnim.SetTrigger("PTBroadReach");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.PTBroadReach;
 							break;
 
 						case "Run":
+							POS.text = "Run";
+
 							ApparentWindModuleManager.s_instance.hasClickedRun = true;
 							boatAnim.SetTrigger("Run");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.Run;
 							break;
 
 						case "STBroadReach":
+							POS.text = "Broad Reach Starbord Tack";
+
 							boatAnim.SetTrigger("STBroadReach");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.STBroadReach;
 							break;
 						
 						case "STBeamReach":
+							POS.text = "Beam Reach Starbord Tack";
 							boatAnim.SetTrigger("STBeamReach");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.STBeamReach;
 							break;
 
 						case "STCloseReach":
+							POS.text = "Close Reach Starbord Tack";
+
 							boatAnim.SetTrigger("STCloseReach");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.STCloseReach;
 							break;
 
 						case "STCloseHaul":
+							POS.text = "Close Hauled Starbord Tack";
+
 							boatAnim.SetTrigger("STCloseHaul");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.STCloseHaul;
 							break;
