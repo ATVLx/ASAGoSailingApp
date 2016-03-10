@@ -214,7 +214,7 @@ public class RightOfWayManager : MonoBehaviour {
 
 	IEnumerator level2 () {
 		print ("LEVEL2.1");
-		yield return new WaitForSeconds (3f);
+		yield return new WaitForSeconds (5f);
 		print ("LEVEL2.2");
 
 		AIboat.GetComponent<AIBoat> ().SetSteering (true, true);
