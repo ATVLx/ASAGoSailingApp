@@ -63,6 +63,8 @@ public class NavManager : MonoBehaviour {
 
 		case GameState.Win:
 			boat.isKinematic = true;
+			GameplayUI.SetActive( false );
+
 			CongratulationsPopUp.s_instance.InitializeCongratulationsPanel ("Sailing Course");
 			SetTimerText (true);
 //			if (elapsedTime > 200f) {
