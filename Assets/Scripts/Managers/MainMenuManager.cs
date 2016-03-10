@@ -49,11 +49,9 @@ public class MainMenuManager : MonoBehaviour {
 				goToPanelIndex = 5;
 				break;
 			case GameManager.LevelState.Navigation:
-				goToPanelIndex = 7;
-				break;
-			case GameManager.LevelState.ManOverboard:
 				goToPanelIndex = 6;
 				break;
+
 			case GameManager.LevelState.RightOfWay:
 				goToPanelIndex = 4;
 				break;

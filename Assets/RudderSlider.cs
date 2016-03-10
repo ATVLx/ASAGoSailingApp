@@ -7,6 +7,17 @@ public class RudderSlider : MonoBehaviour {
 	EventTrigger trigger;
 	UnityAction down, up;
 	void Start () {
+		AddTriggers ();
+	}
+		
+
+	void OnEnable() {
+		AddTriggers ();
+
+	}
+
+	void AddTriggers() {
+		print ("triggers added");
 		down = new UnityAction (NavBoatControl.s_instance.RudderSliderValueWasChangedTrue);
 		up = new UnityAction (NavBoatControl.s_instance.RudderSliderValueWasChangedFalse);
 
