@@ -14,7 +14,6 @@ public class posAnimState : MonoBehaviour {
 	public Text displayPOS, displayPOS2; 
 	
 	void Update () {
-
 		//Cast ray at point of mouse click
 		if (Input.GetButtonDown("Fire1")) 
 		{

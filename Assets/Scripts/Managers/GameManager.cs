@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour {
 	public CanvasGroup loadingBarScreen;
 	public Slider musicVolumeSlider;
 	public Slider soundsVolumeSlider;
-	public Slider loadingSlider;
 
 	private AsyncOperation async = null;
 
@@ -166,10 +165,7 @@ public class GameManager : MonoBehaviour {
 
 	void Update() {
 
-		if (async != null && !async.isDone) {
-			loadingSlider.value = async.progress;
-		}
-
+	
 		if( Input.GetKeyDown( KeyCode.Space ) )
 			PressedPause();
 	}

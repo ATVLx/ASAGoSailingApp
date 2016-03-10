@@ -31,8 +31,22 @@ public class TrimManager : MonoBehaviour {
 			Debug.LogWarning( "Deleting "+ gameObject.name +" because it is a duplicate TrimManager." );
 		}
 	}
-		
+
+	void reshuffle(ref float[] positions)
+	{
+		// Knuth shuffle algorithm :: courtesy of Wikipedia :)
+		for (int t = 0; t < positions.Length; t++ )
+		{
+			float tmp = positions[t];
+			int r = Random.Range(t, positions.Length);
+			positions[t] = positions[r];
+			positions[r] = tmp;
+		}
+
+	}	
+
 	void Start () {
+		reshuffle (ref listOfPositions);
 		submitButton.gameObject.SetActive(false);
 	}
 

@@ -21,8 +21,24 @@ public class AIBoat : MonoBehaviour {
 	void Start()
 	{
 		m_body = GetComponent<Rigidbody>();
-		sail.SetFloat ("sailtrim", .8f);
+		sail.SetFloat ("sailtrim", 1f);
 		accelerate = true;
+	}
+
+	public void SetMast(int scenario) {
+		if (scenario == 0) {
+
+		} else if (scenario == 1) {
+			sail.SetFloat ("sailtrim", -1f);
+			mast.localRotation = Quaternion.Euler (new Vector3 (0, 45f, 0));
+
+		} else if (scenario == 2) {
+			sail.SetFloat ("sailtrim", -1f);
+			mast.localRotation = Quaternion.Euler (new Vector3 (0, 35f, 0));
+		} else if (scenario == 3) {
+			mast.localRotation = Quaternion.Euler (new Vector3 (0, 60f, 0));
+
+		}
 	}
 
 	void FixedUpdate()

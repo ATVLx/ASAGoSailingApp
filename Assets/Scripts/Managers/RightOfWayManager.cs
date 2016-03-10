@@ -19,6 +19,7 @@ public class RightOfWayManager : MonoBehaviour {
 	[SerializeField]
 	Camera cam1, cam2;
 
+
 	[SerializeField] GameObject congratsText;
 	bool isFailing;
 	bool hasStarted;
@@ -88,6 +89,8 @@ public class RightOfWayManager : MonoBehaviour {
 	void ToggleCameras (){
 		cam1.enabled = !cam1.isActiveAndEnabled;
 		cam2.enabled = !cam2.isActiveAndEnabled;
+		cam1.transform.position = GameObject.FindGameObjectWithTag ("CamPos").transform.position;
+
 
 	}
 
@@ -99,17 +102,9 @@ public class RightOfWayManager : MonoBehaviour {
 			yield return new WaitForSeconds (2f);
 		}
 		ToggleCameras ();
-		isFailing = false;
 		ShowGraphics ();
 		ToggleBoatMovement (false);
-		yield return WaitForSecondsOrTap( resetDelay );
-		SetPositions ();
-		currentGraphicCG.alpha = 0f;
-		currentGraphicCG.interactable = false;
-		currentGraphicCG.blocksRaycasts = false;
-		gamePlayUI.SetActive( true );
-		ToggleCameras ();
-		ToggleBoatMovement (true);
+
 	}
 
 	void ToggleBoatMovement (bool thisBool) {
@@ -121,31 +116,21 @@ public class RightOfWayManager : MonoBehaviour {
 
 	//TODO make boats turn after X seconds on each module
 	void ShowGraphics() {
-		
 		switch (scenario) {
-		case 0:
-			{
+		case 2: {
 				currentGraphicCG = windward_LeewardGiveWayCG;
 				break;
 			}
-		case 1:
-			{
+		case 3: {
 				currentGraphicCG = windward_LeewardStandOnCG;
 				break;
 			}
-		case 2:
-			{
+		case 0: {
 				currentGraphicCG = port_StarboardStandOnCG;
 				break;
 			}
-		case 3:
-			{
+		case 1: {
 				currentGraphicCG = port_StarboardGiveWayCG;
-				break;
-			}
-		case 4:
-			{
-				currentGraphicCG = powerboat_SailboatCG;
 				break;
 			}
 		}
@@ -154,13 +139,17 @@ public class RightOfWayManager : MonoBehaviour {
 		currentGraphicCG.interactable = true;
 		currentGraphicCG.blocksRaycasts = true;
 	}
+	void HideGraphics () {
+	currentGraphicCG.alpha = 0f;
+	currentGraphicCG.interactable = false;
+	currentGraphicCG.blocksRaycasts = false;
+	}
 
 	void SetPositions() {
 		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
-
 		print ("SET POS" + scenario);
 		switch (scenario) {
-		case 0:
+		case 2:
 			{
 				hintText.text = "Remember: You give way to them.";
 				boomSlider.value = 40f;
@@ -169,11 +158,12 @@ public class RightOfWayManager : MonoBehaviour {
 				AIboat.transform.position = leeward.position;
 				Player.transform.rotation = windward.rotation;
 				AIboat.transform.rotation = leeward.rotation;
-
+				AIboat.GetComponent<AIBoat> ().SetMast (scenario);
 				currentGraphicCG = windward_LeewardGiveWayCG;
+
 				break;
 			}
-		case 1:
+		case 3:
 			{
 				hintText.text = "Remember: They give way to you.";
 				StartCoroutine ("level2");
@@ -182,11 +172,13 @@ public class RightOfWayManager : MonoBehaviour {
 				Player.transform.position = leeward.position;
 				AIboat.transform.rotation = windward.rotation;
 				AIboat.transform.position = windward.position;
+				AIboat.GetComponent<AIBoat> ().SetMast (scenario);
 
 				currentGraphicCG = windward_LeewardStandOnCG;
+
 				break;
 			}
-		case 2:
+		case 0:
 			{
 				hintText.text = "Remember: They give way to you.";
 				StartCoroutine ("level3");
@@ -196,11 +188,13 @@ public class RightOfWayManager : MonoBehaviour {
 				AIboat.transform.position = port.position;
 				Player.transform.rotation = starboard.rotation;
 				AIboat.transform.rotation = port.rotation;
+				AIboat.GetComponent<AIBoat> ().SetMast (scenario);
 
 				currentGraphicCG = port_StarboardStandOnCG;
+
 				break;
 			}
-		case 3:
+		case 1:
 			{
 				hintText.text = "Remember: You give way to them.";
 				boomSlider.value = 14.5f;
@@ -208,21 +202,10 @@ public class RightOfWayManager : MonoBehaviour {
 				Player.transform.rotation = port.rotation;
 				AIboat.transform.position = starboard.position;
 				AIboat.transform.rotation = starboard.rotation;
+				AIboat.GetComponent<AIBoat> ().SetMast (scenario);
 
 				currentGraphicCG = port_StarboardGiveWayCG;
-				break;
-			}
-		case 4:
-			{
-				hintText.text = "Get the heck out of the way!";
-				AIboat.SetActive (false);
-				Player.transform.position = starboard.position;
-				MotorBoat.transform.position = overrun.position;
-				Player.transform.rotation = starboard.rotation;
-				MotorBoat.transform.rotation = overrun.rotation;
-				MotorBoat.GetComponent<EvilYacht> ().isMoving = true;
 
-				currentGraphicCG = powerboat_SailboatCG;
 				break;
 			}
 		}
@@ -231,7 +214,7 @@ public class RightOfWayManager : MonoBehaviour {
 
 	IEnumerator level2 () {
 		print ("LEVEL2.1");
-		yield return new WaitForSeconds (3f);
+		yield return new WaitForSeconds (5f);
 		print ("LEVEL2.2");
 
 		AIboat.GetComponent<AIBoat> ().SetSteering (true, true);
@@ -245,25 +228,6 @@ public class RightOfWayManager : MonoBehaviour {
 		AIboat.GetComponent<AIBoat> ().SetSteering (true, false);
 		yield return new WaitForSeconds (3f);
 		AIboat.GetComponent<AIBoat> ().SetSteering (false, false);
-	}
-
-	/// <summary>
-	/// Fades the current CG alpha.
-	/// </summary>
-	/// <returns>The current CG alpha.</returns>
-	/// <param name="fadeOut">If set to <c>true</c> fade out. If false, will fade in.</param>
-	IEnumerator FadeCurrentCGAlpha( bool fadeOut = true ) {
-		float lerpTime = 0.05f;
-		float startTime = Time.time;
-		float startAlpha = ( fadeOut ) ? 1f : 0f;
-		float endAlpha = ( fadeOut ) ? 0f : 1f;
-
-		while( lerpTime >= Time.time - startTime ) {
-			currentGraphicCG.alpha = Mathf.Lerp( startAlpha, endAlpha, ( Time.time - startTime )/lerpTime );
-			yield return null;
-		}
-
-		currentGraphicCG.alpha = endAlpha;
 	}
 
 
@@ -285,9 +249,6 @@ public class RightOfWayManager : MonoBehaviour {
 			if (scenario < AIboat.GetComponent<AIBoat> ().scenarioTriggers.Count) {
 				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario-1].SetActive (false);
 				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario].SetActive (true);
-				switchToReset = true;
-			}
-			else if (scenario == AIboat.GetComponent<AIBoat> ().scenarioTriggers.Count) {
 				switchToReset = true;
 			}
 			else {
@@ -318,21 +279,20 @@ public class RightOfWayManager : MonoBehaviour {
 			break;
 		}
 	}
-
-	private IEnumerator WaitForSecondsOrTap( float newWaitTime ) {
-		scenarioWaitTime = newWaitTime;
-
-		while( scenarioWaitTime > 0f ) {
-			scenarioWaitTime -= Time.deltaTime;
-			yield return null;
-		}
-	}
+		
 
 	/// <summary>
 	/// Method called when the player taps to exit the 
 	/// </summary>
 	public void SkippedScenarioIntro() {
-		scenarioWaitTime = 0f;
 		SoundtrackManager.s_instance.beep.Play();
+		SetPositions ();
+		HideGraphics ();
+		gamePlayUI.SetActive( true );
+		ToggleCameras ();
+		ToggleBoatMovement (true);
+		isFailing = false;
+
+
 	}
 }
