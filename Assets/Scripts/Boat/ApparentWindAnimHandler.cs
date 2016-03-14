@@ -43,7 +43,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						//checks which point of sail object was clicked for animation states
 						switch(hit.collider.gameObject.name) {
 						case "Irons":
-							POS.text = "In Irons";
+							POS.text = "No Sail Zone";
 							boatAnim.SetTrigger("Irons");
 							ApparentWindBoatControl.s_instance.currentPOS = ApparentWindBoatControl.BoatPointOfSail.InIrons;
 							break;
@@ -131,7 +131,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						case "Irons":
 							boatAnim.SetTrigger("Irons");
 							pOSModuleManager.currAnimState = "In Irons";
-							tackDescriptor.text = "In Irons - the boat is head to wind (0 degrees)";
+							tackDescriptor.text = "Run - The boat is sailing with the wind coming from directly behind.";
 							auxInfo.text = "";
 
 							break;

@@ -28,8 +28,8 @@ public class posAnimState : MonoBehaviour {
 
 				case "Irons":
 					boatAnim.SetTrigger("Irons");
-					moduleManager.currAnimState = "In Irons";
-					displayPOS.text = "In Irons - the boat is head to wind (0 degrees)";
+					moduleManager.currAnimState = "No Sail Zone";
+					displayPOS.text = "No Sail Zone - the boat is head to wind (0 degrees)";
 					displayPOS2.text = "";
 
 					break;
@@ -66,7 +66,7 @@ public class posAnimState : MonoBehaviour {
 					ApparentWindModuleManager.s_instance.hasClickedRun = true;
 					boatAnim.SetTrigger("Run");
 					moduleManager.currAnimState = "Run";
-					displayPOS.text = "Run - the point of sail on which the wind is aft (180 degrees)";
+					displayPOS.text = "Run - The boat is sailing with the wind coming from directly behind.";
 					displayPOS2.text = "";
 
 					break;
