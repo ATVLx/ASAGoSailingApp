@@ -52,7 +52,7 @@ public class BoatBase : MonoBehaviour {
 		if (!isJibing) {
 
 //			get the boats z rotation and as a constant value for the start and end quaternions of the lerp to influence the lerp
-			mast.transform.localRotation = Quaternion.Lerp (Quaternion.identity, Quaternion.Inverse(transform.localRotation), 0.5f);
+			mast.transform.localRotation = Quaternion.Lerp (Quaternion.identity, Quaternion.Inverse(transform.localRotation), 0.33f);
 		
 		}
 		
