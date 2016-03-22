@@ -116,10 +116,11 @@ public class BoatBase : MonoBehaviour {
 //		}
 
 		if(angleWRTWind > 182 || angleWRTWind < 178) {
-			mast.transform.localRotation = Quaternion.Lerp (Quaternion.identity, Quaternion.Inverse(transform.localRotation), 0.5f);
+			mast.transform.localRotation = Quaternion.Lerp (Quaternion.identity, Quaternion.Inverse(transform.localRotation), 0.34f);
 		}
 
 		if (angleWRTWind ==180) {
+
 			if (lastAngleWRTWind > 180) {
 				blendShape.SetFloat("sailtrim",-1f);
 

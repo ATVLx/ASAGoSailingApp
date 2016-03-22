@@ -36,14 +36,14 @@ public class posAnimState : MonoBehaviour {
 				case "PTCloseHaul":
 					boatAnim.SetTrigger("PTCloseHaul");
 					moduleManager.currAnimState = "Close Hauled Port Tack";
-					displayPOS.text = "Close Hauled on a " + "<color=sFF0000> port tack </color>";
+					displayPOS.text = "Close Hauled on a " + "<color=00FF00> port tack </color>";
 					displayPOS2.text = "the boat is sailing as close to the wind as possible (~45 degrees)";
 
 					break;
 				case "PTCloseReach":
 					boatAnim.SetTrigger("PTCloseReach");
 					moduleManager.currAnimState = "Close Reach Port Tack";
-					displayPOS.text = "Close Reach on a " + "<color=#FF0000> port tack </color>";
+					displayPOS.text = "Close Reach on a " + "<color=#00FF00> port tack </color>";
 					displayPOS2.text = "the point of sail between close-hauled and beam reach. (~60 degrees";
 
 					break;
@@ -51,7 +51,7 @@ public class posAnimState : MonoBehaviour {
 				case "PTBeamReach":
 					boatAnim.SetTrigger ("PTBeamReach");
 					moduleManager.currAnimState = "Beam Reach Port Tack";
-					displayPOS.text = "Beam Reach on a " + "<color=#FF0000> port tack </color>"; 
+					displayPOS.text = "Beam Reach on a " + "<color=#00FF00> port tack </color>"; 
 					displayPOS2.text = "The wind is abeam of the boat (~90 degrees)";
 
 					break;
@@ -59,7 +59,7 @@ public class posAnimState : MonoBehaviour {
 				case "PTBroadReach":
 					boatAnim.SetTrigger("PTBroadReach");
 					moduleManager.currAnimState = "Broad Reach Port Tack";
-					displayPOS.text = "Broad Reach on a " + "<color=#FF0000> port tack </color>"; 
+					displayPOS.text = "Broad Reach on a " + "<color=#00FF00> port tack </color>"; 
 					displayPOS2.text = "The point of sail between a beam reach and a run (~135 degrees)";
 					break;
 				case "Run":
@@ -73,26 +73,26 @@ public class posAnimState : MonoBehaviour {
 				case "STBroadReach":
 					boatAnim.SetTrigger("STBroadReach");
 					moduleManager.currAnimState = "Broad Reach Starboard Tack";
-					displayPOS.text = "Broad Reach on a " + "<color=#00FF00> starboard tack </color>";
+					displayPOS.text = "Broad Reach on a " + "<color=#FF0000> starboard tack </color>";
 					displayPOS2.text = "The point of sail between a beam reach and a run (~135 degrees)";
 					break;
 				case "STBeamReach":
 					boatAnim.SetTrigger("STBeamReach");
 					moduleManager.currAnimState = "Beam Reach Starboard Tack";
-					displayPOS.text = "Beam Reach on a " + "<color=#00FF00> starboard tack </color>"; 
+					displayPOS.text = "Beam Reach on a " + "<color=#FF0000> starboard tack </color>"; 
 					displayPOS2.text = "The wind is abeam of the boat (~90 degrees)";
 
 					break;
 				case "STCloseReach":
 					boatAnim.SetTrigger("STCloseReach");
 					moduleManager.currAnimState = "Close Reach Starboard Tack";
-					displayPOS.text = "Close Reach on a " + "<color=#00FF00> starboard tack </color>";
+					displayPOS.text = "Close Reach on a " + "<color=#FF0000> starboard tack </color>";
 					displayPOS2.text = "The point of sail between close-hauled and beam reach. (~60 degrees)";
 					break;
 				case "STCloseHaul":
 					boatAnim.SetTrigger("STCloseHaul");
 					moduleManager.currAnimState = "Close Hauled Starboard Tack";
-					displayPOS.text = "Close Hauled on a " + "<color=#00FF00> starboard tack </color>";  
+					displayPOS.text = "Close Hauled on a " + "<color=#FF0000> starboard tack </color>";  
 					displayPOS2.text = "The boat is sailing as close to the wind as possible (~45 degrees)";
 					break;
 				}

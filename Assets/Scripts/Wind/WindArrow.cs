@@ -28,7 +28,7 @@ public class WindArrow : MonoBehaviour {
 		}
 
 //		if (NavBoatControl.s_instance == null || TrimManager.s_instance!=null) {
-			transform.Translate (Vector3.forward * .7f);
+			transform.Translate (Vector3.forward * .2f);
 //		}
 	}
 

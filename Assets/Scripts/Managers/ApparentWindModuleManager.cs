@@ -147,20 +147,29 @@ public class ApparentWindModuleManager : MonoBehaviour {
 
 	private void CalculateApparentWind() {
 		if( apparentWindBoatControl.currentPOS != ApparentWindBoatControl.BoatPointOfSail.InIrons ) {
-			Vector3 fakeWindVector = (boatVelocityRendererOrigin.position - windLineRendererOrigin.position).normalized;
-			Vector3 fakeBoatSpeedVector = (mastRendererPosition.position - boatVelocityRendererOrigin.position).normalized;
+			
+			float currentBoatSpeed;
+			float currentWindSpeed;
+			float angle = ApparentWindBoatControl.s_instance.transform.GetChild(0).eulerAngles.y;
+			print (angle);
 
-			if( !isWindSpeedSetToHigh ) {
-				fakeWindVector *= lowWindSpeed;
-				fakeBoatSpeedVector *= lowBoatSpeed;
-			} else {
-				fakeWindVector *= highWindSpeed;
-				fakeBoatSpeedVector *= highBoatSpeed;
+			if (angle > 180) {
+				angle -= 180;
 			}
 
-			Vector3 calculatedApparentWind = fakeWindVector + fakeBoatSpeedVector;
+			if( !isWindSpeedSetToHigh ) {
+				currentWindSpeed = lowWindSpeed;
+				currentBoatSpeed = lowBoatSpeed;
 
-			guiManager.UpdateApparentWindSpeed( calculatedApparentWind.magnitude );
+			} else {
+				currentWindSpeed = highWindSpeed;
+				currentBoatSpeed = highBoatSpeed;
+			}
+
+			Vector3 windVector = Vector3.forward * -currentWindSpeed;
+//			Vector3 boatVector = ApparentWindBoatControl.s_instance.transform.GetChild (0).eulerAngles.y;
+			float calculatedApparentWind = Mathf.Sin (angle) * currentBoatSpeed + currentWindSpeed;
+			guiManager.UpdateApparentWindSpeed( calculatedApparentWind );
 		} else {
 			if( !isWindSpeedSetToHigh ) 
 				guiManager.UpdateApparentWindSpeed( lowWindSpeed );
