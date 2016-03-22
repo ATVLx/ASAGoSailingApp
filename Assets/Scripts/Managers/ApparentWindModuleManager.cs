@@ -46,7 +46,7 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	private float boatVelocityRendererOffsetScalar = 1.75f;
 	private float lowWindSpeedRendererOffset = 8f;
 	private float highWindSpeedRendererOffset = 14f;
-	private bool isWindSpeedSetToHigh = false;
+	public bool isWindSpeedSetToHigh = false;
 	private bool cameraIsLerping = false;
 
 	// GUI Text values
@@ -148,33 +148,34 @@ public class ApparentWindModuleManager : MonoBehaviour {
 	private void CalculateApparentWind() {
 		if( apparentWindBoatControl.currentPOS != ApparentWindBoatControl.BoatPointOfSail.InIrons ) {
 			
-			float currentBoatSpeed;
-			float currentWindSpeed;
-			float angle = ApparentWindBoatControl.s_instance.transform.GetChild(0).eulerAngles.y;
-			print (angle);
-
-			if (angle > 180) {
-				angle -= 180;
-			}
-
-			if( !isWindSpeedSetToHigh ) {
-				currentWindSpeed = lowWindSpeed;
-				currentBoatSpeed = lowBoatSpeed;
-
-			} else {
-				currentWindSpeed = highWindSpeed;
-				currentBoatSpeed = highBoatSpeed;
-			}
-
-			Vector3 windVector = Vector3.forward * -currentWindSpeed;
-//			Vector3 boatVector = ApparentWindBoatControl.s_instance.transform.GetChild (0).eulerAngles.y;
-			float calculatedApparentWind = Mathf.Sin (angle) * currentBoatSpeed + currentWindSpeed;
-			guiManager.UpdateApparentWindSpeed( calculatedApparentWind );
+//			float currentBoatSpeed;
+//			float currentWindSpeed;
+//			float angle = ApparentWindBoatControl.s_instance.transform.GetChild(0).eulerAngles.y;
+//
+//			if (angle > 180) {
+//				angle -= 180;
+//			}
+//
+//			if( !isWindSpeedSetToHigh ) {
+//				currentWindSpeed = lowWindSpeed;
+//				currentBoatSpeed = apparentWindBoatControl.myRigidbody.velocity.magnitude*NavBoatControl.METERS_PER_SECOND_TO_KNOTS;
+//
+//			} else {
+//				currentWindSpeed = highWindSpeed;
+//				currentBoatSpeed = apparentWindBoatControl.myRigidbody.velocity.magnitude*NavBoatControl.METERS_PER_SECOND_TO_KNOTS*1.3f;
+//			}
+//
+//			Vector3 windVector = Vector3.forward * -currentWindSpeed;
+//			Vector3 boatVector = ApparentWindBoatControl.s_instance.transform.GetChild (0).transform.forward * currentBoatSpeed;
+//		
+//			float calculatedApparentWind = Mathf.Sqrt (windVector.sqrMagnitude
+//				+ boatVector.sqrMagnitude + 2 * Vector3.Dot(boatVector,windVector) * Mathf.Cos (angle)); 
+//			guiManager.UpdateApparentWindSpeed( calculatedApparentWind );
 		} else {
-			if( !isWindSpeedSetToHigh ) 
-				guiManager.UpdateApparentWindSpeed( lowWindSpeed );
-			else
-				guiManager.UpdateApparentWindSpeed( highWindSpeed );
+//			if( !isWindSpeedSetToHigh ) 
+//				guiManager.UpdateApparentWindSpeed( lowWindSpeed );
+//			else
+//				guiManager.UpdateApparentWindSpeed( highWindSpeed );
 		}
 	}
 
