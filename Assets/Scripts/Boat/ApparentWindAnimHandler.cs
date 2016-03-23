@@ -153,7 +153,9 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 		}
 	}
 	void Update () {
-		SetTextPOSTextValues ();
+		if (apparentWindModuleManager != null) {
+			SetTextPOSTextValues ();
+		}
 		if( apparentWindModuleManager != null ) {
 			if( apparentWindModuleManager.gameState == ApparentWindModuleManager.GameState.Playing ) {
 				

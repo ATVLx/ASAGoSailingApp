@@ -288,41 +288,41 @@ public class NavBoatControl : MonoBehaviour {
 //			Debug.LogWarning( gameObject.name +"'s "+ this.GetType().ToString() +" is missing a reference to the \"Point of Sail\" Text object." );
 			return;
 		}
-
 		if ((angleWRTWind < 360f && angleWRTWind > 330f) ||
 		    (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "In Irons";
 		}
-		else if ((angleWRTWind < 330f && angleWRTWind > 293f) ||
-		         (angleWRTWind > 0f && angleWRTWind < 45f)) {
+		else if ((angleWRTWind < 330f && angleWRTWind > 320f) ||
+		         (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "Close-Hauled Starboard Tack";
 		}
-		else if ((angleWRTWind < 293f && angleWRTWind > 275f) ||
-		         (angleWRTWind > 0f && angleWRTWind < 45f)) {
+		else if ((angleWRTWind < 320f && angleWRTWind > 290f) ||
+		         (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "Close Reach Starboard Tack";
 		}
-		else if ((angleWRTWind <= 275f && angleWRTWind > 240f) ||
-		         (angleWRTWind > 0f && angleWRTWind < 45f)) {
+		else if ((angleWRTWind <= 290f && angleWRTWind > 250f) ||
+		         (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "Beam Reach Starboard Tack";
 		}
-		else if ((angleWRTWind < 240f && angleWRTWind > 190f) ||
-		         (angleWRTWind > 0f && angleWRTWind < 45f)) {
+		else if ((angleWRTWind < 250f && angleWRTWind > 190f) ||
+		         (angleWRTWind > 0f && angleWRTWind < 30f)) {
 			pointOfSail.text = "Broad Reach Starboard Tack";
 		}
 		else if (angleWRTWind < 190f && angleWRTWind > 170f) {
 			pointOfSail.text = "Run";
 		}
-		else if (angleWRTWind > 120f && angleWRTWind < 170f) {
+		else if (angleWRTWind > 110f && angleWRTWind < 170f) {
 			pointOfSail.text = "Broad Reach Port Tack";
 		}
-		else if (angleWRTWind >= 85f && angleWRTWind < 120f) {
+		else if (angleWRTWind >= 70f && angleWRTWind < 110f) {
 			pointOfSail.text = "Beam Reach Port Tack";
 		}
-		else if (angleWRTWind > 66f && angleWRTWind < 85) {
+		else if (angleWRTWind > 40f && angleWRTWind < 70f) {
 			pointOfSail.text = "Close Reach Port Tack";
 		}
-		else if (angleWRTWind > 30f && angleWRTWind < 66f){
+		else if (angleWRTWind > 30f && angleWRTWind < 40f){
 			pointOfSail.text = "Close-Hauled Port Tack";
+			print ("CH");
 		}
 	}
 	#endregion
