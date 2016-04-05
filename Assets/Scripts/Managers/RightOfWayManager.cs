@@ -133,6 +133,10 @@ public class RightOfWayManager : MonoBehaviour {
 				currentGraphicCG = port_StarboardGiveWayCG;
 				break;
 			}
+		case 4: {
+				currentGraphicCG = powerboat_SailboatCG;
+				break;
+			}
 		}
 		gamePlayUI.SetActive( false );
 		currentGraphicCG.alpha = 1f;
@@ -149,6 +153,18 @@ public class RightOfWayManager : MonoBehaviour {
 		SoundtrackManager.s_instance.PlayAudioSource (SoundtrackManager.s_instance.bell);
 		print ("SET POS" + scenario);
 		switch (scenario) {
+
+		case 4:
+			{
+				hintText.text = "Remember: You give way to them.";
+				MotorBoat.transform.position = overrun.position;
+				MotorBoat.transform.rotation = overrun.rotation;
+				Player.transform.rotation = starboard.rotation;
+				Player.transform.position = starboard.position;
+				MotorBoat.GetComponent<EvilYacht> ().isMoving = true;
+				AIboat.SetActive (false);
+				break;
+			}
 		case 2:
 			{
 				hintText.text = "Remember: You give way to them.";
@@ -246,9 +262,11 @@ public class RightOfWayManager : MonoBehaviour {
 			isFailing = true;
 			success.StartFadeOut ();
 			scenario++;
-			if (scenario < AIboat.GetComponent<AIBoat> ().scenarioTriggers.Count) {
-				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario-1].SetActive (false);
+			if (scenario < 4) {
+				switchToReset = true;
+				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario - 1].SetActive (false);
 				AIboat.GetComponent<AIBoat> ().scenarioTriggers [scenario].SetActive (true);
+			} else if (scenario == 4) {
 				switchToReset = true;
 			}
 			else {
