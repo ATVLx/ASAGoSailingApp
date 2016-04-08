@@ -16,7 +16,7 @@ public class UIWindIndicator : MonoBehaviour {
 
 	void LateUpdate () {
 		float boatYRot = boatTransform.rotation.eulerAngles.y;
-		Quaternion newRot = Quaternion.Euler( 0f, -boatYRot, 0f );
+		Quaternion newRot = Quaternion.Euler( 0f, 0f, boatYRot );
 		windIndicator.rotation = newRot;
 	}
 }
