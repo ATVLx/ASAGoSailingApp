@@ -261,7 +261,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 						case "Irons":
 							boatAnim.SetTrigger("Irons");
 							pOSModuleManager.currAnimState = "In Irons";
-							tackDescriptor.text = "Run - The boat is sailing with the wind coming from directly behind.";
+							tackDescriptor.text = "In Irons - The boat is sailing with the wind coming from directly behind.";
 							auxInfo.text = "";
 
 							break;
