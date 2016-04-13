@@ -195,14 +195,14 @@ public class NavBoatControl : MonoBehaviour {
 	protected void CalculateForwardThrust() {
 		float inIronsBufferZone = 15f;
 		float inIronsNullZone = 30f;
-		float effectiveAngle;
+		float effectiveAngle =15f;
 		
 		// If we are within the in irons range check to see if we are in the buffer zone
-		if (angleWRTWind < (inIronsNullZone + inIronsBufferZone))
-			effectiveAngle = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? angleWRTWind - inIronsNullZone : 0f;
-		else {
-			effectiveAngle = 15f;
-		}
+//		if (angleWRTWind < (inIronsNullZone + inIronsBufferZone))
+//			effectiveAngle = Vector3.Angle( Vector3.forward, transform.forward ) > inIronsNullZone ? angleWRTWind - inIronsNullZone : 0f;
+//		else {
+//			effectiveAngle = 15f;
+//		}
 		
 		optimalAngle = Vector3.Angle( Vector3.forward, transform.forward ) * 0.33f; //TODO Fiddle around with the constant to see what works for us
 		if (boomSlider != null) {
@@ -212,6 +212,7 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
+		print (boatThrust + "effective angle " + effectiveAngle + "anglewrt " + angleWRTWind + "sailEFF " + sailEffectiveness);
 	}
 
 	protected void ApplyForwardThrust () {
