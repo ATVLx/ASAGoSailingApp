@@ -212,7 +212,6 @@ public class NavBoatControl : MonoBehaviour {
 		}
 		sailEffectiveness = Mathf.Pow(sailEffectiveness,3f);
 		boatThrust = (effectiveAngle/inIronsBufferZone) * sailEffectiveness * boatMovementVelocityScalar;
-		print (boatThrust + "effective angle " + effectiveAngle + "anglewrt " + angleWRTWind + "sailEFF " + sailEffectiveness);
 	}
 
 	protected void ApplyForwardThrust () {

@@ -69,6 +69,7 @@ public class DockingManager : MonoBehaviour {
 			{
 				//				StartCoroutine ("PauseBoats");
 				if (switchToGamePlay) {
+					NavBoatControl.s_instance.boomSlider.value = 80f;
 					switchToGamePlay = false;
 					DieOnHitBoat[] arrows = GameObject.FindObjectsOfType<DieOnHitBoat> ();
 					foreach (DieOnHitBoat x in arrows) {
