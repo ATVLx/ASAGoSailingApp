@@ -97,7 +97,7 @@ public class ApparentWindAnimHandler : MonoBehaviour {
 			break;
 		case "Run":
 			if (ApparentWindModuleManager.s_instance.isWindSpeedSetToHigh) {
-				ApparentWindModuleGuiManager.s_instance.UpdateApparentWindSpeed (10.2f);
+				ApparentWindModuleGuiManager.s_instance.UpdateApparentWindSpeed (10.8f);
 				ApparentWindModuleGuiManager.s_instance.UpdateBoatSpeed (7.2f);
 				ApparentWindModuleGuiManager.s_instance.UpdateTrueWindSpeed (18f);
 			} else {
